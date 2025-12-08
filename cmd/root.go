@@ -15,8 +15,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "dots",
-	Short: "Dotfiles manager",
+	Use:               "dots",
+	Short:             "Dotfiles manager",
+	CompletionOptions: cobra.CompletionOptions{DisableDefaultCmd: true},
 }
 
 func Execute() {

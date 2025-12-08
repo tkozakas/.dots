@@ -9,6 +9,14 @@ import (
 	"github.com/tkozakas/dots/internal/config"
 )
 
+const (
+	colorReset  = "\033[0m"
+	colorGreen  = "\033[32m"
+	colorYellow = "\033[33m"
+	colorRed    = "\033[31m"
+	colorCyan   = "\033[36m"
+)
+
 type SymlinkStatus int
 
 const (
@@ -50,14 +58,14 @@ func Unlink(symlinks []config.Symlink, configPath string, dryRun bool) error {
 		}
 
 		if dryRun {
-			log.Printf("[dry-run] remove %s", info.Target)
+			log.Printf("%s[dry-run]%s remove %s", colorYellow, colorReset, info.Target)
 			continue
 		}
 
 		if err := os.Remove(info.Target); err != nil {
 			return fmt.Errorf("removing %s: %w", info.Target, err)
 		}
-		log.Printf("Removed %s", info.Target)
+		log.Printf("%s-%s %s", colorRed, colorReset, info.Target)
 	}
 	return nil
 }
@@ -70,19 +78,19 @@ func Health(symlinks []config.Symlink, configPath string) (ok, missing, broken i
 
 		switch info.Status {
 		case StatusOK:
-			log.Printf("OK       %s", info.Target)
+			log.Printf("%sOK%s       %s", colorGreen, colorReset, info.Target)
 			ok++
 		case StatusMissing:
-			log.Printf("MISSING  %s", info.Target)
+			log.Printf("%sMISSING%s  %s", colorYellow, colorReset, info.Target)
 			missing++
 		case StatusWrongTarget:
-			log.Printf("BROKEN   %s -> %s (expected %s)", info.Target, info.Actual, info.Source)
+			log.Printf("%sBROKEN%s   %s -> %s (expected %s)", colorRed, colorReset, info.Target, info.Actual, info.Source)
 			broken++
 		case StatusNotSymlink:
-			log.Printf("BROKEN   %s (not a symlink)", info.Target)
+			log.Printf("%sBROKEN%s   %s (not a symlink)", colorRed, colorReset, info.Target)
 			broken++
 		case StatusSourceMissing:
-			log.Printf("BROKEN   %s -> %s (source missing)", info.Target, info.Source)
+			log.Printf("%sBROKEN%s   %s -> %s (source missing)", colorRed, colorReset, info.Target, info.Source)
 			broken++
 		}
 	}
@@ -135,7 +143,7 @@ func processSymlink(s config.Symlink, baseDir string, dryRun bool) error {
 	}
 
 	if dryRun {
-		log.Printf("[dry-run] %s -> %s", target, source)
+		log.Printf("%s[dry-run]%s %s -> %s", colorYellow, colorReset, target, source)
 		return nil
 	}
 
@@ -157,11 +165,11 @@ func createSymlink(source, target string) error {
 	}
 
 	if skip {
-		log.Printf("%s -> %s (already exists)", target, source)
+		log.Printf("%s✓%s %s -> %s", colorGreen, colorReset, target, source)
 		return nil
 	}
 
-	log.Printf("%s -> %s", target, source)
+	log.Printf("%s+%s %s -> %s", colorCyan, colorReset, target, source)
 	return os.Symlink(source, target)
 }
 

@@ -85,6 +85,7 @@ packages:
       - unzip
       - github-cli
       - lsd
+      - fastfetch
 
     arch:
       - base-devel
