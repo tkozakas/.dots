@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PANE_WIDTH=30
-HIDDEN_WINDOW="opencode_hidden"
+HIDDEN_WINDOW="opencode"
 
 current_window=$(tmux display-message -p '#{window_id}')
 current_path=$(tmux display-message -p '#{pane_current_path}')
