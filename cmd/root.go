@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -25,7 +27,9 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "dotfiles.yaml", "Config file path")
+	home, _ := os.UserHomeDir()
+	defaultConfig := filepath.Join(home, ".dots", "dotfiles.yaml")
+	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", defaultConfig, "Config file path")
 	rootCmd.PersistentFlags().StringVar(&distro, "distro", "", "Override detected distribution")
 	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "Preview changes")
 }
