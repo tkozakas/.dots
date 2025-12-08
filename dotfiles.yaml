@@ -9,11 +9,7 @@ symlinks:
     os: ["darwin", "linux"]
 
   - source: "configs/tmux"
-    target: "~/.tmux"
-    os: ["darwin", "linux"]
-
-  - source: "configs/tmux/.tmux.conf"
-    target: "~/.tmux.conf"
+    target: "~/.config/tmux"
     os: ["darwin", "linux"]
 
   - source: "configs/opencode"
