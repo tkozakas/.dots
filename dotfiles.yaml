@@ -95,7 +95,7 @@ packages:
       - kitty
       - zip
       - unzip
-      - gh
+      - github-cli
       - lsd
       - fastfetch
 
