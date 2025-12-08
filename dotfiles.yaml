@@ -36,6 +36,10 @@ symlinks:
     target: "~/.local/bin/git-scripts"
     os: ["darwin", "linux"]
 
+  - source: "configs/fastfetch/config.jsonc"
+    target: "~/.config/fastfetch/config.jsonc"
+    os: ["darwin", "linux"]
+
   # MAC SPECIFIC (darwin)
   - source: "configs/aerospace/.aerospace.toml"
     target: "~/.aerospace.toml"
@@ -45,10 +49,6 @@ symlinks:
   - source: "configs/hypr"
     target: "~/.config/hypr"
     os: ["linux"]
-
-  - source: "configs/fastfetch/config.jsonc"
-    target: "~/.config/fastfetch/config.jsonc"
-    os: ["darwin", "linux"]
 
 packages:
   darwin:
@@ -131,4 +131,3 @@ packages:
       - jetbrains-toolbox
       - steam
       - bitwarden-cli
-      - vencord

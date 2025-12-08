@@ -24,8 +24,8 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 
 	if dryRun {
 		log.Print("[dry-run] git pull")
-		log.Print("[dry-run] go build -o bin/dots .")
-		log.Print("[dry-run] bin/dots install")
+		log.Print("[dry-run] go build -o dots .")
+		log.Print("[dry-run] ./dots install")
 		return nil
 	}
 
@@ -34,7 +34,7 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 		cmd  []string
 	}{
 		{"Pulling latest changes...", []string{"git", "pull"}},
-		{"Rebuilding...", []string{"go", "build", "-o", "bin/dots", "."}},
+		{"Rebuilding...", []string{"go", "build", "-o", "dots", "."}},
 	}
 
 	for _, step := range steps {
@@ -45,7 +45,7 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 	}
 
 	log.Print("Reinstalling...")
-	installArgs := []string{"bin/dots", "install"}
+	installArgs := []string{"./dots", "install"}
 	if distro != "" {
 		installArgs = append(installArgs, "--distro", distro)
 	}
