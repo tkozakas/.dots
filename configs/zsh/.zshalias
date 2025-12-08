@@ -17,7 +17,7 @@ alias k='kubectl'
 alias squash='~/.local/bin/git-scripts/git-squash-pr.sh'
 alias pr='~/.local/bin/git-scripts/git-open-or-create-pr.sh'
 
-alias dots='~/.dots/bin/dots'
+alias d='~/.dots/bin/dots'
 
 nvim() {
   command nvim "$@"

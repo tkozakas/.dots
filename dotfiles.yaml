@@ -1,52 +1,52 @@
 symlinks:
   # SHARED CONFIGS
-  - source: "dots/nvim"
+  - source: "configs/nvim"
     target: "~/.config/nvim"
     os: ["darwin", "linux"]
 
-  - source: "dots/kitty"
+  - source: "configs/kitty"
     target: "~/.config/kitty"
     os: ["darwin", "linux"]
 
-  - source: "dots/tmux"
+  - source: "configs/tmux"
     target: "~/.tmux"
     os: ["darwin", "linux"]
 
-  - source: "dots/tmux/.tmux.conf"
+  - source: "configs/tmux/.tmux.conf"
     target: "~/.tmux.conf"
     os: ["darwin", "linux"]
 
-  - source: "dots/opencode"
+  - source: "configs/opencode"
     target: "~/.config/opencode"
     os: ["darwin", "linux"]
 
-  - source: "dots/zsh"
+  - source: "configs/zsh"
     target: "~/.config/zsh"
     os: ["darwin", "linux"]
 
-  - source: "dots/lazygit"
+  - source: "configs/lazygit"
     target: "~/.config/lazygit"
     os: ["darwin", "linux"]
 
-  - source: "dots/k9s"
+  - source: "configs/k9s"
     target: "~/.config/k9s"
     os: ["darwin", "linux"]
 
-  - source: "dots/git"
+  - source: "configs/git"
     target: "~/.local/bin/git-scripts"
     os: ["darwin", "linux"]
 
   # MAC SPECIFIC (darwin)
-  - source: "dots/aerospace/.aerospace.toml"
+  - source: "configs/aerospace/.aerospace.toml"
     target: "~/.aerospace.toml"
     os: ["darwin"]
 
   # LINUX SPECIFIC
-  - source: "dots/hypr"
+  - source: "configs/hypr"
     target: "~/.config/hypr"
     os: ["linux"]
 
-  - source: "dots/fastfetch/config.jsonc"
+  - source: "configs/fastfetch/config.jsonc"
     target: "~/.config/fastfetch/config.jsonc"
     os: ["linux"]
 
