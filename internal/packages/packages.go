@@ -2,6 +2,7 @@ package packages
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -89,11 +90,11 @@ func run(pm, action string, packages []string, dryRun bool) error {
 	cmdStr := fmt.Sprintf("%s %s %s", pm, action, strings.Join(packages, " "))
 
 	if dryRun {
-		fmt.Printf("[dry-run] %s\n", cmdStr)
+		log.Printf("[dry-run] %s", cmdStr)
 		return nil
 	}
 
-	fmt.Printf("Running: %s\n", cmdStr)
+	log.Printf("Running: %s", cmdStr)
 
 	parts := strings.Fields(pm)
 	args := append(strings.Fields(action), packages...)

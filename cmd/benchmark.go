@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"time"
@@ -32,8 +33,8 @@ func Benchmark(runs int) error {
 		shell = "zsh"
 	}
 
-	fmt.Printf("=== %s Startup Benchmark ===\n", shell)
-	fmt.Printf("Running %d iterations...\n", runs)
+	log.Printf("=== %s Startup Benchmark ===", shell)
+	log.Printf("Running %d iterations...", runs)
 
 	var total time.Duration
 
@@ -49,7 +50,7 @@ func Benchmark(runs int) error {
 	}
 
 	avg := total / time.Duration(runs)
-	fmt.Printf("Average startup time: %v\n", avg.Round(time.Millisecond))
+	log.Printf("Average startup time: %v", avg.Round(time.Millisecond))
 
 	return nil
 }

@@ -2,6 +2,7 @@ package linker
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -49,14 +50,14 @@ func Unlink(symlinks []config.Symlink, configPath string, dryRun bool) error {
 		}
 
 		if dryRun {
-			fmt.Printf("[dry-run] remove %s\n", info.Target)
+			log.Printf("[dry-run] remove %s", info.Target)
 			continue
 		}
 
 		if err := os.Remove(info.Target); err != nil {
 			return fmt.Errorf("removing %s: %w", info.Target, err)
 		}
-		fmt.Printf("Removed %s\n", info.Target)
+		log.Printf("Removed %s", info.Target)
 	}
 	return nil
 }
@@ -69,19 +70,19 @@ func Health(symlinks []config.Symlink, configPath string) (ok, missing, broken i
 
 		switch info.Status {
 		case StatusOK:
-			fmt.Printf("OK       %s\n", info.Target)
+			log.Printf("OK       %s", info.Target)
 			ok++
 		case StatusMissing:
-			fmt.Printf("MISSING  %s\n", info.Target)
+			log.Printf("MISSING  %s", info.Target)
 			missing++
 		case StatusWrongTarget:
-			fmt.Printf("BROKEN   %s -> %s (expected %s)\n", info.Target, info.Actual, info.Source)
+			log.Printf("BROKEN   %s -> %s (expected %s)", info.Target, info.Actual, info.Source)
 			broken++
 		case StatusNotSymlink:
-			fmt.Printf("BROKEN   %s (not a symlink)\n", info.Target)
+			log.Printf("BROKEN   %s (not a symlink)", info.Target)
 			broken++
 		case StatusSourceMissing:
-			fmt.Printf("BROKEN   %s -> %s (source missing)\n", info.Target, info.Source)
+			log.Printf("BROKEN   %s -> %s (source missing)", info.Target, info.Source)
 			broken++
 		}
 	}
@@ -134,7 +135,7 @@ func processSymlink(s config.Symlink, baseDir string, dryRun bool) error {
 	}
 
 	if dryRun {
-		fmt.Printf("[dry-run] %s -> %s\n", target, source)
+		log.Printf("[dry-run] %s -> %s", target, source)
 		return nil
 	}
 
@@ -156,11 +157,11 @@ func createSymlink(source, target string) error {
 	}
 
 	if skip {
-		fmt.Printf("%s -> %s (already exists)\n", target, source)
+		log.Printf("%s -> %s (already exists)", target, source)
 		return nil
 	}
 
-	fmt.Printf("%s -> %s\n", target, source)
+	log.Printf("%s -> %s", target, source)
 	return os.Symlink(source, target)
 }
 

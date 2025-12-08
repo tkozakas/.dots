@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"os/exec"
 
@@ -23,9 +23,9 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 	baseDir := linker.ResolveBaseDir(configPath)
 
 	if dryRun {
-		fmt.Println("[dry-run] git pull")
-		fmt.Println("[dry-run] go build -o dots .")
-		fmt.Println("[dry-run] ./dots install")
+		log.Print("[dry-run] git pull")
+		log.Print("[dry-run] go build -o dots .")
+		log.Print("[dry-run] ./dots install")
 		return nil
 	}
 
@@ -38,13 +38,13 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 	}
 
 	for _, step := range steps {
-		fmt.Println(step.name)
+		log.Print(step.name)
 		if err := runCmd(baseDir, step.cmd...); err != nil {
 			return err
 		}
 	}
 
-	fmt.Println("Reinstalling...")
+	log.Print("Reinstalling...")
 	installArgs := []string{"./dots", "install"}
 	if distro != "" {
 		installArgs = append(installArgs, "--distro", distro)
