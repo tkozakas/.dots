@@ -1,0 +1,35 @@
+[config.wallpaper]
+command = "swww"
+arguments = ["img", "--transition-fps", "60"]
+set = true
+
+[templates.waybar]
+input_path = '~/.config/hypr/matugen/templates/colors.css'
+output_path = '~/.config/hypr/waybar/colors.css'
+post_hook = 'pkill -SIGUSR2 waybar'
+
+[templates.kitty]
+input_path = '~/.config/hypr/matugen/templates/kitty-colors.conf'
+output_path = '~/.config/kitty/colors.conf'
+post_hook = "pkill -SIGUSR1 kitty"
+
+[templates.hyprland]
+input_path = '~/.config/hypr/matugen/templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/configs/colors.conf'
+post_hook = 'hyprctl reload'
+
+[templates.rofi]
+input_path = '~/.config/hypr/matugen/templates/rofi-colors.rasi'
+output_path = '~/.config/hypr/rofi/colors.rasi'
+
+[templates.gtk3]
+input_path = '~/.config/hypr/matugen/templates/gtk-colors.css'
+output_path = '~/.config/gtk-3.0/gtk.css'
+
+[templates.gtk4]
+input_path = '~/.config/hypr/matugen/templates/gtk-colors.css'
+output_path = '~/.config/gtk-4.0/gtk.css'
+
+[templates.vencord]
+input_path = '~/.config/hypr/matugen/templates/midnight-discord.css'
+output_path = '~/.config/Vencord/themes/matugen.css'

@@ -1,0 +1,127 @@
+symlinks:
+  # SHARED CONFIGS
+  - source: "configs/nvim"
+    target: "~/.config/nvim"
+    os: ["darwin", "linux"]
+
+  - source: "configs/kitty"
+    target: "~/.config/kitty"
+    os: ["darwin", "linux"]
+
+  - source: "configs/tmux"
+    target: "~/.tmux"
+    os: ["darwin", "linux"]
+
+  - source: "configs/tmux/.tmux.conf"
+    target: "~/.tmux.conf"
+    os: ["darwin", "linux"]
+
+  - source: "configs/opencode"
+    target: "~/.config/opencode"
+    os: ["darwin", "linux"]
+
+  - source: "configs/zsh"
+    target: "~/.config/zsh"
+    os: ["darwin", "linux"]
+
+  - source: "configs/lazygit"
+    target: "~/.config/lazygit"
+    os: ["darwin", "linux"]
+
+  - source: "configs/k9s"
+    target: "~/.config/k9s"
+    os: ["darwin", "linux"]
+
+  - source: "configs/git"
+    target: "~/.local/bin/git-scripts"
+    os: ["darwin", "linux"]
+
+  # MAC SPECIFIC (darwin)
+  - source: "configs/aerospace/.aerospace.toml"
+    target: "~/.aerospace.toml"
+    os: ["darwin"]
+
+  # LINUX SPECIFIC
+  - source: "configs/hypr"
+    target: "~/.config/hypr"
+    os: ["linux"]
+
+  - source: "configs/fastfetch/config.jsonc"
+    target: "~/.config/fastfetch/config.jsonc"
+    os: ["linux"]
+
+packages:
+  darwin:
+    brew:
+      - neovim
+      - lazygit
+      - tmux
+      - zsh
+      - zoxide
+      - direnv
+      - git
+      - vim
+      - github-cli
+      - lsd
+    cask:
+      - font-fira-code-nerd-font
+      - kitty
+
+  linux:
+    common:
+      - firefox
+      - tmux
+      - lazygit
+      - noto-fonts
+      - noto-fonts-emoji
+      - noto-fonts-cjk
+      - ttf-firacode-nerd
+      - git
+      - vim
+      - neovim
+      - zsh
+      - zoxide
+      - direnv
+      - docker
+      - docker-compose-plugin
+      - kitty
+      - zip
+      - unzip
+      - github-cli
+      - gnome-disk-utility
+      - lsd
+
+    arch:
+      - base-devel
+      - python
+      - hyprland
+      - hyprlock
+      - hyprpaper
+      - hyprgraphics
+      - hypridle
+      - hyprutils
+      - waybar
+      - rofi
+      - swww
+      - greetd
+      - greetd-tuigreet
+      - slurp
+      - grim
+      - wl-clipboard
+      - nautilus
+
+    fedora:
+      - "@development-tools"
+      - python3
+
+    ubuntu:
+      - build-essential
+      - python3
+
+    yay:
+      - discord
+      - spotify
+      - jetbrains-toolbox
+      - steam
+      - bitwarden-cli
+      - vencord

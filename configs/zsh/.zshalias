@@ -1,0 +1,30 @@
+alias rm='rm -i'
+alias ls='ls --color=auto'
+alias ll='ls -alhF --color=auto'
+alias da='direnv allow'
+
+alias nano='nvim'
+alias v='nvim'
+
+alias g='git'
+alias gst='git status'
+alias gl='git log --oneline --graph --decorate --all'
+
+alias railsc='bundle exec rails console'
+
+alias k='kubectl'
+
+alias squash='~/.local/bin/git-scripts/git-squash-pr.sh'
+alias pr='~/.local/bin/git-scripts/git-open-or-create-pr.sh'
+
+nvim() {
+  command nvim "$@"
+  if [[ -f "$HOME/.nvim_last_dir" ]]; then
+    local last_dir=$(cat "$HOME/.nvim_last_dir")
+    if [[ -d "$last_dir" ]]; then
+      cd "$last_dir"
+    fi
+    rm -f "$HOME/.nvim_last_dir"
+  fi
+}
+

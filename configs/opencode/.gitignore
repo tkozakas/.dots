@@ -1,0 +1,12 @@
+# OpenCode node_modules (MCP servers and dependencies)
+node_modules/
+
+# Package management files
+package.json
+bun.lock
+package-lock.json
+yarn.lock
+
+# Session and cache files
+.opencode/
+*.log
