@@ -1,52 +1,52 @@
 symlinks:
   # SHARED CONFIGS
-  - source: "configs/nvim"
+  - source: "dots/nvim"
     target: "~/.config/nvim"
     os: ["darwin", "linux"]
 
-  - source: "configs/kitty"
+  - source: "dots/kitty"
     target: "~/.config/kitty"
     os: ["darwin", "linux"]
 
-  - source: "configs/tmux"
+  - source: "dots/tmux"
     target: "~/.tmux"
     os: ["darwin", "linux"]
 
-  - source: "configs/tmux/.tmux.conf"
+  - source: "dots/tmux/.tmux.conf"
     target: "~/.tmux.conf"
     os: ["darwin", "linux"]
 
-  - source: "configs/opencode"
+  - source: "dots/opencode"
     target: "~/.config/opencode"
     os: ["darwin", "linux"]
 
-  - source: "configs/zsh"
+  - source: "dots/zsh"
     target: "~/.config/zsh"
     os: ["darwin", "linux"]
 
-  - source: "configs/lazygit"
+  - source: "dots/lazygit"
     target: "~/.config/lazygit"
     os: ["darwin", "linux"]
 
-  - source: "configs/k9s"
+  - source: "dots/k9s"
     target: "~/.config/k9s"
     os: ["darwin", "linux"]
 
-  - source: "configs/git"
+  - source: "dots/git"
     target: "~/.local/bin/git-scripts"
     os: ["darwin", "linux"]
 
   # MAC SPECIFIC (darwin)
-  - source: "configs/aerospace/.aerospace.toml"
+  - source: "dots/aerospace/.aerospace.toml"
     target: "~/.aerospace.toml"
     os: ["darwin"]
 
   # LINUX SPECIFIC
-  - source: "configs/hypr"
+  - source: "dots/hypr"
     target: "~/.config/hypr"
     os: ["linux"]
 
-  - source: "configs/fastfetch/config.jsonc"
+  - source: "dots/fastfetch/config.jsonc"
     target: "~/.config/fastfetch/config.jsonc"
     os: ["linux"]
 
@@ -72,10 +72,6 @@ packages:
       - firefox
       - tmux
       - lazygit
-      - noto-fonts
-      - noto-fonts-emoji
-      - noto-fonts-cjk
-      - ttf-firacode-nerd
       - git
       - vim
       - neovim
@@ -83,17 +79,21 @@ packages:
       - zoxide
       - direnv
       - docker
-      - docker-compose-plugin
       - kitty
       - zip
       - unzip
       - github-cli
-      - gnome-disk-utility
       - lsd
 
     arch:
       - base-devel
       - python
+      - noto-fonts
+      - noto-fonts-emoji
+      - noto-fonts-cjk
+      - ttf-firacode-nerd
+      - docker-compose
+      - gnome-disk-utility
       - hyprland
       - hyprlock
       - hyprpaper
@@ -113,10 +113,16 @@ packages:
     fedora:
       - "@development-tools"
       - python3
+      - docker-compose-plugin
 
     ubuntu:
       - build-essential
       - python3
+      - docker-compose-plugin
+      - fonts-noto
+      - fonts-noto-color-emoji
+      - fonts-noto-cjk
+      - fonts-firacode
 
     yay:
       - discord

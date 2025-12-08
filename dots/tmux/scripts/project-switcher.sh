@@ -6,7 +6,7 @@ else
     selected=$({
         echo "[New Tab]"
         echo "[Close Current Window]"
-        [[ -d "$HOME/.dotfiles" ]] && echo "$HOME/.dotfiles"
+        [[ -d "$HOME/.dots" ]] && echo "$HOME/.dots"
         [[ -d "$HOME/vinted" ]] && find "$HOME/vinted" -mindepth 1 -maxdepth 1 -type d
         [[ -d "$HOME/Documents" ]] && find "$HOME/Documents" -mindepth 1 -maxdepth 1 -type d
     } | fzf --select-1 --exit-0)

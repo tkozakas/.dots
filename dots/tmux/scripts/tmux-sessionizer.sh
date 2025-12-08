@@ -5,7 +5,7 @@ if [[ $# -eq 1 ]]; then
     selected=$1
 else
     # Find directories and show preview
-    selected=$(find ~/vinted ~/Documents ~/.dotfiles-work -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
+    selected=$(find ~/vinted ~/Documents ~/.dots -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
       fzf --prompt="Select project (session): " \
           --height=60% \
           --layout=reverse \
