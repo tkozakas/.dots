@@ -3,6 +3,7 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=20000
 export FZF_DEFAULT_OPTS='--height 40% --tmux bottom,40% --layout reverse --border=none'
+export PATH="$HOME/.dots:$PATH"
 export PATH="$HOME/.rd/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
