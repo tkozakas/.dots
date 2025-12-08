@@ -16,7 +16,6 @@ if [[ -z $selected ]]; then
     exit 0
 fi
 
-# Handle special actions
 if [[ "$selected" == "[New Tab]" ]]; then
     timestamp=$(date +%s)
     window_name="home-$timestamp"
