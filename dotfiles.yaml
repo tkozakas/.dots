@@ -20,8 +20,20 @@ symlinks:
     target: "~/.config/opencode"
     os: ["darwin", "linux"]
 
-  - source: "configs/zsh"
-    target: "~/.config/zsh"
+  - source: "configs/zsh/.zshrc"
+    target: "~/.zshrc"
+    os: ["darwin", "linux"]
+
+  - source: "configs/zsh/.zshenv"
+    target: "~/.zshenv"
+    os: ["darwin", "linux"]
+
+  - source: "configs/zsh/.zshalias"
+    target: "~/.zshalias"
+    os: ["darwin", "linux"]
+
+  - source: "configs/nvim/editorconfig"
+    target: "~/.editorconfig"
     os: ["darwin", "linux"]
 
   - source: "configs/lazygit"

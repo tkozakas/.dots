@@ -1,3 +1,4 @@
+alias d='dots'
 alias rm='rm -i'
 alias ls='ls --color=auto'
 alias ll='ls -alhF --color=auto'
