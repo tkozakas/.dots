@@ -1,7 +1,7 @@
 # .dots
 
 ```bash
-git clone git@github.com:tkozakas/.dots.git ~/.dots && cd ~/.dots && go build -o dots . && ./dots install
+git clone git@github.com:tkozakas/.dots.git ~/.dots && cd ~/.dots && go build -o bin/dots . && bin/dots install
 ```
 
 ## Commands
