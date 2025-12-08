@@ -13,7 +13,7 @@ var benchmarkRuns int
 
 var benchmarkCmd = &cobra.Command{
 	Use:   "benchmark",
-	Short: "Benchmark shell startup time",
+	Short: "Test shell startup time",
 	RunE:  runBenchmark,
 }
 

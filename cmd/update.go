@@ -6,12 +6,12 @@ import (
 	"os/exec"
 
 	"github.com/spf13/cobra"
-	"github.com/tom/dots/internal/linker"
+	"github.com/tkozakas/dots/internal/linker"
 )
 
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update dots: git pull, rebuild, and reinstall",
+	Short: "Sync: git pull → rebuild → install",
 	RunE:  runUpdate,
 }
 

@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/tom/dots/internal/config"
-	"github.com/tom/dots/internal/env"
+	"github.com/tkozakas/dots/internal/config"
+	"github.com/tkozakas/dots/internal/env"
 )
 
 func Install(cfg *config.Config, distro string, dryRun bool) error {

@@ -4,13 +4,13 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tom/dots/internal/config"
-	"github.com/tom/dots/internal/linker"
+	"github.com/tkozakas/dots/internal/config"
+	"github.com/tkozakas/dots/internal/linker"
 )
 
 var healthCmd = &cobra.Command{
 	Use:   "health",
-	Short: "Verify all symlinks are valid",
+	Short: "Verify symlinks",
 	RunE:  runHealth,
 }
 

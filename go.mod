@@ -1,4 +1,4 @@
-module github.com/tom/dots
+module github.com/tkozakas/dots
 
 go 1.25.4
 

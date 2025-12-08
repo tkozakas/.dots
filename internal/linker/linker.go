@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tom/dots/internal/config"
+	"github.com/tkozakas/dots/internal/config"
 )
 
 type SymlinkStatus int
