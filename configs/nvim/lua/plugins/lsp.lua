@@ -46,7 +46,7 @@ return {
 
 			vim.lsp.config.groovyls = {
 				cmd = {
-					"java",
+					"/opt/homebrew/opt/openjdk/bin/java",
 					"-jar",
 					vim.fn.stdpath("config") .. "/lsp-servers/groovy-language-server-all.jar",
 				},
@@ -55,7 +55,7 @@ return {
 					"Jenkinsfile",
 					"build.gradle",
 					"settings.gradle",
-					".git"
+					".git",
 				},
 			}
 
