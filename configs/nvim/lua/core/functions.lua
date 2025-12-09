@@ -73,11 +73,11 @@ function M.Tmux_split(command_to_run)
 end
 
 function M.tmux_split_horizontal()
-	vim.fn.system("tmux split-window -v -c '#{pane_current_path}'")
+	vim.fn.system('tmux split-window -v -c "#{pane_current_path}"')
 end
 
 function M.tmux_split_vertical()
-	vim.fn.system("tmux split-window -h -c '#{pane_current_path}'")
+	vim.fn.system('tmux split-window -h -c "#{pane_current_path}"')
 end
 
 function M.OpenInGH()
