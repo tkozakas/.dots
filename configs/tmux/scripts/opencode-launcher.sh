@@ -1,21 +1,17 @@
 #!/bin/bash
 
 PANE_WIDTH=30
-HIDDEN_WINDOW="opencode"
+PANE_TITLE="opencode"
 
-current_window=$(tmux display-message -p '#{window_id}')
-current_path=$(tmux display-message -p '#{pane_current_path}')
+toggle_opencode() {
+    opencode_pane=$(tmux list-panes -F '#{pane_id} #{pane_title}' | grep "$PANE_TITLE" | awk '{print $1}')
+    
+    if [[ -n "$opencode_pane" ]]; then
+        tmux kill-pane -t "$opencode_pane"
+    else
+        tmux split-window -h -l "$PANE_WIDTH" "opencode"
+        tmux select-pane -T "$PANE_TITLE"
+    fi
+}
 
-visible_pane=$(tmux list-panes -a -F "#{pane_id} #{pane_title} #{window_id}" | grep "OPENCODE" | grep "$current_window" | awk '{print $1}')
-hidden_window=$(tmux list-windows -F "#{window_name} #{window_id}" | grep "^${HIDDEN_WINDOW} " | awk '{print $2}')
-
-if [ -n "$visible_pane" ]; then
-    tmux break-pane -d -s "$visible_pane" -n "$HIDDEN_WINDOW"
-elif [ -n "$hidden_window" ]; then
-    hidden_pane=$(tmux list-panes -t "$HIDDEN_WINDOW" -F "#{pane_id}" | head -1)
-    tmux join-pane -h -s "$hidden_pane" -t "$current_window" -l "$PANE_WIDTH%"
-    tmux select-pane -t "$current_window" -L
-else
-    tmux split-window -h -p "$PANE_WIDTH" -c "$current_path" "printf '\033]2;OPENCODE\033\\' && opencode"
-    tmux select-pane -L
-fi
+toggle_opencode
