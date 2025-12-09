@@ -7,6 +7,7 @@
 --   <leader>d - Diagnostics/errors
 --   <leader>f - File explorer
 --   <leader>g - Git commands
+--   <leader>l - LSP operations
 --   <leader>s - Search/Telescope
 --   <leader>t - Tmux integration
 --   <leader>x - Debug operations
@@ -46,6 +47,9 @@ vim.keymap.set('n', '<leader>cc', '<cmd>ClaudeCode<CR>', { desc = '[C]ode: Toggl
 
 -- LSP Navigation
 vim.keymap.set('n', 'gr', vim.lsp.buf.references, { desc = 'LSP: Go to references' })
+vim.keymap.set('n', '<leader>le', ':Refactor extract ', { desc = '[L]SP: [E]xtract' })
+vim.keymap.set('v', '<leader>le', ':Refactor extract ', { desc = '[L]SP: [E]xtract' })
+vim.keymap.set('n', '<leader>lr', vim.lsp.buf.references, { desc = '[L]SP: [R]eferences' })
 
 -- Git Operations
 vim.keymap.set('n', '<leader>gc', ':Gcommit<CR>', { desc = '[G]it: [C]ommit' })
