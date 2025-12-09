@@ -6,7 +6,7 @@ vim.opt.textwidth = 120
 vim.opt.conceallevel = 2
 
 vim.keymap.set('n', '<leader>t', function()
-  Tmux_split('go test ./...')
+  require('core.functions').Tmux_split('go test ./...')
 end, { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>w', function()

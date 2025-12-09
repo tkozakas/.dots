@@ -4,7 +4,7 @@ vim.keymap.set('n', '<leader>t', function()
   if test_file_path == nil then
     vim.notify('Could not find test file')
   end
-  Tmux_split('bundle exec rspec ' .. test_file_path)
+  require('core.functions').Tmux_split('bundle exec rspec ' .. test_file_path)
 end, { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>T', function()
@@ -14,7 +14,7 @@ vim.keymap.set('n', '<leader>T', function()
     vim.notify('Could not find test file')
   end
   local line_no, _ = unpack(vim.api.nvim_win_get_cursor(0))
-  Tmux_split('bundle exec rspec ' .. test_file_path .. ':' .. line_no)
+  require('core.functions').Tmux_split('bundle exec rspec ' .. test_file_path .. ':' .. line_no)
 end, { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>cr', function()
