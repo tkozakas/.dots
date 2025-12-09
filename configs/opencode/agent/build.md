@@ -39,3 +39,8 @@ When writing code (Groovy/Jenkinsfile, Go, Ruby, Python, YAML), follow these rul
 - **Command-Query Separation** - Change state OR return info, not both
 - **No train wrecks** - Avoid `obj.get().get().get()`, use `obj.doSomething()`
 - **Clean code = fast code** - Don't rush, messes slow you down
+# Go Specifics
+- File Layout - Imports → Constants → Types → Constructors → Public → Private
+- Reading Distance - Place private helpers immediately below the public function that calls them (Step-down rule)
+- Error Handling - Use Guard Clauses (early return on error) to avoid nesting; overrides "Single Return" rule
+- Testing - Use Table-Driven Tests for 3+ cases; naming format TestTarget_Scenario
