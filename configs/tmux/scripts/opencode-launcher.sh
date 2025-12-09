@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PANE_WIDTH=30
+PANE_WIDTH=65
 PANE_TITLE="opencode"
 
 toggle_opencode() {
