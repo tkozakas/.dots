@@ -12,6 +12,11 @@ import (
 type Config struct {
 	Symlinks []Symlink `yaml:"symlinks"`
 	Packages Packages  `yaml:"packages"`
+	Hooks    Hooks     `yaml:"hooks"`
+}
+
+type Hooks struct {
+	PostInstall []string `yaml:"post_install"`
 }
 
 type Symlink struct {
