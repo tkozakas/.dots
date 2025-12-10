@@ -7,7 +7,7 @@ return {
 		view_options = { show_hidden = true },
 		watch_for_changes = true,
 		delete_to_trash = true,
-		skip_confirm_for_simple_edits = true,
+		skip_confirm_for_simple_edits = false,
 		prompt_save_on_select_new_entry = true,
 		keymaps = {
 			["<CR>"] = {
