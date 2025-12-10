@@ -1,6 +1,0 @@
-#!/bin/sh
-# Global git hook: reindex with ck after merge/pull
-
-if command -v ck >/dev/null 2>&1; then
-    ck reindex "$(git rev-parse --show-toplevel)" >/dev/null 2>&1 &
-fi
