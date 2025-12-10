@@ -52,6 +52,10 @@ symlinks:
     target: "~/.gitignore_global"
     os: ["darwin", "linux"]
 
+  - source: "configs/git/hooks"
+    target: "~/.config/git/hooks"
+    os: ["darwin", "linux"]
+
   - source: "configs/fastfetch/config.jsonc"
     target: "~/.config/fastfetch/config.jsonc"
     os: ["darwin", "linux"]
@@ -153,3 +157,5 @@ packages:
 hooks:
   post_install:
     - git config --global core.excludesFile ~/.gitignore_global
+    - git config --global core.hooksPath ~/.config/git/hooks
+    - chmod +x ~/.config/git/hooks/*
