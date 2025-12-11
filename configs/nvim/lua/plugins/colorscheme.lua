@@ -1,6 +1,11 @@
 return {
-  'sainnhe/gruvbox-material',
+  'Mofiqul/vscode.nvim',
   config = function()
-    vim.cmd('colorscheme gruvbox-material')
+    require('vscode').setup({
+      style = 'dark',
+      transparent = false,
+      italic_comments = true,
+    })
+    vim.cmd('colorscheme vscode')
   end,
 }
