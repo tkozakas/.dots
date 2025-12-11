@@ -1,11 +1,14 @@
 return {
-  'Mofiqul/vscode.nvim',
+  'rose-pine/neovim',
+  name = 'rose-pine',
   config = function()
-    require('vscode').setup({
-      style = 'dark',
-      transparent = false,
-      italic_comments = true,
+    require('rose-pine').setup({
+      variant = 'main',
+      disable_background = true,
+      styles = {
+        italic = false,
+      },
     })
-    vim.cmd('colorscheme vscode')
+    vim.cmd('colorscheme rose-pine')
   end,
 }
