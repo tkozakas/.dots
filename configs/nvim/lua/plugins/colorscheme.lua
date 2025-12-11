@@ -1,12 +1,10 @@
 return {
-    "rose-pine/neovim",
-    name = "rose-pine",
-    lazy = false,
-    priority = 1000,
-    config = function()
-        require("rose-pine").setup({
-            disable_background = true,
-        })
-        vim.cmd("colorscheme rose-pine")
-    end,
+  'navarasu/onedark.nvim',
+  priority = 1000, -- make sure to load this before all the other start plugins
+  config = function()
+    require('onedark').setup({
+      style = 'darker',
+    })
+    require('onedark').load()
+  end,
 }
