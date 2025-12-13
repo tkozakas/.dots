@@ -96,6 +96,8 @@ return {
 			require("mason-tool-installer").setup({
 				ensure_installed = vim.list_extend(vim.deepcopy(servers), {
 					"stylua",
+					"isort",
+					"black",
 				})
 			})
 
