@@ -20,7 +20,7 @@ return {
       cmp.setup({
         completion = { completeopt = 'menu,menuone,noinsert' },
         mapping = cmp.mapping.preset.insert({
-          ['<Tab>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-y>'] = cmp.mapping.confirm({ select = true }),
         }),
         sources = {
           { name = 'copilot' },

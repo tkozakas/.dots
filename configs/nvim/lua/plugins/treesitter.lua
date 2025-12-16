@@ -19,6 +19,7 @@ return {
 			"ruby",
 			"nix",
 			"groovy",
+			"python",
 		},
 		auto_install = true,
 		highlight = { enable = true },

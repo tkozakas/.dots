@@ -27,14 +27,15 @@ Analyze code and provide suggestions without making changes.
 ## Go
 - Layout: Imports -> Constants -> Types -> Constructors -> Public -> Private
 - Guard clauses for errors (early return)
-- Table-driven tests
+- Table-driven tests with camelCase names: `testUserLogin`, `testEmptyInput`
 
 # MCP Tools
 
-## ck-search
+## ck-search (PREFERRED for local code search)
+- Use ck-search FIRST for all local codebase searches
 - `semantic_search` - find code by meaning ("error handling", "auth logic")
 - `regex_search` - exact pattern match
-- `hybrid_search` - both combined
+- `hybrid_search` - both combined (best for most queries)
 
 ## gh_grep
 - Find real-world examples from GitHub repos

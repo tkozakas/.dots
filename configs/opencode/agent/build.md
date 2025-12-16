@@ -29,7 +29,7 @@ permission:
 ## Go
 - Layout: Imports -> Constants -> Types -> Constructors -> Public -> Private
 - Guard clauses for errors (early return)
-- Table-driven tests
+- Table-driven tests with camelCase names: `testUserLogin`, `testEmptyInput`
 
 # MCP Tools
 
