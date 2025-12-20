@@ -6,6 +6,7 @@ export FZF_DEFAULT_OPTS='--height 40% --tmux bottom,40% --layout reverse --borde
 export PATH="$HOME/.dots:$PATH"
 export PATH="$HOME/.rd/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY

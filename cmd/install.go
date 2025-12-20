@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/tkozakas/dots/internal/config"
+	"github.com/tkozakas/dots/internal/hooks"
 	"github.com/tkozakas/dots/internal/linker"
 	"github.com/tkozakas/dots/internal/packages"
 )
@@ -31,6 +32,10 @@ func runInstall(cmd *cobra.Command, args []string) error {
 
 	if err := packages.Install(cfg, distro, dryRun); err != nil {
 		return fmt.Errorf("installing packages: %w", err)
+	}
+
+	if err := hooks.RunPostInstall(cfg.Hooks, dryRun); err != nil {
+		return fmt.Errorf("running post-install hooks: %w", err)
 	}
 
 	if !dryRun {

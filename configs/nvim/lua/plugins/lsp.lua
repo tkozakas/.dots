@@ -164,8 +164,27 @@ return {
 		config = function(_, opts)
 			require("conform").setup(opts)
 			vim.keymap.set({ "n", "v" }, "<leader>f", function()
-				require("conform").format({ async = true, lsp_format = "fallback" })
-			end)
+				if vim.bo.filetype == "oil" then
+					local dir = require("oil").get_current_dir()
+					if not dir then
+						return
+					end
+					vim.notify("Formatting: " .. dir, vim.log.levels.INFO)
+					local cmds = {
+						{ pattern = "*.py", cmd = { "black", dir } },
+						{ pattern = "*.go", cmd = { "gofmt", "-w", dir } },
+						{ pattern = "*.lua", cmd = { "stylua", dir } },
+						{ pattern = "*.{js,ts,jsx,tsx,json,yaml,md,html,css}", cmd = { "prettier", "--write", dir } },
+						{ pattern = "*.rb", cmd = { "rubocop", "-a", dir } },
+						{ pattern = "*.sh", cmd = { "shfmt", "-w", dir } },
+					}
+					for _, c in ipairs(cmds) do
+						vim.fn.jobstart(c.cmd, { detach = true })
+					end
+				else
+					require("conform").format({ async = true, lsp_format = "fallback" })
+				end
+			end, { desc = "[F]ormat file or directory" })
 		end,
 	},
 }
