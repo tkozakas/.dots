@@ -22,6 +22,27 @@ return {
 								vim.cmd.cd(dir)
 							end
 						end)
+					elseif entry and entry.type == "file" then
+						local name = entry.name
+						local ext = name:match("%.([^%.]+)$")
+						if ext then
+							ext = ext:lower()
+						end
+						local media_exts = {
+							-- Images
+							png = true, jpg = true, jpeg = true, gif = true, bmp = true,
+							webp = true, svg = true, ico = true, tiff = true, tif = true,
+							-- Videos
+							mp4 = true, mkv = true, avi = true, mov = true, wmv = true,
+							flv = true, webm = true, m4v = true, mpeg = true, mpg = true,
+						}
+						if ext and media_exts[ext] then
+							local dir = oil.get_current_dir()
+							local filepath = dir .. name
+							vim.fn.jobstart({ "xdg-open", filepath }, { detach = true })
+						else
+							oil.select()
+						end
 					else
 						oil.select()
 					end

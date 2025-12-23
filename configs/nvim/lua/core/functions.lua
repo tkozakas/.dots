@@ -93,7 +93,8 @@ function M.OpenInGH()
 	local line_no, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
 	local url = string.format("https://%s/blob/master/%s#L%d", remote, current_file, line_no)
-	vim.system({ "open", url })
+	local open_cmd = vim.fn.has("mac") == 1 and "open" or "xdg-open"
+	vim.system({ open_cmd, url })
 end
 
 return M
