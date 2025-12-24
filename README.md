@@ -8,14 +8,8 @@ go build -o dots . && ./dots install
 ## Commands
 
 ```bash
-d install     # 1. Setup: symlinks → packages → benchmark
-d update      # 2. Sync: git pull → rebuild → install
-d uninstall   # 3. Cleanup: remove symlinks
-```
-
-### Optional
-
-```bash
+d install     # Setup: symlinks → packages → benchmark
+d uninstall   # Cleanup: remove symlinks
 d health      # Verify symlinks
 d benchmark   # Test shell startup time
 ```
