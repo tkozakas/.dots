@@ -1,22 +1,20 @@
 # .dots
 
+All configurations are in the [`configs/`](configs/) directory.
+
+## Install
+
 ```bash
-git clone git@github.com:tkozakas/.dots.git ~/.dots && cd ~/.dots
-go build -o dots . && ./dots install
+git clone git@github.com:tkozakas/.dots.git ~/.dots && ~/.dots/bootstrap.sh
 ```
 
-## Commands
+## Tasks
 
 ```bash
-d install     # Setup: symlinks → packages → benchmark
-d uninstall   # Cleanup: remove symlinks
-d health      # Verify symlinks
-d benchmark   # Test shell startup time
-```
-
-## Flags
-
-```bash
---dry-run        # Preview changes
---distro <name>  # Override distro (arch, fedora, ubuntu)
+task                              # Install (default)
+task install                      # Setup dotfiles
+task install -- --dry-run         # Preview changes
+task install -- --distro arch     # Override distro
+task uninstall                    # Remove symlinks
+task benchmark                    # Test shell startup time
 ```

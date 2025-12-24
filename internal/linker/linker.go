@@ -17,26 +17,8 @@ const (
 	colorCyan   = "\033[36m"
 )
 
-type SymlinkStatus int
-
-const (
-	StatusOK SymlinkStatus = iota
-	StatusMissing
-	StatusWrongTarget
-	StatusNotSymlink
-	StatusSourceMissing
-)
-
-type SymlinkInfo struct {
-	Source string
-	Target string
-	Status SymlinkStatus
-	Actual string
-}
-
 func Link(symlinks []config.Symlink, configPath string, dryRun bool) error {
-	baseDir := ResolveBaseDir(configPath)
-
+	baseDir := resolveBaseDir(configPath)
 	for _, s := range symlinks {
 		if err := processSymlink(s, baseDir, dryRun); err != nil {
 			return err
@@ -45,99 +27,9 @@ func Link(symlinks []config.Symlink, configPath string, dryRun bool) error {
 	return nil
 }
 
-func Unlink(symlinks []config.Symlink, configPath string, dryRun bool) error {
-	baseDir := ResolveBaseDir(configPath)
-
-	for _, s := range symlinks {
-		info := CheckSymlink(s, baseDir)
-		if info.Status == StatusMissing {
-			continue
-		}
-		if info.Status != StatusOK {
-			continue
-		}
-
-		if dryRun {
-			log.Printf("%s[dry-run]%s remove %s", colorYellow, colorReset, info.Target)
-			continue
-		}
-
-		if err := os.Remove(info.Target); err != nil {
-			return fmt.Errorf("removing %s: %w", info.Target, err)
-		}
-		log.Printf("%s-%s %s", colorRed, colorReset, info.Target)
-	}
-	return nil
-}
-
-func Health(symlinks []config.Symlink, configPath string) (ok, missing, broken int) {
-	baseDir := ResolveBaseDir(configPath)
-
-	for _, s := range symlinks {
-		info := CheckSymlink(s, baseDir)
-
-		switch info.Status {
-		case StatusOK:
-			log.Printf("%sOK%s       %s", colorGreen, colorReset, info.Target)
-			ok++
-		case StatusMissing:
-			log.Printf("%sMISSING%s  %s", colorYellow, colorReset, info.Target)
-			missing++
-		case StatusWrongTarget:
-			log.Printf("%sBROKEN%s   %s -> %s (expected %s)", colorRed, colorReset, info.Target, info.Actual, info.Source)
-			broken++
-		case StatusNotSymlink:
-			log.Printf("%sBROKEN%s   %s (not a symlink)", colorRed, colorReset, info.Target)
-			broken++
-		case StatusSourceMissing:
-			log.Printf("%sBROKEN%s   %s -> %s (source missing)", colorRed, colorReset, info.Target, info.Source)
-			broken++
-		}
-	}
-	return
-}
-
-func CheckSymlink(s config.Symlink, baseDir string) SymlinkInfo {
-	source := filepath.Join(baseDir, s.Source)
-	target, _ := ExpandHome(s.Target)
-
-	info := SymlinkInfo{Source: source, Target: target}
-
-	stat, err := os.Lstat(target)
-	if os.IsNotExist(err) {
-		info.Status = StatusMissing
-		return info
-	}
-
-	if stat.Mode()&os.ModeSymlink == 0 {
-		info.Status = StatusNotSymlink
-		return info
-	}
-
-	actual, err := os.Readlink(target)
-	if err != nil {
-		info.Status = StatusNotSymlink
-		return info
-	}
-	info.Actual = actual
-
-	if actual != source {
-		info.Status = StatusWrongTarget
-		return info
-	}
-
-	if _, err := os.Stat(source); os.IsNotExist(err) {
-		info.Status = StatusSourceMissing
-		return info
-	}
-
-	info.Status = StatusOK
-	return info
-}
-
 func processSymlink(s config.Symlink, baseDir string, dryRun bool) error {
 	source := filepath.Join(baseDir, s.Source)
-	target, err := ExpandHome(s.Target)
+	target, err := expandHome(s.Target)
 	if err != nil {
 		return fmt.Errorf("expanding path %s: %w", s.Target, err)
 	}
@@ -159,43 +51,151 @@ func createSymlink(source, target string) error {
 		return err
 	}
 
-	skip, err := removeExistingTarget(source, target)
-	if err != nil {
-		return err
-	}
+	action, oldTarget := prepareTarget(source, target)
 
-	if skip {
-		log.Printf("%s✓%s %s -> %s", colorGreen, colorReset, target, source)
+	switch action {
+	case actionSkip:
+		log.Printf("%s✓%s %s", colorGreen, colorReset, target)
 		return nil
+	case actionUpdate:
+		log.Printf("%s~%s %s (was %s)", colorYellow, colorReset, target, oldTarget)
+	case actionCreate:
+		log.Printf("%s+%s %s", colorCyan, colorReset, target)
 	}
 
-	log.Printf("%s+%s %s -> %s", colorCyan, colorReset, target, source)
 	return os.Symlink(source, target)
 }
 
-func removeExistingTarget(source, target string) (skip bool, err error) {
+type linkAction int
+
+const (
+	actionCreate linkAction = iota
+	actionSkip
+	actionUpdate
+)
+
+func prepareTarget(source, target string) (linkAction, string) {
 	info, err := os.Lstat(target)
 	if os.IsNotExist(err) {
-		return false, nil
+		return actionCreate, ""
 	}
 	if err != nil {
-		return false, err
+		return actionCreate, ""
 	}
 
 	if info.Mode()&os.ModeSymlink != 0 {
-		existing, err := os.Readlink(target)
-		if err == nil && existing == source {
-			return true, nil
+		existing, _ := os.Readlink(target)
+		if existing == source {
+			return actionSkip, ""
 		}
+		_ = os.Remove(target)
+		return actionUpdate, existing
 	}
 
 	if info.IsDir() {
-		return false, os.RemoveAll(target)
+		_ = os.RemoveAll(target)
+	} else {
+		_ = os.Remove(target)
 	}
-	return false, os.Remove(target)
+	return actionCreate, ""
 }
 
-func ExpandHome(path string) (string, error) {
+func Unlink(symlinks []config.Symlink, configPath string, dryRun bool) error {
+	baseDir := resolveBaseDir(configPath)
+	for _, s := range symlinks {
+		if err := unlinkOne(s, baseDir, dryRun); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func unlinkOne(s config.Symlink, baseDir string, dryRun bool) error {
+	source := filepath.Join(baseDir, s.Source)
+	target, _ := expandHome(s.Target)
+
+	info, err := os.Lstat(target)
+	if os.IsNotExist(err) {
+		return nil
+	}
+
+	if info.Mode()&os.ModeSymlink == 0 {
+		return nil
+	}
+
+	existing, _ := os.Readlink(target)
+	if existing != source {
+		return nil
+	}
+
+	if dryRun {
+		log.Printf("%s[dry-run]%s remove %s", colorYellow, colorReset, target)
+		return nil
+	}
+
+	if err := os.Remove(target); err != nil {
+		return fmt.Errorf("removing %s: %w", target, err)
+	}
+
+	log.Printf("%s-%s %s", colorRed, colorReset, target)
+	return nil
+}
+
+func Health(symlinks []config.Symlink, configPath string) (ok, missing, broken int) {
+	baseDir := resolveBaseDir(configPath)
+	for _, s := range symlinks {
+		status := checkOne(s, baseDir)
+		switch status {
+		case statusOK:
+			ok++
+		case statusMissing:
+			missing++
+		default:
+			broken++
+		}
+	}
+	return
+}
+
+type symlinkStatus int
+
+const (
+	statusOK symlinkStatus = iota
+	statusMissing
+	statusBroken
+)
+
+func checkOne(s config.Symlink, baseDir string) symlinkStatus {
+	source := filepath.Join(baseDir, s.Source)
+	target, _ := expandHome(s.Target)
+
+	info, err := os.Lstat(target)
+	if os.IsNotExist(err) {
+		log.Printf("%sMISSING%s  %s", colorYellow, colorReset, target)
+		return statusMissing
+	}
+
+	if info.Mode()&os.ModeSymlink == 0 {
+		log.Printf("%sBROKEN%s   %s (not a symlink)", colorRed, colorReset, target)
+		return statusBroken
+	}
+
+	actual, _ := os.Readlink(target)
+	if actual != source {
+		log.Printf("%sBROKEN%s   %s -> %s (expected %s)", colorRed, colorReset, target, actual, source)
+		return statusBroken
+	}
+
+	if _, err := os.Stat(source); os.IsNotExist(err) {
+		log.Printf("%sBROKEN%s   %s (source missing)", colorRed, colorReset, target)
+		return statusBroken
+	}
+
+	log.Printf("%sOK%s       %s", colorGreen, colorReset, target)
+	return statusOK
+}
+
+func expandHome(path string) (string, error) {
 	if len(path) == 0 || path[0] != '~' {
 		return filepath.Abs(path)
 	}
@@ -206,7 +206,7 @@ func ExpandHome(path string) (string, error) {
 	return filepath.Join(home, path[1:]), nil
 }
 
-func ResolveBaseDir(configPath string) string {
+func resolveBaseDir(configPath string) string {
 	dir := filepath.Dir(configPath)
 	if dir == "." {
 		dir, _ = filepath.Abs(".")

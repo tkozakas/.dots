@@ -14,32 +14,32 @@ import (
 
 func Install(cfg *config.Config, distro string, dryRun bool) error {
 	if runtime.GOOS == "darwin" {
-		return installDarwin(cfg.Packages.Darwin, dryRun)
+		return installDarwin(cfg.Packages, dryRun)
 	}
-	return installLinux(cfg.Packages.Linux, distro, dryRun)
+	return installLinux(cfg.Packages, distro, dryRun)
 }
 
-func installDarwin(pkgs config.DarwinPackages, dryRun bool) error {
-	if len(pkgs.Brew) > 0 {
-		if err := run("brew", "install", pkgs.Brew, dryRun); err != nil {
+func installDarwin(pkgs config.Packages, dryRun bool) error {
+	if len(pkgs.Darwin.Brew) > 0 {
+		if err := run("brew", "install", pkgs.Darwin.Brew, dryRun); err != nil {
 			return err
 		}
 	}
-	if len(pkgs.Cask) > 0 {
-		if err := run("brew", "install --cask", pkgs.Cask, dryRun); err != nil {
+	if len(pkgs.Darwin.Cask) > 0 {
+		if err := run("brew", "install --cask", pkgs.Darwin.Cask, dryRun); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func installLinux(pkgs config.LinuxPackages, distro string, dryRun bool) error {
+func installLinux(pkgs config.Packages, distro string, dryRun bool) error {
 	if distro == "" {
 		distro = env.DetectDistro()
 	}
 
-	if len(pkgs.Common) > 0 {
-		if err := installForDistro(pkgs.Common, distro, dryRun); err != nil {
+	if len(pkgs.Linux.Common) > 0 {
+		if err := installForDistro(pkgs.Linux.Common, distro, dryRun); err != nil {
 			return err
 		}
 	}
@@ -51,8 +51,8 @@ func installLinux(pkgs config.LinuxPackages, distro string, dryRun bool) error {
 		}
 	}
 
-	if distro == "arch" && len(pkgs.Yay) > 0 {
-		if err := run("yay", "-S --noconfirm --needed", pkgs.Yay, dryRun); err != nil {
+	if distro == "arch" && len(pkgs.Linux.Yay) > 0 {
+		if err := run("yay", "-S --noconfirm --needed", pkgs.Linux.Yay, dryRun); err != nil {
 			return err
 		}
 	}
@@ -60,14 +60,14 @@ func installLinux(pkgs config.LinuxPackages, distro string, dryRun bool) error {
 	return nil
 }
 
-func getDistroPackages(pkgs config.LinuxPackages, distro string) []string {
+func getDistroPackages(pkgs config.Packages, distro string) []string {
 	switch distro {
 	case "arch":
-		return pkgs.Arch
+		return pkgs.Linux.Arch
 	case "fedora":
-		return pkgs.Fedora
+		return pkgs.Linux.Fedora
 	case "ubuntu", "debian":
-		return pkgs.Ubuntu
+		return pkgs.Linux.Ubuntu
 	default:
 		return nil
 	}
@@ -98,7 +98,6 @@ func run(pm, action string, packages []string, dryRun bool) error {
 
 	parts := strings.Fields(pm)
 	args := append(strings.Fields(action), packages...)
-
 	cmd := exec.Command(parts[0], append(parts[1:], args...)...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

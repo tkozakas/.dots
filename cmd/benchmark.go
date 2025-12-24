@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -10,47 +9,43 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var benchmarkRuns int
-
 var benchmarkCmd = &cobra.Command{
 	Use:   "benchmark",
 	Short: "Test shell startup time",
-	RunE:  runBenchmark,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return benchmark(10)
+	},
 }
 
 func init() {
-	benchmarkCmd.Flags().IntVarP(&benchmarkRuns, "runs", "n", 10, "Number of iterations")
 	rootCmd.AddCommand(benchmarkCmd)
 }
 
-func runBenchmark(cmd *cobra.Command, args []string) error {
-	return Benchmark(benchmarkRuns)
-}
-
-func Benchmark(runs int) error {
+func benchmark(runs int) error {
 	shell := os.Getenv("SHELL")
 	if shell == "" {
 		shell = "zsh"
 	}
 
-	log.Printf("=== %s Startup Benchmark ===", shell)
+	log.Printf("\n=== %s Startup Benchmark ===", shell)
 	log.Printf("Running %d iterations...", runs)
 
 	var total time.Duration
-
 	for range runs {
-		start := time.Now()
-		c := exec.Command(shell, "-i", "-c", "exit")
-		c.Stdout = nil
-		c.Stderr = nil
-		if err := c.Run(); err != nil {
-			return fmt.Errorf("running shell: %w", err)
-		}
-		total += time.Since(start)
+		total += measureShellStartup(shell)
 	}
 
 	avg := total / time.Duration(runs)
-	log.Printf("Average startup time: %v", avg.Round(time.Millisecond))
+	log.Printf("Average: %v", avg.Round(time.Millisecond))
 
 	return nil
+}
+
+func measureShellStartup(shell string) time.Duration {
+	start := time.Now()
+	cmd := exec.Command(shell, "-i", "-c", "exit")
+	cmd.Stdout = nil
+	cmd.Stderr = nil
+	_ = cmd.Run()
+	return time.Since(start)
 }

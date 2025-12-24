@@ -15,33 +15,32 @@ type Config struct {
 	Hooks    Hooks     `yaml:"hooks"`
 }
 
-type Hooks struct {
-	PostInstall []string `yaml:"post_install"`
-}
-
 type Symlink struct {
-	Source    string   `yaml:"source"`
-	Target    string   `yaml:"target"`
-	OS        []string `yaml:"os"`
-	Submodule bool     `yaml:"submodule"`
+	Source string   `yaml:"source"`
+	Target string   `yaml:"target"`
+	OS     []string `yaml:"os"`
 }
 
 type Packages struct {
-	Darwin DarwinPackages `yaml:"darwin"`
-	Linux  LinuxPackages  `yaml:"linux"`
+	Darwin darwinPackages `yaml:"darwin"`
+	Linux  linuxPackages  `yaml:"linux"`
 }
 
-type DarwinPackages struct {
+type darwinPackages struct {
 	Brew []string `yaml:"brew"`
 	Cask []string `yaml:"cask"`
 }
 
-type LinuxPackages struct {
+type linuxPackages struct {
 	Common []string `yaml:"common"`
 	Arch   []string `yaml:"arch"`
 	Fedora []string `yaml:"fedora"`
 	Ubuntu []string `yaml:"ubuntu"`
 	Yay    []string `yaml:"yay"`
+}
+
+type Hooks struct {
+	PostInstall []string `yaml:"post_install"`
 }
 
 func Load(path string) (*Config, error) {
@@ -59,13 +58,9 @@ func Load(path string) (*Config, error) {
 }
 
 func (c *Config) SymlinksForCurrentOS() []Symlink {
-	return c.filterSymlinks(runtime.GOOS)
-}
-
-func (c *Config) filterSymlinks(osName string) []Symlink {
 	var result []Symlink
 	for _, s := range c.Symlinks {
-		if s.matchesOS(osName) {
+		if s.matchesOS(runtime.GOOS) {
 			result = append(result, s)
 		}
 	}
@@ -73,8 +68,5 @@ func (c *Config) filterSymlinks(osName string) []Symlink {
 }
 
 func (s *Symlink) matchesOS(osName string) bool {
-	if len(s.OS) == 0 {
-		return true
-	}
-	return slices.Contains(s.OS, osName)
+	return len(s.OS) == 0 || slices.Contains(s.OS, osName)
 }

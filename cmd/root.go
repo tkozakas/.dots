@@ -9,9 +9,10 @@ import (
 )
 
 var (
-	distro     string
-	dryRun     bool
-	configPath string
+	configPath   string
+	distro       string
+	dryRun       bool
+	skipPackages bool
 )
 
 var rootCmd = &cobra.Command{
@@ -28,9 +29,13 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", defaultConfigPath(), "config file")
+	rootCmd.PersistentFlags().StringVar(&distro, "distro", "", "override distro")
+	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "preview changes")
+	rootCmd.PersistentFlags().BoolVar(&skipPackages, "skip-packages", false, "skip package installation")
+}
+
+func defaultConfigPath() string {
 	home, _ := os.UserHomeDir()
-	defaultConfig := filepath.Join(home, ".dots", "dotfiles.yaml")
-	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", defaultConfig, "Config file path")
-	rootCmd.PersistentFlags().StringVar(&distro, "distro", "", "Override detected distribution")
-	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "Preview changes")
+	return filepath.Join(home, ".dots", "dotfiles.yaml")
 }
