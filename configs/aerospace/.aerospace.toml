@@ -4,6 +4,18 @@
 start-at-login = true
 automatically-unhide-macos-hidden-apps = false
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+after-startup-command = [
+    'exec-and-forget defaults write com.apple.dock expose-animation-duration -float 0.1 && killall Dock',
+    'exec-and-forget defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false',
+    'exec-and-forget defaults write -g NSWindowResizeTime -float 0.001',
+    'exec-and-forget firefox',
+    'exec-and-forget spotify',
+    'exec-and-forget slack',
+    'exec-and-forget 1password',
+    'exec-and-forget kitty',
+    'exec-and-forget raycast',
+    'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=3.0'
+]
 
 # =============================================================================
 # LAYOUT
@@ -23,22 +35,6 @@ outer.top = 0
 outer.right = 0
 
 # =============================================================================
-# STARTUP
-# =============================================================================
-after-startup-command = [
-    'exec-and-forget firefox',
-    'exec-and-forget spotify',
-    'exec-and-forget slack',
-    'exec-and-forget 1password',
-    'exec-and-forget kitty',
-    'exec-and-forget golang',
-    'exec-and-forget rubymine',
-    'exec-and-forget sketchybar',
-    'exec-and-forget raycast',
-    'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
-]
-
-# =============================================================================
 # MONITORS
 # =============================================================================
 [workspace-to-monitor-force-assignment]
@@ -51,13 +47,6 @@ after-startup-command = [
 9 = 1
 10 = 1
 
-# =============================================================================
-# HOOKS
-# =============================================================================
-exec-on-workspace-change = [
-    '/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-]
 
 # =============================================================================
 # KEYBINDINGS
@@ -130,34 +119,27 @@ shift-down = ['volume set 0', 'mode main']
 # =============================================================================
 # WINDOW RULES
 # =============================================================================
+# Apps that should tile (order matters - these must come before catch-all)
 [[on-window-detected]]
-if.app-id = 'com.1password.1password'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.ActivityMonitor'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.finder'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.systempreferences'
-run = 'layout floating'
+if.app-id = 'org.mozilla.firefox'
+run = ['layout tiling', 'move-node-to-workspace 1']
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace 2'
-
-[[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = 'move-node-to-workspace 1'
+run = ['layout tiling', 'move-node-to-workspace 2']
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
-run = 'move-node-to-workspace 3'
+run = ['layout tiling', 'move-node-to-workspace 3']
 
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
-run = 'move-node-to-workspace C'
+run = ['layout tiling', 'move-node-to-workspace C']
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = ['layout tiling', 'move-node-to-workspace 4']
+
+# Everything else floats
+[[on-window-detected]]
+run = 'layout floating'

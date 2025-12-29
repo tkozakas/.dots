@@ -1,6 +1,7 @@
 return {
 	"stevearc/oil.nvim",
-	lazy = false,
+	cmd = { "Oil" },
+	keys = { { "<leader>e", desc = "Open file explorer" } },
 	dependencies = { "nvim-telescope/telescope.nvim" },
 	opts = {
 		lsp_file_methods = { enabled = false },

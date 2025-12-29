@@ -3,14 +3,12 @@
   "share": "manual",
   "theme": "one-dark",
   "autoupdate": true,
-
   "tui": {
     "scroll_speed": 3,
     "scroll_acceleration": {
       "enabled": true
     }
   },
-
   "agent": {
     "build": {
       "path": "agent/build.md",
@@ -24,7 +22,6 @@
       "path": "agent/plan.md"
     }
   },
-
   "mcp": {
     "gh_grep": {
       "type": "remote",
@@ -32,7 +29,13 @@
     },
     "ck-search": {
       "type": "local",
-      "command": ["ck", "--serve"]
+      "command": [
+        "ck",
+        "--serve"
+      ]
     }
   },
+  "plugin": [
+    "oh-my-opencode"
+  ]
 }

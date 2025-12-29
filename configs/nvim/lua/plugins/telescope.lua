@@ -1,7 +1,13 @@
 return {
   'nvim-telescope/telescope.nvim',
   tag = '0.1.8',
-  lazy = false,
+  cmd = { 'Telescope' },
+  keys = {
+    { '<leader>j', desc = 'Find Recent Files' },
+    { '<leader>ff', desc = '[F]ind [F]iles' },
+    { '<leader>sg', desc = '[S]earch by [G]rep' },
+    { '<leader><leader>', desc = 'Resume Last Search' },
+  },
   dependencies = {
     { 'nvim-lua/plenary.nvim' },
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },

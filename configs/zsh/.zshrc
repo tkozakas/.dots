@@ -43,12 +43,8 @@ bindkey '\ec' fzf-cd-widget
 
 
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
-{
-  [[ -f "${DEVTOOLS_PATH:-$HOME/vinted/dev-tools}/bin/shell_function.sh" ]] && \
-    source "${DEVTOOLS_PATH:-$HOME/vinted/dev-tools}/bin/shell_function.sh"
-} &
-
-wait
+[[ -f "${DEVTOOLS_PATH:-$HOME/vinted/dev-tools}/bin/shell_function.sh" ]] && \
+  source "${DEVTOOLS_PATH:-$HOME/vinted/dev-tools}/bin/shell_function.sh"
 
 nvm() {
   unset -f nvm node npm
@@ -82,3 +78,10 @@ sdk() {
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/tomas.kozakas/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+# bun completions
+[ -s "/Users/tomas.kozakas/.bun/_bun" ] && source "/Users/tomas.kozakas/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
