@@ -15,6 +15,27 @@ const (
 	colorYellow = "\033[33m"
 	colorRed    = "\033[31m"
 	colorCyan   = "\033[36m"
+
+	xdgConfigHome    = "$XDG_CONFIG_HOME"
+	xdgConfigHomeLen = 16
+	defaultConfig    = ".config"
+	dirPerm          = 0755
+)
+
+type linkAction int
+
+const (
+	actionCreate linkAction = iota
+	actionSkip
+	actionUpdate
+)
+
+type symlinkStatus int
+
+const (
+	statusOK symlinkStatus = iota
+	statusMissing
+	statusBroken
 )
 
 func Link(symlinks []config.Symlink, configPath string, dryRun bool) error {
@@ -29,7 +50,7 @@ func Link(symlinks []config.Symlink, configPath string, dryRun bool) error {
 
 func processSymlink(s config.Symlink, baseDir string, dryRun bool) error {
 	source := filepath.Join(baseDir, s.Source)
-	target, err := expandHome(s.Target)
+	target, err := expandPath(s.Target)
 	if err != nil {
 		return fmt.Errorf("expanding path %s: %w", s.Target, err)
 	}
@@ -47,7 +68,7 @@ func createSymlink(source, target string) error {
 		return fmt.Errorf("source not found: %s", source)
 	}
 
-	if err := os.MkdirAll(filepath.Dir(target), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(target), dirPerm); err != nil {
 		return err
 	}
 
@@ -65,14 +86,6 @@ func createSymlink(source, target string) error {
 
 	return os.Symlink(source, target)
 }
-
-type linkAction int
-
-const (
-	actionCreate linkAction = iota
-	actionSkip
-	actionUpdate
-)
 
 func prepareTarget(source, target string) (linkAction, string) {
 	info, err := os.Lstat(target)
@@ -112,7 +125,7 @@ func Unlink(symlinks []config.Symlink, configPath string, dryRun bool) error {
 
 func unlinkOne(s config.Symlink, baseDir string, dryRun bool) error {
 	source := filepath.Join(baseDir, s.Source)
-	target, _ := expandHome(s.Target)
+	target, _ := expandPath(s.Target)
 
 	info, err := os.Lstat(target)
 	if os.IsNotExist(err) {
@@ -157,17 +170,9 @@ func Health(symlinks []config.Symlink, configPath string) (ok, missing, broken i
 	return
 }
 
-type symlinkStatus int
-
-const (
-	statusOK symlinkStatus = iota
-	statusMissing
-	statusBroken
-)
-
 func checkOne(s config.Symlink, baseDir string) symlinkStatus {
 	source := filepath.Join(baseDir, s.Source)
-	target, _ := expandHome(s.Target)
+	target, _ := expandPath(s.Target)
 
 	info, err := os.Lstat(target)
 	if os.IsNotExist(err) {
@@ -195,15 +200,32 @@ func checkOne(s config.Symlink, baseDir string) symlinkStatus {
 	return statusOK
 }
 
-func expandHome(path string) (string, error) {
-	if len(path) == 0 || path[0] != '~' {
+func expandPath(path string) (string, error) {
+	if len(path) == 0 {
 		return filepath.Abs(path)
 	}
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
+
+	if len(path) >= xdgConfigHomeLen && path[:xdgConfigHomeLen] == xdgConfigHome {
+		xdg := os.Getenv("XDG_CONFIG_HOME")
+		if xdg == "" {
+			home, err := os.UserHomeDir()
+			if err != nil {
+				return "", err
+			}
+			xdg = filepath.Join(home, defaultConfig)
+		}
+		return filepath.Join(xdg, path[xdgConfigHomeLen:]), nil
 	}
-	return filepath.Join(home, path[1:]), nil
+
+	if path[0] == '~' {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			return "", err
+		}
+		return filepath.Join(home, path[1:]), nil
+	}
+
+	return filepath.Abs(path)
 }
 
 func resolveBaseDir(configPath string) string {
