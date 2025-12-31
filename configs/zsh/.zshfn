@@ -1,0 +1,68 @@
+# ── Aliases ───────────────────────────────────────────────────────────────────
+alias d='dots'
+alias rm='rm -i'
+alias ls='ls --color=auto'
+alias ll='ls -alhF --color=auto'
+alias da='direnv allow'
+
+alias v='nvim'
+alias nano='nvim'
+
+alias g='git'
+alias gst='git status'
+alias gl='git log --oneline --graph --decorate --all'
+
+alias k='kubectl'
+alias railsc='bundle exec rails console'
+
+alias squash='~/.local/bin/git-scripts/git-squash-pr.sh'
+alias pr='~/.local/bin/git-scripts/git-open-or-create-pr.sh'
+
+# ── Functions ─────────────────────────────────────────────────────────────────
+
+# Nvim with directory sync
+nvim() {
+  command nvim "$@"
+  if [[ -f "$HOME/.nvim_last_dir" ]]; then
+    local last_dir=$(cat "$HOME/.nvim_last_dir")
+    [[ -d "$last_dir" ]] && cd "$last_dir"
+    rm -f "$HOME/.nvim_last_dir"
+  fi
+}
+
+# Dotfiles dirty indicator for prompt
+mnml_dots() {
+  local dots_dir="${DOTFILES_DIR:-$HOME/.dots}"
+  if [[ -d "$dots_dir/.git" ]]; then
+    if [[ -n "$(git -C "$dots_dir" status --porcelain 2>/dev/null)" ]]; then
+      printf '%b' "%{\e[0;33m%}●%{\e[0m%}"
+    fi
+  fi
+}
+
+# ── Lazy Loaders ──────────────────────────────────────────────────────────────
+
+nvm() {
+  unset -f nvm node npm
+  [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
+  [[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+
+node() {
+  unset -f nvm node npm
+  [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
+  node "$@"
+}
+
+npm() {
+  unset -f nvm node npm
+  [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
+  npm "$@"
+}
+
+sdk() {
+  unset -f sdk
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+  sdk "$@"
+}

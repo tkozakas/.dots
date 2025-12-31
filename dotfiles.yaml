@@ -28,8 +28,8 @@ symlinks:
     target: "~/.zshenv"
     os: ["darwin", "linux"]
 
-  - source: "configs/zsh/.zshalias"
-    target: "~/.zshalias"
+  - source: "configs/zsh/.zshfn"
+    target: "~/.zshfn"
     os: ["darwin", "linux"]
 
   - source: "configs/nvim/editorconfig"
