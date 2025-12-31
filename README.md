@@ -1,5 +1,7 @@
 # .dots
 
+Semi-stolen, semi-handcrafted.
+
 All configurations are in the [`configs/`](configs/) directory.
 
 ## Install
