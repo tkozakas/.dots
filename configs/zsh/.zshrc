@@ -17,9 +17,6 @@ zplug "zsh-users/zsh-history-substring-search", defer:2
 
 ! zplug check && zplug install
 
-# ── Prompt ────────────────────────────────────────────────────────────────────
-MNML_RPROMPT=(mnml_dots 'mnml_cwd 2 0' mnml_git)
-
 # ── Vi Mode ───────────────────────────────────────────────────────────────────
 bindkey -v
 export KEYTIMEOUT=1
