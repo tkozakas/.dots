@@ -8,4 +8,3 @@ Semi-stolen, semi-handcrafted.
 - LSP, completion, treesitter
 - Telescope, debugger (DAP)
 - Tmux integration
-- One Dark theme
