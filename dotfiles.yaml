@@ -81,6 +81,7 @@ packages:
       - lsd
       - fastfetch
       - ck
+      - mole
     cask:
       - font-fira-code-nerd-font
       - kitty
