@@ -20,7 +20,6 @@ if [[ "$selected" == "[New Tab]" ]]; then
     timestamp=$(date +%s)
     window_name="home-$timestamp"
     tmux new-window -n "$window_name" -c "$HOME"
-    tmux send-keys -t "$window_name" "nvim ." C-m
     exit 0
 fi
 
@@ -41,5 +40,4 @@ if tmux list-windows -F '#{window_name}' | grep -q "^${selected_name}$"; then
     fi
 else
     tmux new-window -n "$selected_name" -c "$selected"
-    tmux send-keys -t "$selected_name" "nvim ." C-m
 fi
