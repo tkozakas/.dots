@@ -2,4 +2,4 @@
 
 - Custom agent configs (build, plan)
 - oh-my-opencode plugin with model mappings
-- MCP servers (gh_grep, ck-search)
+- MCP servers (gh_grep)

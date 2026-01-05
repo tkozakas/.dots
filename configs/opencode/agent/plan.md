@@ -31,11 +31,5 @@ Analyze code and provide suggestions without making changes.
 
 # MCP Tools
 
-## ck-search (PREFERRED for local code search)
-- Use ck-search FIRST for all local codebase searches
-- `semantic_search` - find code by meaning ("error handling", "auth logic")
-- `regex_search` - exact pattern match
-- `hybrid_search` - both combined (best for most queries)
-
 ## gh_grep
 - Find real-world examples from GitHub repos
