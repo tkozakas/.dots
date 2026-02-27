@@ -15,4 +15,4 @@ make install    # Setup dotfiles
 make uninstall  # Remove symlinks
 make benchmark  # Shell startup time
 make clean      # Remove binary
-`` Alacritty`
+```
