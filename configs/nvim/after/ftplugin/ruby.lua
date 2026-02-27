@@ -1,21 +1,29 @@
+local function find_spec_file()
+  local file = vim.fn.expand('%:.')
+  if file:find('_spec.rb') then return file end
+  local spec = file:gsub('^app/', 'spec/'):gsub('%.rb$', '_spec.rb')
+  if vim.fn.filereadable(spec) == 1 then return spec end
+  return nil
+end
+
 vim.keymap.set('n', '<leader>t', function()
-  local current_file = vim.fn.expand('%:.')
-  local test_file_path = current_file:find('_spec.rb') and current_file or vim.b.onv_otherFile
-  if test_file_path == nil then
-    vim.notify('Could not find test file')
+  local spec = find_spec_file()
+  if not spec then
+    vim.notify('Could not find test file', vim.log.levels.WARN)
+    return
   end
-  require('core.functions').Tmux_split('bundle exec rspec ' .. test_file_path)
-end, { desc = '[T]est: run rspec file', noremap = true, silent = true })
+  require('core.functions').Tmux_split('bundle exec rspec ' .. spec)
+end, { buffer = 0, desc = '[T]est: run rspec file' })
 
 vim.keymap.set('n', '<leader>T', function()
-  local current_file = vim.fn.expand('%:.')
-  local test_file_path = current_file:find('_spec.rb') and current_file or vim.b.onv_otherFile
-  if test_file_path == nil then
-    vim.notify('Could not find test file')
+  local spec = find_spec_file()
+  if not spec then
+    vim.notify('Could not find test file', vim.log.levels.WARN)
+    return
   end
   local line_no = vim.api.nvim_win_get_cursor(0)[1]
-  require('core.functions').Tmux_split('bundle exec rspec ' .. test_file_path .. ':' .. line_no)
-end, { desc = '[T]est: run rspec at line', noremap = true, silent = true })
+  require('core.functions').Tmux_split('bundle exec rspec ' .. spec .. ':' .. line_no)
+end, { buffer = 0, desc = '[T]est: run rspec at line' })
 
 vim.keymap.set('n', '<leader>cr', function()
   local ts = vim.treesitter
@@ -34,7 +42,7 @@ vim.keymap.set('n', '<leader>cr', function()
     vim.notify(ts.get_node_text(node, 0), vim.log.levels.INFO)
     break
   end
-end, { desc = '[C]lass: show [R]uby class name' })
+end, { buffer = 0, desc = '[C]lass: show [R]uby class name' })
 
 vim.keymap.set('n', '<leader>w', function()
   require('telescope').extensions.live_grep_args.live_grep_args({
@@ -46,4 +54,4 @@ vim.keymap.set('n', '<leader>w', function()
       return true
     end,
   })
-end, { desc = '[W]ord search (exclude specs)' })
+end, { buffer = 0, desc = '[W]ord search (exclude specs)' })

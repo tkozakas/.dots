@@ -12,7 +12,7 @@ return {
     { 'nvim-lua/plenary.nvim' },
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     { 'nvim-telescope/telescope-live-grep-args.nvim', version = '^1.0.0' },
-    { 'nvim-telescope/telescope-frecency.nvim', config = { db_safe_mode = false } },
+    { 'nvim-telescope/telescope-frecency.nvim', opts = { db_safe_mode = false } },
   },
   config = function()
     local telescope = require('telescope')

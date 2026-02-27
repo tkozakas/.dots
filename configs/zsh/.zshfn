@@ -34,13 +34,3 @@ nvim() {
     rm -f "$HOME/.nvim_last_dir"
   fi
 }
-
-# Dotfiles dirty indicator for prompt
-mnml_dots() {
-  local dots_dir="${DOTFILES_DIR:-$HOME/.dots}"
-  if [[ -d "$dots_dir/.git" ]]; then
-    if [[ -n "$(git -C "$dots_dir" status --porcelain 2>/dev/null)" ]]; then
-      printf '%b' "%{\e[0;33m%}●%{\e[0m%}"
-    fi
-  fi
-}

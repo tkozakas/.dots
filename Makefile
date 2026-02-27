@@ -11,7 +11,8 @@ uninstall: $(BINARY)
 benchmark: $(BINARY)
 	./$(BINARY) benchmark
 
-$(BINARY): $(wildcard **/*.go) go.mod go.sum
+GO_SRC := $(shell find . -name '*.go')
+$(BINARY): $(GO_SRC) go.mod go.sum
 	go build -o $(BINARY) .
 
 clean:

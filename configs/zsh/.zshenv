@@ -1,10 +1,6 @@
 # ── Paths ─────────────────────────────────────────────────────────────────────
-export PATH="$HOME/go/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.rd/bin:$PATH"
-export PATH="$HOME/.bun/bin:$PATH"
-export PATH="$HOME/.dots:$PATH"
+typeset -U path
+export PATH="$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.rd/bin:$HOME/.bun/bin:$HOME/.dots:$PATH"
 
 export BUN_INSTALL="$HOME/.bun"
 export EDITOR="nvim"
@@ -15,7 +11,6 @@ export HISTSIZE=50000
 export SAVEHIST=100000
 
 setopt APPEND_HISTORY
-setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_FIND_NO_DUPS

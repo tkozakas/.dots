@@ -33,11 +33,6 @@ eval "$(zoxide init zsh --cmd cd)"
 eval "$(direnv hook zsh)"
 eval "$(mise activate zsh)"
 
-# ── Keybindings ───────────────────────────────────────────────────────────────
-bindkey '^R' fzf-history-widget
-bindkey '^T' fzf-file-widget
-bindkey '\ec' fzf-cd-widget
-
 # ── External Sources ──────────────────────────────────────────────────────────
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 [[ -f "${DEVTOOLS_PATH:-$HOME/vinted/dev-tools}/bin/shell_function.sh" ]] && \

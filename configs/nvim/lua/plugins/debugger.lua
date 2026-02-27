@@ -12,19 +12,11 @@ return {
       local dap = require('dap')
       local dapui = require('dapui')
 
-      -- Setup UI
       dapui.setup()
-
-      -- Setup virtual text
       require('nvim-dap-virtual-text').setup()
-
-      -- Setup Go debugger
       require('dap-go').setup()
-
-      -- Setup Python debugger
       require('dap-python').setup('python')
 
-      -- Setup Ruby debugger (using rdbg)
       dap.adapters.ruby = {
         type = 'executable',
         command = 'rdbg',
@@ -46,38 +38,23 @@ return {
         },
       }
 
-      -- Auto open/close UI
-      dap.listeners.before.attach.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.launch.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        dapui.close()
-      end
+      dap.listeners.before.attach.dapui_config = function() dapui.open() end
+      dap.listeners.before.launch.dapui_config = function() dapui.open() end
+      dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
+      dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
 
-      -- Keymaps
-      vim.keymap.set(
-        'n',
-        '<leader>db',
-        dap.toggle_breakpoint,
-        { desc = '[D]ebug [B]reakpoint toggle' }
-      )
-      vim.keymap.set('n', '<leader>dc', dap.continue, { desc = '[D]ebug [C]ontinue' })
-      vim.keymap.set('n', '<leader>di', dap.step_into, { desc = '[D]ebug step [I]nto' })
-      vim.keymap.set('n', '<leader>do', dap.step_over, { desc = '[D]ebug step [O]ver' })
-      vim.keymap.set('n', '<leader>dO', dap.step_out, { desc = '[D]ebug step [O]ut' })
-      vim.keymap.set('n', '<leader>dr', dap.repl.open, { desc = '[D]ebug [R]EPL' })
-      vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = '[D]ebug run [L]ast' })
-      vim.keymap.set('n', '<leader>dt', dapui.toggle, { desc = '[D]ebug UI [T]oggle' })
-      vim.keymap.set('n', '<leader>dx', dap.terminate, { desc = '[D]ebug terminate/e[X]it' })
-      vim.keymap.set({ 'n', 'v' }, '<leader>dh', function()
+      vim.keymap.set('n', '<leader>xb', dap.toggle_breakpoint, { desc = 'Debug: [B]reakpoint toggle' })
+      vim.keymap.set('n', '<leader>xc', dap.continue, { desc = 'Debug: [C]ontinue' })
+      vim.keymap.set('n', '<leader>xi', dap.step_into, { desc = 'Debug: step [I]nto' })
+      vim.keymap.set('n', '<leader>xo', dap.step_over, { desc = 'Debug: step [O]ver' })
+      vim.keymap.set('n', '<leader>xO', dap.step_out, { desc = 'Debug: step [O]ut' })
+      vim.keymap.set('n', '<leader>xr', dap.repl.open, { desc = 'Debug: [R]EPL' })
+      vim.keymap.set('n', '<leader>xl', dap.run_last, { desc = 'Debug: run [L]ast' })
+      vim.keymap.set('n', '<leader>xt', dapui.toggle, { desc = 'Debug: UI [T]oggle' })
+      vim.keymap.set('n', '<leader>xx', dap.terminate, { desc = 'Debug: terminate/e[X]it' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>xh', function()
         require('dap.ui.widgets').hover()
-      end, { desc = '[D]ebug [H]over' })
+      end, { desc = 'Debug: [H]over' })
     end,
   },
 }

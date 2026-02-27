@@ -10,57 +10,54 @@ return {
 		},
 		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+				group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
 				callback = function(event)
-					local map = function(keys, func, mode)
+					local function map(keys, func, desc, mode)
 						mode = mode or "n"
-						vim.keymap.set(mode, keys, func, { buffer = event.buf })
+						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = desc })
 					end
 
-					map("gd", vim.lsp.buf.definition)
-					map("<leader>rn", vim.lsp.buf.rename)
-					map("<leader>.", vim.lsp.buf.code_action, { "n", "x" })
-					map("<leader>h", vim.lsp.buf.hover)
-				map("<leader>dn", vim.diagnostic.goto_next)
-				map("<leader>dp", vim.diagnostic.goto_prev)
+					map("gd", vim.lsp.buf.definition, "LSP: Go to definition")
+					map("gr", vim.lsp.buf.references, "LSP: Go to references")
+					map("<leader>rn", vim.lsp.buf.rename, "LSP: Rename symbol")
+					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode: [A]ction", { "n", "x" })
+					map("<leader>h", vim.lsp.buf.hover, "LSP: Hover documentation")
 				end,
 			})
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-			-- Configure LSP servers using vim.lsp.config
 			vim.lsp.config("*", {
 				capabilities = capabilities,
 			})
 
-			vim.lsp.config.yamlls = {}
-			vim.lsp.config.gopls = {}
-			vim.lsp.config.pyright = {}
+			vim.lsp.config("yamlls", {})
+			vim.lsp.config("gopls", {})
+			vim.lsp.config("pyright", {})
 
-			vim.lsp.config.ruby_lsp = {
+			vim.lsp.config("ruby_lsp", {
 				cmd = { "mise", "x", "--", "ruby-lsp" },
 				filetypes = { "ruby" },
 				root_markers = { "Gemfile", ".git" },
-				settings = {},
-			}
+			})
 
-			vim.lsp.config.groovyls = {
+			vim.lsp.config("groovyls", {
 				cmd = {
 					"/opt/homebrew/opt/openjdk/bin/java",
 					"-jar",
 					vim.fn.stdpath("config") .. "/lsp-servers/groovy-language-server-all.jar",
 				},
-				filetypes = { "groovy", "Jenkinsfile" },
+				filetypes = { "groovy" },
 				root_markers = {
 					"Jenkinsfile",
 					"build.gradle",
 					"settings.gradle",
 					".git",
 				},
-			}
+			})
 
-			vim.lsp.config.lua_ls = {
+			vim.lsp.config("lua_ls", {
 				on_init = function(client)
 					if client.workspace_folders then
 						local path = client.workspace_folders[1].name
@@ -83,7 +80,7 @@ return {
 				settings = {
 					Lua = {},
 				},
-			}
+			})
 
 			require("mason").setup()
 
@@ -99,7 +96,7 @@ return {
 					"stylua",
 					"isort",
 					"black",
-				})
+				}),
 			})
 
 			require("mason-lspconfig").setup({
@@ -111,20 +108,8 @@ return {
 				},
 			})
 
-			-- Enable non-Mason LSP servers
 			vim.lsp.enable("ruby_lsp")
 			vim.lsp.enable("groovyls")
-
-			vim.lsp.handlers["textDocument/publishDiagnostics"] =
-				vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-				virtual_text = {
-					spacing = 4,
-					prefix = "●",
-				},
-					signs = false,
-					underline = false,
-					update_in_insert = false,
-				})
 		end,
 	},
 	{
@@ -176,12 +161,12 @@ return {
 					end
 					vim.notify("Formatting: " .. dir, vim.log.levels.INFO)
 					local cmds = {
-						{ pattern = "*.py", cmd = { "black", dir } },
-						{ pattern = "*.go", cmd = { "gofmt", "-w", dir } },
-						{ pattern = "*.lua", cmd = { "stylua", dir } },
-						{ pattern = "*.{js,ts,jsx,tsx,json,yaml,md,html,css}", cmd = { "prettier", "--write", dir } },
-						{ pattern = "*.rb", cmd = { "rubocop", "-a", dir } },
-						{ pattern = "*.sh", cmd = { "shfmt", "-w", dir } },
+						{ cmd = { "black", dir } },
+						{ cmd = { "gofmt", "-w", dir } },
+						{ cmd = { "stylua", dir } },
+						{ cmd = { "prettier", "--write", dir } },
+						{ cmd = { "rubocop", "-a", dir } },
+						{ cmd = { "shfmt", "-w", dir } },
 					}
 					for _, c in ipairs(cmds) do
 						vim.fn.jobstart(c.cmd, { detach = true })
