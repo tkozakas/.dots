@@ -1,34 +1,24 @@
 local M = {}
 
 function M.open_or_create_pr()
-	local file_dir
-	if vim.bo.filetype == "oil" then
-		file_dir = require("oil").get_current_dir()
-	else
-		file_dir = vim.fn.expand("%:p:h")
-	end
+	local cwd = vim.bo.filetype == "oil" and require("oil").get_current_dir() or vim.fn.expand("%:p:h")
+	if not cwd or cwd == "" then return end
 
-	if file_dir == "" or file_dir == nil then
-		vim.notify("Cannot determine file directory.", vim.log.levels.WARN)
-		return
-	end
+	vim.system({ "git", "rev-parse", "--abbrev-ref", "HEAD" }, { cwd = cwd }, function(out)
+		local branch = vim.trim(out.stdout)
+		if branch == "master" or branch == "main" then
+			vim.schedule(function() vim.notify("On " .. branch .. ", switch branches first", vim.log.levels.WARN) end)
+			return
+		end
 
-	local gh_command = "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) && "
-		.. "DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name') && "
-		.. 'if [ "$CURRENT_BRANCH" = "$DEFAULT_BRANCH" ]; then exit 1; fi && '
-		.. 'git push --set-upstream origin "$CURRENT_BRANCH" && '
-		.. "OPEN_PR_COUNT=$(gh pr list --head \"$CURRENT_BRANCH\" --state open --limit 1 --json url --jq 'length') && "
-		.. 'if [ "$OPEN_PR_COUNT" -eq 0 ]; then '
-		.. "gh pr create --fill --web; "
-		.. "else "
-		.. "gh pr view --web; "
-		.. "fi"
-
-	local silent_command = "(" .. gh_command .. ") >/dev/null 2>&1"
-
-	vim.system({ "sh", "-c", silent_command }, {
-		cwd = file_dir,
-	})
+		vim.system({ "git", "push", "-u", "origin", "HEAD" }, { cwd = cwd }, function()
+			vim.system({ "gh", "pr", "view", "--web" }, { cwd = cwd }, function(pr)
+				if pr.code ~= 0 then
+					vim.system({ "gh", "pr", "create", "--fill", "--web" }, { cwd = cwd })
+				end
+			end)
+		end)
+	end)
 end
 
 function M.lazygit()

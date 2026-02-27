@@ -22,8 +22,8 @@ vim.keymap.set('n', 'd', '"_d', { desc = 'Delete (no yank)' })
 vim.keymap.set('x', 'd', '"_d', { desc = 'Delete selection (no yank)' })
 
 -- Navigation
-vim.keymap.set('n', '<C-o>', '<C-o>zz', { desc = 'Jump back and center' })
-vim.keymap.set('n', '<C-i>', '<C-i>zz', { desc = 'Jump forward and center' })
+vim.keymap.set('n', '<C-[>', '<C-o>zz', { desc = 'Jump back and center' })
+vim.keymap.set('n', '<C-]>', '<C-i>zz', { desc = 'Jump forward and center' })
 
 -- Window splits
 vim.keymap.set('n', '<C-w>h', ':split<CR>', { desc = 'Split window horizontally' })
@@ -57,12 +57,9 @@ vim.keymap.set('n', '<leader>gg', function()
   require('core.functions').lazygit()
 end, { desc = '[G]it: Open [G]UI (LazyGit)' })
 vim.keymap.set('n', '<leader>gh', ':Gh<CR>', { desc = '[G]it: Open on [H]ub' })
-vim.keymap.set(
-  'n',
-  '<leader>gp',
-  require('core.functions').open_or_create_pr,
-  { desc = '[G]it: [P]R', silent = true }
-)
+vim.keymap.set('n', '<leader>gp', function()
+  require('core.functions').open_or_create_pr()
+end, { desc = '[G]it: [P]R' })
 
 -- Diagnostics
 vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, { desc = '[D]iagnostic: [D]etails' })
