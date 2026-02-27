@@ -10,13 +10,9 @@ All configurations are in the [`configs/`](configs/) directory.
 git clone git@github.com:tkozakas/.dots.git ~/.dots && ~/.dots/bootstrap.sh
 ```
 
-## Tasks
-
 ```bash
-task                              # Install (default)
-task install                      # Setup dotfiles
-task install -- --dry-run         # Preview changes
-task install -- --distro arch     # Override distro
-task uninstall                    # Remove symlinks
-task benchmark                    # Test shell startup time
-```
+make install    # Setup dotfiles
+make uninstall  # Remove symlinks
+make benchmark  # Shell startup time
+make clean      # Remove binary
+`` Alacritty`

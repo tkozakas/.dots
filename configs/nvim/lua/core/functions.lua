@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 
 function M.open_or_create_pr()
 	local file_dir
@@ -81,18 +81,47 @@ function M.tmux_split_vertical()
 end
 
 function M.OpenInGH()
-	local git_cmd = vim.system({ "git", "remote", "get-url", "origin" }):wait()
+	local file_path = vim.fn.expand("%:p")
+	local file_dir = vim.fn.expand("%:p:h")
 
-	if git_cmd["code"] ~= 0 then
-		vim.notify("Not a git repository or origin is not set")
+	local remote_cmd = vim.system({ "git", "remote", "get-url", "origin" }, { cwd = file_dir }):wait()
+	if remote_cmd.code ~= 0 then
+		vim.notify("Not a git repository or origin is not set", vim.log.levels.ERROR)
 		return
 	end
 
-	local remote = git_cmd.stdout:gsub("\n", ""):gsub("^git@", ""):gsub("%.git$", ""):gsub(":", "/")
-	local current_file = vim.fn.expand("%:.")
-	local line_no, _ = unpack(vim.api.nvim_win_get_cursor(0))
+	local raw = vim.trim(remote_cmd.stdout)
+	local base_url
+	if raw:match("^https?://") then
+		base_url = raw:gsub("%.git$", "")
+	else
+		local host, path = raw:match("^git@([^:]+):(.+)$")
+		if not host then
+			vim.notify("Unsupported remote format: " .. raw, vim.log.levels.ERROR)
+			return
+		end
+		base_url = "https://" .. host .. "/" .. path:gsub("%.git$", "")
+	end
 
-	local url = string.format("https://%s/blob/master/%s#L%d", remote, current_file, line_no)
+	local rel_cmd = vim.system(
+		{ "git", "ls-files", "--full-name", file_path },
+		{ cwd = file_dir }
+	):wait()
+	local rel_path = vim.trim(rel_cmd.stdout)
+	if rel_path == "" then
+		vim.notify("File not tracked by git", vim.log.levels.WARN)
+		return
+	end
+
+	local branch_cmd = vim.system({ "git", "rev-parse", "--abbrev-ref", "HEAD" }, { cwd = file_dir }):wait()
+	local branch = vim.trim(branch_cmd.stdout)
+	if branch == "" then
+		branch = "HEAD"
+	end
+
+	local line_no = vim.api.nvim_win_get_cursor(0)[1]
+	local url = string.format("%s/blob/%s/%s#L%d", base_url, branch, rel_path, line_no)
+
 	local open_cmd = vim.fn.has("mac") == 1 and "open" or "xdg-open"
 	vim.system({ open_cmd, url })
 end

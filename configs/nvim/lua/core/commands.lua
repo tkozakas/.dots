@@ -3,7 +3,7 @@ vim.api.nvim_create_user_command('Gcommit', function()
 end, {})
 
 vim.api.nvim_create_user_command('Econf', function()
-  vim.cmd('e ~/dotfiles/.config/nvim/init.lua')
+  vim.cmd('e ~/.dots/configs/nvim/init.lua')
 end, {})
 
 vim.api.nvim_create_user_command('Cp', function()

@@ -1,8 +1,10 @@
 # ── Aliases ───────────────────────────────────────────────────────────────────
 alias d='dots'
 alias rm='rm -i'
-alias ls='ls --color=auto'
-alias ll='ls -alhF --color=auto'
+alias ls='lsd'
+alias ll='lsd -alF'
+alias la='lsd -a'
+alias lt='lsd --tree --depth 2'
 alias da='direnv allow'
 
 alias v='nvim'
@@ -13,10 +15,13 @@ alias gst='git status'
 alias gl='git log --oneline --graph --decorate --all'
 
 alias k='kubectl'
+alias gw-token='export TOKEN=$(cd ~/vinted/api-gw-configs/integration_tests && go run ~/Documents/script/gen-gw-token.go)'
 alias railsc='bundle exec rails console'
 
 alias squash='~/.local/bin/git-scripts/git-squash-pr.sh'
 alias pr='~/.local/bin/git-scripts/git-open-or-create-pr.sh'
+
+alias jnt-sandbox2='ssh -i ~/.ssh/chef -tt jnt "ssh gs1-front-sandbox2-external-api1.ams1.vinted.infra"'
 
 # ── Functions ─────────────────────────────────────────────────────────────────
 

@@ -51,8 +51,8 @@ return {
 	{
 		"rgroli/other.nvim",
 		keys = {
-			{ "<leader>o", function() require("other-nvim").open() end, desc = "Open other file" },
-			{ "<leader>O", function() require("other-nvim").openVSplit() end, desc = "Open other file (vsplit)" },
+			{ "<leader>o", function() require("other-nvim").open() end, desc = "Open [O]ther file" },
+			{ "<leader>O", function() require("other-nvim").openVSplit() end, desc = "Open [O]ther file (vsplit)" },
 		},
 		config = function()
 			require("other-nvim").setup({
@@ -74,21 +74,5 @@ return {
 				},
 			})
 		end,
-		keys = {
-			{
-				"<leader>o",
-				function()
-					require("other-nvim").open()
-				end,
-				mode = "n",
-			},
-			{
-				"<leader>O",
-				function()
-					require("other-nvim").openVSplit()
-				end,
-				mode = "n",
-			},
-		},
 	},
 }

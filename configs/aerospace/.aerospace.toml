@@ -12,7 +12,7 @@ after-startup-command = [
     'exec-and-forget spotify',
     'exec-and-forget slack',
     'exec-and-forget 1password',
-    'exec-and-forget kitty',
+    'exec-and-forget alacritty',
     'exec-and-forget raycast',
     'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=3.0'
 ]
@@ -133,7 +133,7 @@ if.app-id = 'com.spotify.client'
 run = ['layout tiling', 'move-node-to-workspace 3']
 
 [[on-window-detected]]
-if.app-id = 'net.kovidgoyal.kitty'
+if.app-id = 'org.alacritty'
 run = ['layout tiling', 'move-node-to-workspace C']
 
 [[on-window-detected]]

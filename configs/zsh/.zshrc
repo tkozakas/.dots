@@ -1,5 +1,4 @@
 # ── Source Config ─────────────────────────────────────────────────────────────
-[[ -f ~/.zshenv ]] && source ~/.zshenv
 [[ -f ~/.zshfn ]] && source ~/.zshfn
 
 # ── Plugins ───────────────────────────────────────────────────────────────────
@@ -9,7 +8,6 @@ fi
 source "${ZPLUG_HOME:-$HOME/.zplug}/init.zsh"
 
 zplug "subnixr/minimal", as:theme, depth:1
-zplug "agkozak/zsh-z"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-autosuggestions", defer:2
 zplug "zsh-users/zsh-completions", defer:2
@@ -40,6 +38,11 @@ fi
 bindkey '^R' fzf-history-widget
 bindkey '^T' fzf-file-widget
 bindkey '\ec' fzf-cd-widget
+
+# ── Tool Activation ──────────────────────────────────────────────────────────
+eval "$(zoxide init zsh)"
+eval "$(direnv hook zsh)"
+eval "$(mise activate zsh)"
 
 # ── External Sources ──────────────────────────────────────────────────────────
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh

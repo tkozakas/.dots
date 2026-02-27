@@ -21,8 +21,8 @@ return {
 					map("<leader>rn", vim.lsp.buf.rename)
 					map("<leader>.", vim.lsp.buf.code_action, { "n", "x" })
 					map("<leader>h", vim.lsp.buf.hover)
-					map("<leader>en", vim.diagnostic.goto_next)
-					map("<leader>ep", vim.diagnostic.goto_prev)
+				map("<leader>dn", vim.diagnostic.goto_next)
+				map("<leader>dp", vim.diagnostic.goto_prev)
 				end,
 			})
 

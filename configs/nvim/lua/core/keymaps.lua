@@ -21,9 +21,9 @@ vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 vim.keymap.set('n', 'd', '"_d', { desc = 'Delete (no yank)' })
 vim.keymap.set('x', 'd', '"_d', { desc = 'Delete selection (no yank)' })
 
--- Navigation - restore standard Vim jump behavior
-vim.keymap.set('n', '[', '<C-o>', { desc = 'Jump back' })
-vim.keymap.set('n', ']', '<C-i>', { desc = 'Jump forward' })
+-- Navigation
+vim.keymap.set('n', '<C-o>', '<C-o>zz', { desc = 'Jump back and center' })
+vim.keymap.set('n', '<C-i>', '<C-i>zz', { desc = 'Jump forward and center' })
 
 -- Window splits
 vim.keymap.set('n', '<C-w>h', ':split<CR>', { desc = 'Split window horizontally' })
@@ -72,8 +72,6 @@ vim.keymap.set(
   vim.diagnostic.setloclist,
   { desc = '[D]iagnostic: [L]ocation list' }
 )
-vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next, { desc = '[D]iagnostic: [N]ext' })
-vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev, { desc = '[D]iagnostic: [P]revious' })
 vim.keymap.set(
   'n',
   '<leader>dq',

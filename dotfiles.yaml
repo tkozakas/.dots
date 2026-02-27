@@ -4,8 +4,8 @@ symlinks:
     target: "~/.config/nvim"
     os: ["darwin", "linux"]
 
-  - source: "configs/kitty"
-    target: "~/.config/kitty"
+  - source: "configs/alacritty"
+    target: "~/.config/alacritty"
     os: ["darwin", "linux"]
 
   - source: "configs/tmux"
@@ -82,8 +82,8 @@ packages:
       - fastfetch
       - mole
     cask:
-      - font-fira-code-nerd-font
-      - kitty
+      - font-jetbrains-mono-nerd-font
+      - alacritty
 
   linux:
     common:
@@ -97,7 +97,7 @@ packages:
       - zoxide
       - direnv
       - docker
-      - kitty
+      - alacritty
       - zip
       - unzip
       - github-cli
@@ -110,7 +110,7 @@ packages:
       - noto-fonts
       - noto-fonts-emoji
       - noto-fonts-cjk
-      - ttf-firacode-nerd
+      - ttf-jetbrains-mono-nerd
       - docker-compose
       - gnome-disk-utility
       - hyprland

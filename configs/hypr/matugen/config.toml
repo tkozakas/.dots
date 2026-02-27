@@ -8,10 +8,9 @@ input_path = '~/.config/hypr/matugen/templates/colors.css'
 output_path = '~/.config/hypr/waybar/colors.css'
 post_hook = 'pkill -SIGUSR2 waybar'
 
-[templates.kitty]
-input_path = '~/.config/hypr/matugen/templates/kitty-colors.conf'
-output_path = '~/.config/kitty/colors.conf'
-post_hook = "pkill -SIGUSR1 kitty"
+[templates.alacritty]
+input_path = '~/.config/hypr/matugen/templates/alacritty-colors.toml'
+output_path = '~/.config/alacritty/colors.toml'
 
 [templates.hyprland]
 input_path = '~/.config/hypr/matugen/templates/hyprland-colors.conf'
