@@ -29,17 +29,16 @@ return {
 							ext = ext:lower()
 						end
 						local media_exts = {
-							-- Images
 							png = true, jpg = true, jpeg = true, gif = true, bmp = true,
 							webp = true, svg = true, ico = true, tiff = true, tif = true,
-							-- Videos
 							mp4 = true, mkv = true, avi = true, mov = true, wmv = true,
 							flv = true, webm = true, m4v = true, mpeg = true, mpg = true,
 						}
 						if ext and media_exts[ext] then
 							local dir = oil.get_current_dir()
 							local filepath = dir .. name
-							vim.fn.jobstart({ "xdg-open", filepath }, { detach = true })
+							local open_cmd = vim.fn.has("mac") == 1 and "open" or "xdg-open"
+							vim.fn.jobstart({ open_cmd, filepath }, { detach = true })
 						else
 							oil.select()
 						end
@@ -51,8 +50,6 @@ return {
 		},
 	},
 	config = function(_, opts)
-		local funcs = require("core.functions")
-
 		require("oil").setup(opts)
 		vim.keymap.set("n", "<leader>e", require("oil").open, { desc = "Open file explorer" })
 
@@ -67,20 +64,20 @@ return {
 			end,
 		})
 
+		-- Auto-cd to git root (or file dir if not in a repo)
 		vim.api.nvim_create_autocmd({ "BufEnter", "DirChanged" }, {
 			callback = function(args)
 				local buftype = vim.bo[args.buf].buftype
 				local filetype = vim.bo[args.buf].filetype
-				
+
 				if filetype == "oil" then
-					local oil = require("oil")
-					local dir = oil.get_current_dir()
+					local dir = require("oil").get_current_dir()
 					if dir and vim.fn.getcwd() ~= dir then
 						vim.cmd.cd(dir)
 					end
 					return
 				end
-				
+
 				if buftype ~= "" and buftype ~= "acwrite" then
 					return
 				end
@@ -91,8 +88,11 @@ return {
 				end
 
 				local filedir = vim.fn.fnamemodify(filepath, ":h")
-				if vim.fn.isdirectory(filedir) == 1 and vim.fn.getcwd() ~= filedir then
-					vim.cmd.cd(filedir)
+				local git_root = vim.fn.systemlist("git -C " .. vim.fn.shellescape(filedir) .. " rev-parse --show-toplevel 2>/dev/null")[1]
+				local target = (git_root and git_root ~= "" and vim.v.shell_error == 0) and git_root or filedir
+
+				if vim.fn.isdirectory(target) == 1 and vim.fn.getcwd() ~= target then
+					vim.cmd.cd(target)
 				end
 			end,
 		})
@@ -108,9 +108,9 @@ return {
 					buffer = args.buf,
 					desc = "[S]earch [G]rep (from Oil)",
 				})
-				vim.keymap.set("n", "<leader>g", funcs.lazygit, {
+				vim.keymap.set("n", "<leader>gg", require("core.functions").lazygit, {
 					buffer = args.buf,
-					desc = "Open Lazygit (from Oil)",
+					desc = "[G]it: Open [G]UI (from Oil)",
 				})
 			end,
 		})

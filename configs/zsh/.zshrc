@@ -1,19 +1,23 @@
 # ── Source Config ─────────────────────────────────────────────────────────────
 [[ -f ~/.zshfn ]] && source ~/.zshfn
 
-# ── Plugins ───────────────────────────────────────────────────────────────────
-if [[ ! -d "${ZPLUG_HOME:-$HOME/.zplug}" ]]; then
-  git clone https://github.com/zplug/zplug "${ZPLUG_HOME:-$HOME/.zplug}"
+# ── Zinit ─────────────────────────────────────────────────────────────────────
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [[ ! -d "$ZINIT_HOME" ]]; then
+  mkdir -p "$(dirname "$ZINIT_HOME")"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
-source "${ZPLUG_HOME:-$HOME/.zplug}/init.zsh"
+source "$ZINIT_HOME/zinit.zsh"
 
-zplug "subnixr/minimal", as:theme, depth:1
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-autosuggestions", defer:2
-zplug "zsh-users/zsh-completions", defer:2
-zplug "zsh-users/zsh-history-substring-search", defer:2
+zinit light subnixr/minimal
 
-! zplug check && zplug install
+# Turbo-loaded plugins (load after prompt renders)
+zinit wait lucid light-mode for \
+  Aloxaf/fzf-tab \
+  zsh-users/zsh-completions \
+  atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions \
+  zsh-users/zsh-history-substring-search \
+  atinit"zicompinit; zicdreplay" zdharma-continuum/fast-syntax-highlighting
 
 # ── Vi Mode ───────────────────────────────────────────────────────────────────
 bindkey -v
@@ -24,25 +28,15 @@ zle-keymap-select() { zle reset-prompt }
 zle -N zle-line-init
 zle -N zle-keymap-select
 
-# ── Load Plugins & Completions ────────────────────────────────────────────────
-zplug load
-
-autoload -Uz compinit
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qNmh+24) ]]; then
-  compinit -i
-else
-  compinit -C -i
-fi
+# ── Tool Activation ───────────────────────────────────────────────────────────
+eval "$(zoxide init zsh --cmd cd)"
+eval "$(direnv hook zsh)"
+eval "$(mise activate zsh)"
 
 # ── Keybindings ───────────────────────────────────────────────────────────────
 bindkey '^R' fzf-history-widget
 bindkey '^T' fzf-file-widget
 bindkey '\ec' fzf-cd-widget
-
-# ── Tool Activation ──────────────────────────────────────────────────────────
-eval "$(zoxide init zsh)"
-eval "$(direnv hook zsh)"
-eval "$(mise activate zsh)"
 
 # ── External Sources ──────────────────────────────────────────────────────────
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh

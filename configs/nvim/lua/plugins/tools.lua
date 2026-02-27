@@ -29,23 +29,23 @@ return {
 
 			vim.keymap.set("n", "M", function()
 				harpoon:list():add()
-			end)
+			end, { desc = "Harpoon: add file" })
 			vim.keymap.set("n", "mm", function()
 				harpoon.ui:toggle_quick_menu(harpoon:list())
-			end)
+			end, { desc = "Harpoon: toggle menu" })
 
 			vim.keymap.set("n", "ma", function()
 				harpoon:list():select(1)
-			end)
+			end, { desc = "Harpoon: file 1" })
 			vim.keymap.set("n", "ms", function()
 				harpoon:list():select(2)
-			end)
+			end, { desc = "Harpoon: file 2" })
 			vim.keymap.set("n", "md", function()
 				harpoon:list():select(3)
-			end)
+			end, { desc = "Harpoon: file 3" })
 			vim.keymap.set("n", "mf", function()
 				harpoon:list():select(4)
-			end)
+			end, { desc = "Harpoon: file 4" })
 		end,
 	},
 	{

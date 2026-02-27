@@ -1,5 +1,5 @@
 vim.opt.tabstop = 4
-vim.opt.shiftwidth = 2
+vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 0
 vim.opt.expandtab = false
 vim.opt.textwidth = 120
@@ -7,7 +7,7 @@ vim.opt.conceallevel = 2
 
 vim.keymap.set('n', '<leader>t', function()
   require('core.functions').Tmux_split('go test ./...')
-end, { noremap = true, silent = true })
+end, { desc = '[T]est: run go test', noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>w', function()
   require('telescope').extensions.live_grep_args.live_grep_args({
@@ -19,4 +19,4 @@ vim.keymap.set('n', '<leader>w', function()
       return true
     end,
   })
-end)
+end, { desc = '[W]ord search (exclude generated)' })

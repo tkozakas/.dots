@@ -7,8 +7,6 @@ export PATH="$HOME/.bun/bin:$PATH"
 export PATH="$HOME/.dots:$PATH"
 
 export BUN_INSTALL="$HOME/.bun"
-export NVM_DIR="$HOME/.nvm"
-export SDKMAN_DIR="$HOME/.sdkman"
 export EDITOR="nvim"
 
 # ── History ───────────────────────────────────────────────────────────────────

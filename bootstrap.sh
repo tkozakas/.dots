@@ -2,4 +2,4 @@
 set -e
 curl https://mise.run | sh
 eval "$(~/.local/bin/mise activate bash)"
-mise trust && make
+mise trust && mise install && make

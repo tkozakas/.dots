@@ -10,10 +10,16 @@ shell = { program = "/bin/zsh", args = ["-l", "-c", "tmux new-session -A -s main
 
 [window]
 decorations = "Buttonless"
+startup_mode = "Maximized"
 dynamic_title = true
 opacity = 1.0
 padding = { x = 6, y = 6 }
 option_as_alt = "Both"
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Command"
+action = "ToggleFullscreen"
 
 [scrolling]
 history = 10000

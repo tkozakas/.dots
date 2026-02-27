@@ -7,7 +7,6 @@ return {
 
 	{
 		"Wansmer/treesj",
-		lazy = false,
 		config = function()
 			require("treesj").setup({
 				use_default_keymaps = false,
@@ -21,24 +20,6 @@ return {
 					require("treesj").toggle()
 				end,
 			},
-		},
-	},
-
-	{
-		"pocco81/auto-save.nvim",
-		opts = {
-			enabled = true,
-			trigger_events = { "InsertLeave" },
-			execution_message = { message = "" },
-			condition = function(buf)
-				if not vim.api.nvim_buf_is_valid(buf) then
-					return false
-				end
-				if vim.bo[buf].filetype == "harpoon" then
-					return false
-				end
-				return true
-			end,
 		},
 	},
 
