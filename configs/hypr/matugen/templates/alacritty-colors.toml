@@ -1,0 +1,31 @@
+[colors.primary]
+background = "{{colors.background.default.hex}}"
+foreground = "{{colors.on_background.default.hex}}"
+
+[colors.cursor]
+text = "{{colors.background.default.hex}}"
+cursor = "{{colors.on_background.default.hex}}"
+
+[colors.selection]
+text = "CellForeground"
+background = "{{colors.surface_container_high.default.hex}}"
+
+[colors.normal]
+black   = "{{colors.surface.default.hex}}"
+red     = "{{colors.error.default.hex}}"
+green   = "{{colors.primary.default.hex}}"
+yellow  = "{{colors.tertiary.default.hex}}"
+blue    = "{{colors.secondary.default.hex}}"
+magenta = "{{colors.tertiary_container.default.hex}}"
+cyan    = "{{colors.primary_container.default.hex}}"
+white   = "{{colors.on_background.default.hex}}"
+
+[colors.bright]
+black   = "{{colors.outline.default.hex}}"
+red     = "{{colors.error_container.default.hex}}"
+green   = "{{colors.primary_fixed.default.hex}}"
+yellow  = "{{colors.tertiary_fixed.default.hex}}"
+blue    = "{{colors.secondary_fixed.default.hex}}"
+magenta = "{{colors.on_tertiary.default.hex}}"
+cyan    = "{{colors.on_primary.default.hex}}"
+white   = "{{colors.inverse_surface.default.hex}}"

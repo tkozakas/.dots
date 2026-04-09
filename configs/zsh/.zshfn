@@ -1,0 +1,25 @@
+# vim: ft=zsh
+# ── Aliases ───────────────────────────────────────────────────────────────────
+alias d='dots'
+alias rm='rm -i'
+alias ls='lsd'
+alias ll='lsd -alF'
+alias la='lsd -a'
+alias lt='lsd --tree --depth 2'
+alias da='direnv allow'
+
+alias v='nvim'
+alias nano='nvim'
+
+alias g='git'
+alias gst='git status'
+alias gl='git log --oneline --graph --decorate --all'
+
+alias k='kubectl'
+
+alias squash='git-squash-pr.sh'
+alias pr='git-open-or-create-pr.sh'
+
+# ── Private Extensions ────────────────────────────────────────────────────────
+[[ -f ~/.dots-work/zshfn ]] && source ~/.dots-work/zshfn
+
