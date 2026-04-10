@@ -15,10 +15,10 @@ import (
 
 const repo = ".dots-work"
 
-func Run(distro string, dryRun, skipPackages bool) {
+func Run(distro string, dryRun, skipPackages bool) []config.Symlink {
 	home, err := os.UserHomeDir()
 	if err != nil {
-		return
+		return nil
 	}
 
 	dir := filepath.Join(home, repo)
@@ -26,27 +26,28 @@ func Run(distro string, dryRun, skipPackages bool) {
 
 	if !exists(dir) {
 		if !hasGHRepo(repo) {
-			return
+			return nil
 		}
 		if err := cloneRepo(home, dryRun); err != nil {
 			log.Printf("Extension: clone failed: %v", err)
-			return
+			return nil
 		}
 	}
 
 	if !exists(cfgPath) {
-		return
+		return nil
 	}
 
 	cfg, err := config.Load(cfgPath)
 	if err != nil {
-		return
+		return nil
 	}
 
 	log.Printf("\n=== Extension: %s ===", repo)
 
-	if symlinks := cfg.SymlinksForCurrentOS(); len(symlinks) > 0 {
-		_ = linker.Link(symlinks, cfgPath, dryRun)
+	extSymlinks := cfg.SymlinksForCurrentOS()
+	if len(extSymlinks) > 0 {
+		_ = linker.Link(extSymlinks, cfgPath, dryRun)
 	}
 
 	if !skipPackages {
@@ -56,6 +57,8 @@ func Run(distro string, dryRun, skipPackages bool) {
 	for _, h := range cfg.Hooks.PostInstall {
 		runSilent(h, dryRun)
 	}
+
+	return extSymlinks
 }
 
 func exists(path string) bool {

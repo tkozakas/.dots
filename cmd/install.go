@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/tkozakas/dots/internal/config"
@@ -44,23 +46,45 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("running hooks: %w", err)
 	}
 
-	extensions.Run(distro, dryRun, skipPackages)
+	extSymlinks := extensions.Run(distro, dryRun, skipPackages)
 
 	if dryRun {
 		return nil
 	}
 
-	if err := checkHealth(symlinks); err != nil {
+	if err := checkHealth(symlinks, extSymlinks); err != nil {
 		return err
 	}
 
 	return benchmark(10)
 }
 
-func checkHealth(symlinks []config.Symlink) error {
+func checkHealth(symlinks, extSymlinks []config.Symlink) error {
 	log.Println("\n=== Health Check ===")
 
-	ok, missing, broken := linker.Health(symlinks, configPath)
+	overrides := make(map[string]bool)
+	for _, s := range extSymlinks {
+		overrides[s.Target] = true
+	}
+
+	var filtered []config.Symlink
+	for _, s := range symlinks {
+		if !overrides[s.Target] {
+			filtered = append(filtered, s)
+		}
+	}
+
+	ok, missing, broken := linker.Health(filtered, configPath)
+
+	if len(extSymlinks) > 0 {
+		home, _ := os.UserHomeDir()
+		extCfgPath := filepath.Join(home, ".dots-work", "dotfiles.yaml")
+		extOk, extMissing, extBroken := linker.Health(extSymlinks, extCfgPath)
+		ok += extOk
+		missing += extMissing
+		broken += extBroken
+	}
+
 	log.Printf("Total: %d OK, %d missing, %d broken", ok, missing, broken)
 
 	if broken > 0 || missing > 0 {
