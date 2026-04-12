@@ -37,7 +37,7 @@ return {
 				filetypes = { "ruby", "eruby" },
 				root_markers = { "Gemfile", ".git" },
 				init_options = {
-					formatter = "none",
+					formatter = "rubocop",
 					linters = { "rubocop" },
 					indexing = {
 						excludedPatterns = { "**/test/**/*.rb", "**/spec/fixtures/**/*.rb" },
