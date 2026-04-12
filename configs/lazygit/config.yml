@@ -104,7 +104,7 @@ gui:
   # If true, show the bottom line that contains keybinding info and useful buttons. If false, this line will be hidden except to display a loader for an in-progress action.
   showBottomLine: false
   # If true, show jump-to-window keybindings in window titles.
-  showPanelJumps: false
+  showPanelJumps: true
   # Deprecated: use nerdFontsVersion instead
   showIcons: false
   # Nerd fonts version to use.
@@ -162,7 +162,7 @@ gui:
   # If true, jump to the Files panel after applying a stash
   switchToFilesAfterStashApply: true
   # If true, when using the panel jump keys (default 1 through 5) and target panel is already active, go to next tab instead
-  switchTabsWithPanelJumpKeys: false
+  switchTabsWithPanelJumpKeys: true
 # Config relating to git
 git:
   # See https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
