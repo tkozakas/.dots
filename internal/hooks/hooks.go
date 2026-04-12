@@ -4,13 +4,18 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"runtime"
 
 	"github.com/tkozakas/dots/internal/config"
 )
 
 func RunPostInstall(hooks config.Hooks, dryRun bool) error {
-	for _, cmd := range hooks.PostInstall {
-		if err := runCmd(cmd, dryRun); err != nil {
+	for _, hook := range hooks.PostInstall {
+		if !hook.MatchesOS(runtime.GOOS) {
+			log.Printf("[skip] %s (os: %v, current: %s)", hook.Cmd, hook.OS, runtime.GOOS)
+			continue
+		}
+		if err := runCmd(hook.Cmd, dryRun); err != nil {
 			return err
 		}
 	}

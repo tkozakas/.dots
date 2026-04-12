@@ -70,6 +70,10 @@ symlinks:
     target: "~/.config/hypr"
     os: ["linux"]
 
+  - source: "configs/boot/scripts"
+    target: "~/.local/bin/boot"
+    os: ["linux"]
+
 packages:
   darwin:
     brew:
@@ -161,4 +165,6 @@ hooks:
   post_install:
     - git config --global core.excludesFile ~/.gitignore_global
     - go install github.com/tkozakas/agent-monitor@latest
+    - cmd: "if [ -d /sys/firmware/efi ]; then ~/.local/bin/boot/setup.sh; fi"
+      os: ["linux"]
 

@@ -39,8 +39,33 @@ type linuxPackages struct {
 	Yay    []string `yaml:"yay"`
 }
 
+type Hook struct {
+	Cmd string   `yaml:"cmd"`
+	OS  []string `yaml:"os"`
+}
+
 type Hooks struct {
-	PostInstall []string `yaml:"post_install"`
+	PostInstall []Hook `yaml:"post_install"`
+}
+
+func (h *Hook) MatchesOS(osName string) bool {
+	return len(h.OS) == 0 || slices.Contains(h.OS, osName)
+}
+
+func (h *Hook) UnmarshalYAML(value *yaml.Node) error {
+	if value.Kind == yaml.ScalarNode {
+		h.Cmd = value.Value
+		h.OS = nil
+		return nil
+	}
+
+	type hookAlias Hook
+	var alias hookAlias
+	if err := value.Decode(&alias); err != nil {
+		return err
+	}
+	*h = Hook(alias)
+	return nil
 }
 
 func Load(path string) (*Config, error) {

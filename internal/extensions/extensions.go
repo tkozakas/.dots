@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"runtime"
+
 	"github.com/tkozakas/dots/internal/config"
 	"github.com/tkozakas/dots/internal/linker"
 	"github.com/tkozakas/dots/internal/packages"
@@ -55,7 +57,10 @@ func Run(distro string, dryRun, skipPackages bool) []config.Symlink {
 	}
 
 	for _, h := range cfg.Hooks.PostInstall {
-		runSilent(h, dryRun)
+		if !h.MatchesOS(runtime.GOOS) {
+			continue
+		}
+		runSilent(h.Cmd, dryRun)
 	}
 
 	return extSymlinks
