@@ -20,6 +20,9 @@ func Install(cfg *config.Config, distro string, dryRun bool) error {
 }
 
 func installDarwin(pkgs config.Packages, dryRun bool) error {
+	if err := syncSystem("darwin", dryRun); err != nil {
+		return fmt.Errorf("system sync failed: %w", err)
+	}
 	if len(pkgs.Darwin.Brew) > 0 {
 		if err := run("brew", "install", pkgs.Darwin.Brew, dryRun); err != nil {
 			return err
@@ -38,6 +41,10 @@ func installLinux(pkgs config.Packages, distro string, dryRun bool) error {
 		distro = env.DetectDistro()
 	}
 
+	if err := syncSystem(distro, dryRun); err != nil {
+		return fmt.Errorf("system sync failed: %w", err)
+	}
+
 	if len(pkgs.Linux.Common) > 0 {
 		if err := installForDistro(pkgs.Linux.Common, distro, dryRun); err != nil {
 			return err
@@ -52,7 +59,7 @@ func installLinux(pkgs config.Packages, distro string, dryRun bool) error {
 	}
 
 	if distro == "arch" && len(pkgs.Linux.Yay) > 0 {
-		if err := run("yay", "-S --noconfirm --needed", pkgs.Linux.Yay, dryRun); err != nil {
+		if err := run("yay", "-S --noconfirm --needed --sudoloop", pkgs.Linux.Yay, dryRun); err != nil {
 			return err
 		}
 	}
@@ -84,6 +91,35 @@ func installForDistro(packages []string, distro string, dryRun bool) error {
 	default:
 		return fmt.Errorf("unsupported distro: %s", distro)
 	}
+}
+
+func syncSystem(distro string, dryRun bool) error {
+	var cmdStr string
+	switch distro {
+	case "arch":
+		cmdStr = "sudo pacman -Syu --noconfirm"
+	case "fedora":
+		cmdStr = "sudo dnf upgrade -y --refresh"
+	case "ubuntu", "debian":
+		cmdStr = "sudo apt update && sudo apt upgrade -y"
+	case "darwin":
+		cmdStr = "brew update && brew upgrade"
+	default:
+		log.Printf("Skipping system sync for unsupported distro: %s", distro)
+		return nil
+	}
+
+	if dryRun {
+		log.Printf("[dry-run] %s", cmdStr)
+		return nil
+	}
+
+	log.Printf("Running: %s", cmdStr)
+	cmd := exec.Command("sh", "-c", cmdStr)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	return cmd.Run()
 }
 
 func run(pm, action string, packages []string, dryRun bool) error {
