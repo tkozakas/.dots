@@ -128,7 +128,7 @@ packages:
       - hyprutils
       - waybar
       - rofi
-      - swww
+      - awww
       - greetd
       - greetd-tuigreet
       - slurp

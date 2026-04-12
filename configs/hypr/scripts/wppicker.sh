@@ -19,6 +19,6 @@ mkdir -p "$(dirname "$SYMLINK_PATH")"
 ln -sf "$SELECTED_PATH" "$SYMLINK_PATH"
 
 matugen --config ~/.config/hypr/matugen/config.toml image "$SYMLINK_PATH"
-swww img "$SYMLINK_PATH" --transition-type none 
+awww img "$SYMLINK_PATH" --transition-type none 
 
 echo "Wallpaper changed."
