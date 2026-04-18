@@ -1,9 +1,11 @@
 package linker
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/tkozakas/dots/internal/config"
@@ -69,7 +71,12 @@ func createSymlink(source, target string) error {
 	}
 
 	if err := os.MkdirAll(filepath.Dir(target), dirPerm); err != nil {
-		return err
+		if !errors.Is(err, os.ErrPermission) {
+			return err
+		}
+		if err := sudoRun("mkdir", "-p", filepath.Dir(target)); err != nil {
+			return err
+		}
 	}
 
 	action, oldTarget := prepareTarget(source, target)
@@ -84,7 +91,13 @@ func createSymlink(source, target string) error {
 		log.Printf("%s+%s %s", colorCyan, colorReset, target)
 	}
 
-	return os.Symlink(source, target)
+	if err := os.Symlink(source, target); err != nil {
+		if !errors.Is(err, os.ErrPermission) {
+			return err
+		}
+		return sudoRun("ln", "-sfn", source, target)
+	}
+	return nil
 }
 
 func prepareTarget(source, target string) (linkAction, string) {
@@ -101,16 +114,30 @@ func prepareTarget(source, target string) (linkAction, string) {
 		if existing == source {
 			return actionSkip, ""
 		}
-		_ = os.Remove(target)
+		if err := os.Remove(target); err != nil {
+			_ = sudoRun("rm", "-f", target)
+		}
 		return actionUpdate, existing
 	}
 
 	if info.IsDir() {
-		_ = os.RemoveAll(target)
+		if err := os.RemoveAll(target); err != nil {
+			_ = sudoRun("rm", "-rf", target)
+		}
 	} else {
-		_ = os.Remove(target)
+		if err := os.Remove(target); err != nil {
+			_ = sudoRun("rm", "-f", target)
+		}
 	}
 	return actionCreate, ""
+}
+
+func sudoRun(args ...string) error {
+	cmd := exec.Command("sudo", args...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 func Unlink(symlinks []config.Symlink, configPath string, dryRun bool) error {
@@ -147,7 +174,12 @@ func unlinkOne(s config.Symlink, baseDir string, dryRun bool) error {
 	}
 
 	if err := os.Remove(target); err != nil {
-		return fmt.Errorf("removing %s: %w", target, err)
+		if !errors.Is(err, os.ErrPermission) {
+			return fmt.Errorf("removing %s: %w", target, err)
+		}
+		if err := sudoRun("rm", "-f", target); err != nil {
+			return fmt.Errorf("removing %s with sudo: %w", target, err)
+		}
 	}
 
 	log.Printf("%s-%s %s", colorRed, colorReset, target)

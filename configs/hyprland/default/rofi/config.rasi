@@ -2,10 +2,10 @@
 @import "colors.rasi"
 
 configuration {
-	modi: "window,run,drun";
-	display-drun: "Applications";
-	display-window: "Windows";
-	display-run: "Run";
+	modi: "combi";
+	combi-modi: "window,drun,run";
+	combi-display-format: "{icon} {text}";
+	display-combi: "Search";
 	drun-display-format: "{icon} {name}";
 	font: "JetBrainsMono Nerd Font 10";
 	show-icons: true;
@@ -44,7 +44,7 @@ imagebox {
     background-color:            transparent;
     background-image:            url("~/.config/hypr/current_wallpaper", height);
     orientation:                 vertical;
-    children:                    [ "inputbar", "dummy", "mode-switcher" ];
+    children:                    [ "inputbar", "dummy" ];
 }
 
 listbox {

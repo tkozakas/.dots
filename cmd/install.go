@@ -16,7 +16,7 @@ import (
 
 var installCmd = &cobra.Command{
 	Use:   "install",
-	Short: "Setup: symlinks → packages → health → benchmark",
+	Short: "Setup: packages → symlinks → health → benchmark",
 	RunE:  runInstall,
 }
 
@@ -32,14 +32,14 @@ func runInstall(cmd *cobra.Command, args []string) error {
 
 	symlinks := cfg.SymlinksForCurrentOS()
 
-	if err := linker.Link(symlinks, configPath, dryRun); err != nil {
-		return fmt.Errorf("creating symlinks: %w", err)
-	}
-
 	if !skipPackages {
 		if err := packages.Install(cfg, distro, dryRun); err != nil {
 			return fmt.Errorf("installing packages: %w", err)
 		}
+	}
+
+	if err := linker.Link(symlinks, configPath, dryRun); err != nil {
+		return fmt.Errorf("creating symlinks: %w", err)
 	}
 
 	if err := hooks.RunPostInstall(cfg.Hooks, dryRun); err != nil {

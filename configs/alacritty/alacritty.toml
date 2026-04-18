@@ -1,5 +1,6 @@
 [general]
 live_config_reload = true
+import = ["~/.config/alacritty/theme.toml"]
 
 [env]
 TERM = "xterm-256color"
@@ -50,35 +51,3 @@ hide_when_typing = true
 [selection]
 save_to_clipboard = true
 
-# One Dark
-[colors.primary]
-background = "#282c34"
-foreground = "#abb2bf"
-
-[colors.cursor]
-text = "#282c34"
-cursor = "#abb2bf"
-
-[colors.selection]
-text = "CellForeground"
-background = "#3e4452"
-
-[colors.normal]
-black   = "#1e2127"
-red     = "#e06c75"
-green   = "#98c379"
-yellow  = "#d19a66"
-blue    = "#61afef"
-magenta = "#c678dd"
-cyan    = "#56b6c2"
-white   = "#abb2bf"
-
-[colors.bright]
-black   = "#5c6370"
-red     = "#e06c75"
-green   = "#98c379"
-yellow  = "#d19a66"
-blue    = "#61afef"
-magenta = "#c678dd"
-cyan    = "#56b6c2"
-white   = "#ffffff"

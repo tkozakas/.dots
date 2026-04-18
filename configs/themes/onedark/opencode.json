@@ -1,0 +1,4 @@
+{
+  "theme": "onedark",
+  "nvim_cmd": "require('onedark').load()"
+}
