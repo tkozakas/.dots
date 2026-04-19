@@ -28,9 +28,7 @@
       "themes": "themes",
       "current-theme": "themes/onedark",
       "lazygit": "lazygit",
-      "k9s": "k9s",
-      "fastfetch/config.jsonc": "fastfetch/config.jsonc",
-      "obsidian/obsidian.json": "obsidian/obsidian.json"
+      "k9s": "k9s"
     },
     "homeLinks": {
       ".tmux": "tmux",
