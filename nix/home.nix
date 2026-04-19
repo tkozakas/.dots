@@ -20,6 +20,8 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
+  programs.home-manager.enable = true;
+
   nix.package = pkgs.nix;
   nix.settings = {
     warn-dirty = false;
