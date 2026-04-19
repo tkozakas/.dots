@@ -1,16 +1,34 @@
 { config, pkgs, lib, dotsRoot, username, homeDirectory, ... }:
 
 let
-  configsDir = "configs";
-  link = path: config.lib.file.mkOutOfStoreSymlink "${dotsRoot}/${configsDir}/${path}";
-  toSources = lib.mapAttrs (_: src: { source = link src; });
-
-  cfg = builtins.fromJSON (builtins.readFile ../config.json);
-
   osKey = if pkgs.stdenv.isLinux then "linux" else "darwin";
 
-  mergeList  = f: (cfg.common.${f} or []) ++ (cfg.${osKey}.${f} or []);
-  mergeAttrs = f: (cfg.common.${f} or {}) // (cfg.${osKey}.${f} or {});
+  readLayer = root:
+    let manifest = root + "/config.json"; in
+    if builtins.pathExists manifest
+    then { inherit root; cfg = builtins.fromJSON (builtins.readFile manifest); }
+    else null;
+
+  base    = readLayer dotsRoot;
+  overlay = readLayer (dotsRoot + "-work");
+  layers  = lib.filter (l: l != null) [ base overlay ];
+
+  layerList  = layer: f: (layer.cfg.common.${f} or []) ++ (layer.cfg.${osKey}.${f} or []);
+  layerAttrs = layer: f: (layer.cfg.common.${f} or {}) // (layer.cfg.${osKey}.${f} or {});
+
+  mergeList  = f: lib.concatMap     (l: layerList  l f) layers;
+  mergeAttrs = f: lib.foldl' (acc: l: acc // layerAttrs l f) {} layers;
+
+  mkLinksFor = field:
+    lib.foldl' (acc: layer:
+      let
+        entries = layerAttrs layer field;
+        toLink  = path: {
+          source = config.lib.file.mkOutOfStoreSymlink
+            "${layer.root}/configs/${path}";
+        };
+      in acc // lib.mapAttrs (_: toLink) entries
+    ) {} layers;
 in
 {
   home.username = username;
@@ -34,8 +52,8 @@ in
     (p: lib.attrByPath (lib.splitString "." p) (throw "unknown package: ${p}") pkgs)
     (mergeList "packages");
 
-  xdg.configFile = toSources (mergeAttrs "xdgLinks");
-  home.file      = toSources (mergeAttrs "homeLinks");
+  xdg.configFile = mkLinksFor "xdgLinks";
+  home.file      = mkLinksFor "homeLinks";
 
   home.activation.userHooks = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     export PATH="${config.home.profileDirectory}/bin:$PATH"
