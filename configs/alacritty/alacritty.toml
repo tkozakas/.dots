@@ -1,6 +1,6 @@
 [general]
 live_config_reload = true
-import = ["~/.config/alacritty/theme.toml"]
+import = ["~/.config/current-theme/alacritty.toml"]
 
 [env]
 TERM = "xterm-256color"

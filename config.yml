@@ -1,0 +1,76 @@
+common:
+  packages:
+    - neovim
+    - tmux
+    - lazygit
+    - git
+    - vim
+    - zsh
+    - zoxide
+    - direnv
+    - alacritty
+    - zip
+    - unzip
+    - gh
+    - lsd
+    - fastfetch
+    - fzf
+    - bitwarden-cli
+  xdgLinks:
+    nvim: nvim
+    alacritty: alacritty
+    opencode: opencode
+    themes: themes
+    current-theme: themes/onedark
+    lazygit: lazygit
+    k9s: k9s
+    fastfetch/config.jsonc: fastfetch/config.jsonc
+    obsidian/obsidian.json: obsidian/obsidian.json
+  homeLinks:
+    .tmux: tmux
+    .tmux.conf: tmux/.tmux.conf
+    .zshrc: zsh/.zshrc
+    .zshenv: zsh/.zshenv
+    .zshfn: zsh/.zshfn
+    .editorconfig: nvim/editorconfig
+    .gitignore_global: git/.gitignore_global
+    .local/bin/git-scripts: git
+  hooks:
+    - git config --global core.excludesFile ~/.gitignore_global
+
+linux:
+  packages:
+    - docker
+    - docker-compose
+    - firefox
+    - python3
+    - nerd-fonts.jetbrains-mono
+    - noto-fonts
+    - noto-fonts-color-emoji
+    - noto-fonts-cjk-sans
+    - hyprland
+    - hyprlock
+    - hyprpaper
+    - hypridle
+    - hyprutils
+    - waybar
+    - rofi
+    - awww
+    - slurp
+    - grim
+    - wl-clipboard
+    - nautilus
+    - discord
+    - spotify
+    - jetbrains-toolbox
+  xdgLinks:
+    hypr: hypr
+  homeLinks: {}
+  hooks: []
+
+darwin:
+  packages: []
+  xdgLinks: {}
+  homeLinks:
+    .aerospace.toml: aerospace/.aerospace.toml
+  hooks: []
