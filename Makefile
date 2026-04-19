@@ -1,4 +1,4 @@
-.PHONY: install update rollback clean
+.PHONY: install update rollback clean fmt check news
 
 CONFIG := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 HASH   := \#
@@ -7,6 +7,15 @@ SOURCE := export USER=$${USER:-$$(id -un)}; . $(NIX_SH);
 NIX    := nix --option warn-dirty false
 FILTER := 2>&1 | grep -vE "unknown setting|deprecated alias"; exit $${PIPESTATUS[0]}
 HM     := $(SOURCE) $(NIX) run ".$(HASH)home-manager" -- switch --flake ".$(HASH)$(CONFIG)" -b backup --impure
+
+fmt:
+	@bash -c '$(SOURCE) $(NIX) fmt'
+
+check:
+	@bash -c '$(SOURCE) $(NIX) build ".$(HASH)homeConfigurations.linux.activationPackage" --no-link --impure $(FILTER)'
+
+news:
+	@bash -c '$(SOURCE) $(NIX) run ".$(HASH)home-manager" -- news --flake ".$(HASH)linux" --impure $(FILTER)'
 
 install:
 	@bash -c '$(HM) $(FILTER)'
