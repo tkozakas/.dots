@@ -69,7 +69,11 @@ linux:
   hooks: []
 
 darwin:
-  packages: []
+  packages:
+    - mole
+    - lazysql
+    - opencode
+    - nerd-fonts.jetbrains-mono
   xdgLinks: {}
   homeLinks:
     .aerospace.toml: aerospace/.aerospace.toml
