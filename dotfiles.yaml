@@ -70,7 +70,7 @@ symlinks:
     os: ["darwin", "linux"]
 
   # LINUX SPECIFIC
-  - source: "configs/hyprland/default"
+  - source: "configs/hypr"
     target: "~/.config/hypr"
     os: ["linux"]
 
