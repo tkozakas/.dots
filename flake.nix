@@ -24,7 +24,7 @@
           inherit system;
           config.allowUnfree = true;
         };
-        modules = [ ./home.nix ] ++ workModules;
+        modules = [ ./nix/home.nix ] ++ workModules;
         extraSpecialArgs = {
           inherit username homeDirectory dotsRoot;
         };

@@ -5,7 +5,7 @@ let
   link = path: config.lib.file.mkOutOfStoreSymlink "${dotsRoot}/${configsDir}/${path}";
   toSources = lib.mapAttrs (_: src: { source = link src; });
 
-  cfg = (import ./nix/load-yaml.nix { inherit pkgs lib; }) ./config.yml;
+  cfg = (import ./load-yaml.nix { inherit pkgs lib; }) ../config.yml;
 
   osKey = if pkgs.stdenv.isLinux then "linux" else "darwin";
 
