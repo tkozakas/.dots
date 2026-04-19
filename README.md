@@ -2,7 +2,7 @@
 
 Personal dotfiles managed declaratively via nix home-manager. Works on Arch Linux and macOS.
 
-Semi-stolen, semi-handcrafted.
+Semi-stolen, semi-handcrafted, aggresively vibe coded.
 
 All configurations are in the [`configs/`](configs/) directory.
 
