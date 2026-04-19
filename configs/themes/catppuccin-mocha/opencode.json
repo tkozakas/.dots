@@ -1,4 +1,0 @@
-{
-  "theme": "catppuccin",
-  "nvim_cmd": "vim.cmd.colorscheme('catppuccin')"
-}

@@ -1,12 +1,12 @@
 {
   "themes": [
     {
-      "name": "One Dark",
-      "dir": "onedark"
+      "name": "Default",
+      "dir": "default"
     },
     {
-      "name": "Catppuccin Mocha",
-      "dir": "catppuccin-mocha"
+      "name": "One Dark",
+      "dir": "onedark"
     },
     {
       "name": "Gruvbox Dark",

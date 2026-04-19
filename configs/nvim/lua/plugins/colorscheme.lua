@@ -9,14 +9,6 @@ return {
     end,
   },
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    lazy = true,
-    config = function()
-      require('catppuccin').setup({ flavour = 'mocha' })
-    end,
-  },
-  {
     'ellisonleao/gruvbox.nvim',
     lazy = true,
     config = function()
@@ -31,23 +23,24 @@ return {
     lazy = false,
     config = function()
       local theme_file = vim.fn.expand('~/.config/nvim/theme')
-      local theme = 'onedark' -- fallback
+      local theme = 'default' -- fallback to vim default
       local f = io.open(theme_file, 'r')
       if f then
         theme = f:read('*l') or theme
         f:close()
       end
-      -- Ensure the plugin is loaded before setting colorscheme
-      local ok = pcall(function()
-        if theme == 'onedark' then
+
+      local function apply_theme(t)
+        if t == 'default' then
+          vim.cmd('colorscheme default')
+        elseif t == 'onedark' then
           require('onedark').load()
         else
-          vim.cmd.colorscheme(theme)
+          pcall(vim.cmd.colorscheme, t)
         end
-      end)
-      if not ok then
-        require('onedark').load()
       end
+
+      apply_theme(theme)
 
       -- Watch for theme changes via SIGUSR1
       vim.api.nvim_create_autocmd('Signal', {
@@ -58,11 +51,7 @@ return {
             local new_theme = tf:read('*l')
             tf:close()
             if new_theme then
-              if new_theme == 'onedark' then
-                require('onedark').load()
-              else
-                pcall(vim.cmd.colorscheme, new_theme)
-              end
+              apply_theme(new_theme)
             end
           end
         end,
