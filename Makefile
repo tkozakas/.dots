@@ -1,4 +1,4 @@
-.PHONY: install update rollback clean fmt check news
+.PHONY: install update rollback clean fmt check news diff
 
 CONFIG := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 HASH   := \#
@@ -19,6 +19,9 @@ news:
 
 install:
 	@bash -c '$(HM) $(FILTER)'
+
+diff:
+	@bash -c '$(SOURCE) $(NIX) build ".$(HASH)homeConfigurations.$(CONFIG).activationPackage" --no-link --impure --print-out-paths $(FILTER)' | tail -1 | xargs -I{} bash -c '$(SOURCE) $(NIX) store diff-closures ~/.local/state/nix/profiles/home-manager {}/home-files'
 
 update:
 	@bash -c '$(SOURCE) $(NIX) flake update $(FILTER)'
