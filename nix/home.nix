@@ -26,6 +26,8 @@ in
   nix.settings = {
     warn-dirty = false;
     experimental-features = [ "nix-command" "flakes" ];
+    max-jobs = "auto";
+    cores = 0;
   };
 
   home.packages = map
