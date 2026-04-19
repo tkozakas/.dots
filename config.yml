@@ -55,7 +55,7 @@ linux:
     - hyprutils
     - waybar
     - rofi
-    - awww
+    - swww
     - slurp
     - grim
     - wl-clipboard

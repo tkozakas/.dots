@@ -15,9 +15,16 @@ in
 {
   home.username = username;
   home.homeDirectory = homeDirectory;
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
+  home.enableNixpkgsReleaseCheck = false;
 
   nixpkgs.config.allowUnfree = true;
+
+  nix.package = pkgs.nix;
+  nix.settings = {
+    warn-dirty = false;
+    experimental-features = [ "nix-command" "flakes" ];
+  };
 
   home.packages = map
     (p: lib.attrByPath (lib.splitString "." p) (throw "unknown package: ${p}") pkgs)

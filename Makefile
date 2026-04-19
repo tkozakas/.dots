@@ -1,23 +1,27 @@
 .PHONY: install update rollback clean
 
-CONFIG  := $(shell uname -s | tr '[:upper:]' '[:lower:]')
-FLAKE   := .#$(CONFIG)
-HM      := home-manager switch --flake "$(FLAKE)" -b backup --impure
+CONFIG := $(shell uname -s | tr '[:upper:]' '[:lower:]')
+HASH   := \#
+NIX_SH := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+SOURCE := export USER=$${USER:-$$(id -un)}; . $(NIX_SH);
+NIX    := nix --option warn-dirty false
+FILTER := 2>&1 | grep -vE "unknown setting|deprecated alias"; exit $${PIPESTATUS[0]}
+HM     := $(SOURCE) $(NIX) run ".$(HASH)home-manager" -- switch --flake ".$(HASH)$(CONFIG)" -b backup --impure
 
 install:
-	$(HM)
+	@bash -c '$(HM) $(FILTER)'
 
 update:
-	nix flake update
-	$(HM)
+	@bash -c '$(SOURCE) $(NIX) flake update $(FILTER)'
+	@bash -c '$(HM) $(FILTER)'
 
 rollback:
-	home-manager generations | head -2 | tail -1 | awk '{print $$NF}' | xargs -I{} {}/activate
+	@$(SOURCE) $(NIX) run ".$(HASH)home-manager" -- generations | head -2 | tail -1 | awk '{print $$NF}' | xargs -I{} {}/activate
 
 clean:
-	nix profile wipe-history 2>/dev/null || true
-	nix-collect-garbage -d 2>/dev/null || true
+	@$(SOURCE) $(NIX) profile wipe-history 2>/dev/null || true
+	@$(SOURCE) nix-collect-garbage -d 2>/dev/null || true
 ifneq ($(shell uname),Darwin)
-	sudo journalctl --vacuum-time=7d 2>/dev/null || true
-	rm -rf ~/.cache/thumbnails/*
+	@sudo journalctl --vacuum-time=7d 2>/dev/null || true
+	@rm -rf ~/.cache/thumbnails/*
 endif

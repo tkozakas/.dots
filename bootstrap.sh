@@ -18,4 +18,5 @@ case "$(uname -s)" in
 esac
 
 cd "$(dirname "$0")"
-nix run home-manager/master -- switch --flake ".#${CONFIG}" -b backup --impure
+nix --option warn-dirty false run ".#home-manager" -- switch --flake ".#${CONFIG}" -b backup --impure 2>&1 \
+  | grep -vE "unknown setting|deprecated alias"
