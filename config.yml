@@ -16,6 +16,9 @@ common:
     - fastfetch
     - fzf
     - bitwarden-cli
+    - lazysql
+    - opencode
+    - nerd-fonts.jetbrains-mono
   xdgLinks:
     nvim: nvim
     alacritty: alacritty
@@ -44,7 +47,6 @@ linux:
     - docker-compose
     - firefox
     - python3
-    - nerd-fonts.jetbrains-mono
     - noto-fonts
     - noto-fonts-color-emoji
     - noto-fonts-cjk-sans
@@ -69,10 +71,7 @@ linux:
   hooks: []
 
 darwin:
-  packages:
-    - lazysql
-    - opencode
-    - nerd-fonts.jetbrains-mono
+  packages: []
   xdgLinks: {}
   homeLinks:
     .aerospace.toml: aerospace/.aerospace.toml
