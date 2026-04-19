@@ -70,7 +70,6 @@ linux:
 
 darwin:
   packages:
-    - mole
     - lazysql
     - opencode
     - nerd-fonts.jetbrains-mono
