@@ -6,7 +6,7 @@
     "build": {
       "description": "Build and implement features end-to-end",
       "path": "agent/build.md",
-      "model": "github-copilot/claude-opus-4.6",
+      "model": "github-copilot/claude-opus-4.7",
       "permission": {
         "task": {
           "coder": "allow",
@@ -19,7 +19,7 @@
     "plan": {
       "description": "Plan changes without executing them",
       "path": "agent/plan.md",
-      "model": "github-copilot/claude-opus-4.6",
+      "model": "github-copilot/claude-opus-4.7",
       "permission": {
         "task": {
           "researcher": "allow",
