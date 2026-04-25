@@ -18,7 +18,7 @@
       "fzf",
       "bitwarden-cli",
       "lazysql",
-      "opencode",
+      "unstable.opencode",
       "nerd-fonts.jetbrains-mono"
     ],
     "xdgLinks": {
