@@ -4,10 +4,13 @@ return {
   cmd = { 'Telescope' },
   keys = {
     { '<leader>j', desc = 'Recent files' },
-    { '<leader>sf', desc = '[S]earch [F]iles' },
-    { '<leader>sg', desc = '[S]earch [G]rep' },
+    { '<leader>sf', desc = '[S]earch [F]iles (repo)' },
+    { '<leader>sg', desc = '[S]earch [G]rep (repo)' },
+    { '<leader>sa', desc = '[S]earch [A]ST pattern (repo)' },
+    { '<leader>sF', desc = '[S]earch [F]iles (cwd)' },
+    { '<leader>sG', desc = '[S]earch [G]rep (cwd)' },
+    { '<leader>sA', desc = '[S]earch [A]ST pattern (cwd)' },
     { '<leader><leader>', desc = 'Resume last search' },
-    { '<leader>sa', desc = '[S]earch [A]ST pattern' },
   },
   dependencies = {
     { 'nvim-lua/plenary.nvim' },
@@ -79,6 +82,11 @@ return {
     telescope.load_extension('ast_grep')
 
     local git_root = require('core.functions').git_root
+    local function buf_dir()
+      local name = vim.api.nvim_buf_get_name(0)
+      if name == '' then return vim.fn.getcwd() end
+      return vim.fn.fnamemodify(name, ':p:h')
+    end
 
     vim.keymap.set('n', '<leader>j', function()
       require('telescope').extensions.frecency.frecency({
@@ -91,17 +99,31 @@ return {
 
     vim.keymap.set('n', '<leader>sf', function()
       require('telescope.builtin').find_files({ cwd = git_root() })
-    end, { desc = '[S]earch [F]iles' })
+    end, { desc = '[S]earch [F]iles (repo)' })
 
     vim.keymap.set('n', '<leader>sg', function()
       require('telescope').extensions.live_grep_args.live_grep_args({
         cwd = git_root(),
       })
-    end, { desc = '[S]earch [G]rep' })
+    end, { desc = '[S]earch [G]rep (repo)' })
 
     vim.keymap.set('n', '<leader>sa', function()
       require('telescope').extensions.ast_grep.ast_grep({ cwd = git_root() })
-    end, { desc = '[S]earch [A]ST pattern' })
+    end, { desc = '[S]earch [A]ST pattern (repo)' })
+
+    vim.keymap.set('n', '<leader>sF', function()
+      require('telescope.builtin').find_files({ cwd = buf_dir() })
+    end, { desc = '[S]earch [F]iles (cwd)' })
+
+    vim.keymap.set('n', '<leader>sG', function()
+      require('telescope').extensions.live_grep_args.live_grep_args({
+        cwd = buf_dir(),
+      })
+    end, { desc = '[S]earch [G]rep (cwd)' })
+
+    vim.keymap.set('n', '<leader>sA', function()
+      require('telescope').extensions.ast_grep.ast_grep({ cwd = buf_dir() })
+    end, { desc = '[S]earch [A]ST pattern (cwd)' })
 
     vim.keymap.set('n', '<leader><leader>', function()
       require('telescope.builtin').resume()
