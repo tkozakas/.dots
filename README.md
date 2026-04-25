@@ -18,6 +18,5 @@ git clone git@github.com:tkozakas/.dots.git ~/.dots && ~/.dots/bootstrap.sh
 make install   # apply config
 make update    # bump flake.lock and apply
 make rollback  # revert to previous home-manager generation
-make diff      # show closure diff vs current generation
 make clean     # wipe profile history and run nix gc
 ```

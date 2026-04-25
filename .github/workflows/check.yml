@@ -30,6 +30,13 @@ jobs:
       - name: Set up Magic Nix Cache
         uses: DeterminateSystems/magic-nix-cache-action@main
 
+      - name: Flake check
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          USER: runner
+          HOME: ${{ matrix.home }}
+        run: nix flake check --impure --option warn-dirty false
+
       - name: Build home configuration
         env:
           USER: runner

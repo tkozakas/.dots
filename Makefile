@@ -1,4 +1,4 @@
-.PHONY: install update rollback clean fmt check news diff trust
+.PHONY: install update rollback clean fmt check news diff trust doctor
 
 CONFIG := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 HASH   := \#
@@ -47,6 +47,18 @@ update:
 
 rollback:
 	@$(SOURCE) $(NIX) run ".$(HASH)home-manager" -- generations | head -2 | tail -1 | awk '{print $$NF}' | xargs -I{} {}/activate
+
+doctor:
+	@bash -c '$(SOURCE) \
+		echo "system:    $$(uname -srm)"; \
+		echo "user:      $$USER"; \
+		echo "dots:      $$(pwd)"; \
+		echo "nix:       $$($(NIX) --version)"; \
+		echo "profile:   $$(readlink ~/.local/state/nix/profiles/home-manager 2>/dev/null || echo none)"; \
+		echo "trusted:   $$(grep -h cache.nixos.org /etc/nix/nix.conf /etc/nix/nix.custom.conf 2>/dev/null | head -1 || echo missing)"; \
+		echo; \
+		echo "generations:"; \
+		$(NIX) run ".$(HASH)home-manager" -- generations 2>/dev/null | head -3'
 
 clean:
 	@$(SOURCE) $(NIX) profile wipe-history 2>/dev/null || true
