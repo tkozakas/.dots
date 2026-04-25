@@ -20,25 +20,27 @@
       homeDirectory = builtins.getEnv "HOME";
       dotsRoot      = homeDirectory + "/.dots";
 
-      mkHome = system: home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-          overlays = [
-            nixgl.overlays.default
-            (final: _prev: {
-              unstable = import nixpkgs-unstable {
-                inherit system;
-                config.allowUnfree = true;
-              };
-            })
-          ];
+      mkHome = system:
+        let
+          isLinux = nixpkgs.lib.hasSuffix "-linux" system;
+          unstableOverlay = _final: _prev: {
+            unstable = import nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+        in home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+            overlays = [ unstableOverlay ]
+              ++ nixpkgs.lib.optional isLinux nixgl.overlays.default;
+          };
+          modules = [ ./nix/home.nix ];
+          extraSpecialArgs = {
+            inherit username homeDirectory dotsRoot system;
+          };
         };
-        modules = [ ./nix/home.nix ];
-        extraSpecialArgs = {
-          inherit username homeDirectory dotsRoot system;
-        };
-      };
     in
     {
       homeConfigurations = {
