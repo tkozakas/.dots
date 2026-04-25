@@ -1,7 +1,9 @@
-{ config, pkgs, lib, dotsRoot, username, homeDirectory, ... }:
+{ config, pkgs, lib, dotsRoot, username, homeDirectory, system, ... }:
 
 let
-  osKey = if pkgs.stdenv.isLinux then "linux" else "darwin";
+  isLinux  = lib.hasSuffix "-linux"  system;
+  isDarwin = lib.hasSuffix "-darwin" system;
+  osKey    = if isLinux then "linux" else "darwin";
 
   readLayer = root:
     let manifest = root + "/config.json"; in
@@ -29,8 +31,20 @@ let
         };
       in acc // lib.mapAttrs (_: toLink) entries
     ) {} layers;
+
+  resolvePackage = name:
+    lib.attrByPath (lib.splitString "." name) (throw "unknown package: ${name}") pkgs;
+
+  requestedPackages = mergeList "packages";
+
+  ownedByOSModule = [ "hyprland" ];
+  basePackages = lib.filter (p: !(builtins.elem p ownedByOSModule)) requestedPackages;
 in
 {
+  imports = [ ]
+    ++ lib.optional isLinux  (import ./modules/linux.nix  { inherit requestedPackages; })
+    ++ lib.optional isDarwin (import ./modules/darwin.nix { inherit requestedPackages; });
+
   home.username = username;
   home.homeDirectory = homeDirectory;
   home.stateVersion = "25.05";
@@ -48,9 +62,7 @@ in
     cores = 0;
   };
 
-  home.packages = map
-    (p: lib.attrByPath (lib.splitString "." p) (throw "unknown package: ${p}") pkgs)
-    (mergeList "packages");
+  home.packages = map resolvePackage basePackages;
 
   xdg.configFile = mkLinksFor "xdgLinks";
   home.file      = mkLinksFor "homeLinks";
