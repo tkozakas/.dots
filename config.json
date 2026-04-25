@@ -1,25 +1,25 @@
 {
   "common": {
     "packages": [
-      "neovim",
-      "tmux",
-      "lazygit",
-      "git",
-      "vim",
-      "zsh",
-      "zoxide",
-      "direnv",
-      "alacritty",
-      "zip",
-      "unzip",
-      "gh",
-      "lsd",
-      "fastfetch",
-      "fzf",
-      "bitwarden-cli",
-      "lazysql",
+      "unstable.neovim",
+      "unstable.tmux",
+      "unstable.lazygit",
+      "unstable.git",
+      "unstable.vim",
+      "unstable.zsh",
+      "unstable.zoxide",
+      "unstable.direnv",
+      "unstable.alacritty",
+      "unstable.zip",
+      "unstable.unzip",
+      "unstable.gh",
+      "unstable.lsd",
+      "unstable.fastfetch",
+      "unstable.fzf",
+      "unstable.bitwarden-cli",
+      "unstable.lazysql",
       "unstable.opencode",
-      "nerd-fonts.jetbrains-mono"
+      "unstable.nerd-fonts.jetbrains-mono"
     ],
     "xdgLinks": {
       "nvim": "nvim",
@@ -46,13 +46,13 @@
   },
   "linux": {
     "packages": [
-      "docker",
-      "docker-compose",
-      "firefox",
-      "python3",
-      "noto-fonts",
-      "noto-fonts-color-emoji",
-      "noto-fonts-cjk-sans",
+      "unstable.docker",
+      "unstable.docker-compose",
+      "unstable.firefox",
+      "unstable.python3",
+      "unstable.noto-fonts",
+      "unstable.noto-fonts-color-emoji",
+      "unstable.noto-fonts-cjk-sans",
       "hyprland",
       "hyprlock",
       "hyprpaper",
@@ -64,10 +64,10 @@
       "slurp",
       "grim",
       "wl-clipboard",
-      "nautilus",
-      "discord",
-      "spotify",
-      "jetbrains-toolbox"
+      "unstable.nautilus",
+      "unstable.discord",
+      "unstable.spotify",
+      "unstable.jetbrains-toolbox"
     ],
     "xdgLinks": {
       "hypr": "hypr"
@@ -76,7 +76,9 @@
     "hooks": []
   },
   "darwin": {
-    "packages": [],
+    "packages": [
+      "unstable.aerospace"
+    ],
     "xdgLinks": {},
     "homeLinks": {
       ".aerospace.toml": "aerospace/.aerospace.toml"
