@@ -19,17 +19,4 @@ case "$(uname -s)" in
 esac
 
 cd "$(dirname "$0")"
-
-# Move existing non-symlink config targets aside so home-manager can take over.
-TS=$(date +%s)
-JQ_EXPR='((.common.xdgLinks // {}) + (.["'"$CONFIG"'"].xdgLinks // {}) | keys[] | "\(env.HOME)/.config/\(.)"),
-((.common.homeLinks // {}) + (.["'"$CONFIG"'"].homeLinks // {}) | keys[] | "\(env.HOME)/\(.)")'
-while IFS= read -r path; do
-  if [ -e "$path" ] && [ ! -L "$path" ]; then
-    mv "$path" "$path.pre-dots-$TS"
-    echo "moved aside: $path -> $path.pre-dots-$TS"
-  fi
-done < <(nix --option warn-dirty false run nixpkgs#jq -- -r "$JQ_EXPR" config.json)
-
-nix --option warn-dirty false run ".#home-manager" -- switch --flake ".#${CONFIG}" -b backup --impure 2>&1 \
-  | grep -vE "unknown setting|deprecated alias"
+exec make install

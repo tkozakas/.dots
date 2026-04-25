@@ -26,7 +26,6 @@
       "alacritty": "alacritty",
       "opencode": "opencode",
       "themes": "themes",
-      "current-theme": "themes/onedark",
       "lazygit": "lazygit",
       "k9s": "k9s"
     },
@@ -38,7 +37,8 @@
       ".zshfn": "zsh/.zshfn",
       ".editorconfig": "nvim/editorconfig",
       ".gitignore_global": "git/.gitignore_global",
-      ".local/bin/git-scripts": "git"
+      ".local/bin/git-scripts": "git",
+      ".config/current-theme": "themes/onedark"
     },
     "hooks": [
       "git config --global core.excludesFile ~/.gitignore_global"

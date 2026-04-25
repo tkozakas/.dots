@@ -5,7 +5,7 @@ HASH   := \#
 NIX_SH := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 SOURCE := export USER=$${USER:-$$(id -un)}; . $(NIX_SH);
 NIX    := nix --option warn-dirty false
-FILTER := 2>&1 | grep -vE "unknown setting|deprecated alias"; exit $${PIPESTATUS[0]}
+FILTER := 2>&1 | grep -vE "unknown setting|deprecated alias|evaluation warning: .system. has been renamed|Using .builtins.derivation. to create a derivation named .options.json."; exit $${PIPESTATUS[0]}
 HM     := $(SOURCE) $(NIX) run ".$(HASH)home-manager" -- switch --flake ".$(HASH)$(CONFIG)" -b backup --impure
 
 fmt:

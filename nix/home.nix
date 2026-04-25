@@ -28,6 +28,7 @@ let
         toLink  = path: {
           source = config.lib.file.mkOutOfStoreSymlink
             "${layer.root}/configs/${path}";
+          force = true;
         };
       in acc // lib.mapAttrs (_: toLink) entries
     ) {} layers;
