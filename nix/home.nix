@@ -33,18 +33,29 @@ let
       in acc // lib.mapAttrs (_: toLink) entries
     ) {} layers;
 
+  # Try resolving a dotted package path (e.g. "unstable.neovim").
+  # Returns the package on success, null + warning on failure.
   resolvePackage = name:
-    lib.attrByPath (lib.splitString "." name) (throw "unknown package: ${name}") pkgs;
+    let
+      tried = builtins.tryEval (
+        lib.attrByPath (lib.splitString "." name) (throw "missing") pkgs
+      );
+    in
+    if tried.success
+    then tried.value
+    else lib.warn "skipping '${name}': not found in nixpkgs" null;
 
   requestedPackages = mergeList "packages";
 
   ownedByOSModule = [ "hyprland" ];
-  basePackages = lib.filter (p: !(builtins.elem p ownedByOSModule)) requestedPackages;
+  basePackageNames = lib.filter (p: !(builtins.elem p ownedByOSModule)) requestedPackages;
+
+  resolvedPackages = lib.filter (p: p != null) (map resolvePackage basePackageNames);
 in
 {
   imports = [ ]
-    ++ lib.optional isLinux  (import ./modules/linux.nix  { inherit requestedPackages; })
-    ++ lib.optional isDarwin (import ./modules/darwin.nix { inherit requestedPackages; });
+    ++ lib.optional isLinux  (import ./modules/linux.nix  { requestedPackages = basePackageNames; })
+    ++ lib.optional isDarwin (import ./modules/darwin.nix { requestedPackages = basePackageNames; });
 
   home.username = username;
   home.homeDirectory = homeDirectory;
@@ -63,7 +74,7 @@ in
     cores = 0;
   };
 
-  home.packages = map resolvePackage basePackages;
+  home.packages = resolvedPackages;
 
   xdg.configFile = mkLinksFor "xdgLinks";
   home.file      = mkLinksFor "homeLinks";

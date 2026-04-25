@@ -6,7 +6,6 @@ alias ls='lsd'
 alias ll='lsd -alF'
 alias la='lsd -a'
 alias lt='lsd --tree --depth 2'
-alias da='direnv allow'
 
 alias v='nvim'
 alias nano='nvim'

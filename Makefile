@@ -1,4 +1,4 @@
-.PHONY: install update rollback clean fmt check news diff
+.PHONY: install update rollback clean fmt check news diff trust
 
 CONFIG := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 HASH   := \#
@@ -17,8 +17,26 @@ check:
 news:
 	@bash -c '$(SOURCE) $(NIX) run ".$(HASH)home-manager" -- news --flake ".$(HASH)linux" --impure $(FILTER)'
 
-install:
+install: trust
 	@bash -c '$(HM) $(FILTER)'
+
+# one-time per machine: add cache.nixos.org substituter
+# (Determinate Nix doesn't include it by default).
+trust:
+	@if grep -q "cache.nixos.org" /etc/nix/nix.custom.conf 2>/dev/null; then \
+		echo "already trusted"; \
+	else \
+		echo "adding cache.nixos.org substituter"; \
+		printf 'extra-substituters = https://cache.nixos.org\nextra-trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=\n' \
+			| sudo tee -a /etc/nix/nix.custom.conf >/dev/null; \
+		if [ "$$(uname)" = "Darwin" ]; then \
+			sudo launchctl kickstart -k system/systems.determinate.nix-daemon 2>/dev/null \
+				|| sudo launchctl kickstart -k system/org.nixos.nix-daemon; \
+		else \
+			sudo systemctl restart nix-daemon; \
+		fi; \
+		echo "done"; \
+	fi
 
 diff:
 	@bash -c '$(SOURCE) $(NIX) build ".$(HASH)homeConfigurations.$(CONFIG).activationPackage" --no-link --impure --print-out-paths $(FILTER)' | tail -1 | xargs -I{} bash -c '$(SOURCE) $(NIX) store diff-closures ~/.local/state/nix/profiles/home-manager {}/home-files'
