@@ -12,11 +12,5 @@ if ! command -v nix >/dev/null 2>&1; then
   fi
 fi
 
-case "$(uname -s)" in
-  Linux)  CONFIG=linux  ;;
-  Darwin) CONFIG=darwin ;;
-  *) echo "unsupported OS: $(uname -s)" >&2; exit 1 ;;
-esac
-
 cd "$(dirname "$0")"
 exec make install

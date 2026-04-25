@@ -8,7 +8,17 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            config: linux
+            home: /home/runner
+          - os: macos-latest
+            config: darwin
+            home: /Users/runner
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -23,9 +33,9 @@ jobs:
       - name: Build home configuration
         env:
           USER: runner
-          HOME: /home/runner
+          HOME: ${{ matrix.home }}
         run: |
-          nix build .#homeConfigurations.linux.activationPackage \
+          nix build .#homeConfigurations.${{ matrix.config }}.activationPackage \
             --impure \
             --no-link \
             --option warn-dirty false

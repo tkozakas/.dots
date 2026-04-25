@@ -47,16 +47,33 @@ let
 
   requestedPackages = mergeList "packages";
 
-  ownedByOSModule = [ "hyprland" ];
-  basePackageNames = lib.filter (p: !(builtins.elem p ownedByOSModule)) requestedPackages;
+  # hyprland needs nixGL wrapping on non-NixOS Linux; handle it specially.
+  needsHyprland   = isLinux && builtins.elem "hyprland" requestedPackages;
+  basePackageNames = lib.filter (p: p != "hyprland") requestedPackages;
 
-  resolvedPackages = lib.filter (p: p != null) (map resolvePackage basePackageNames);
+  hyprlandPackages =
+    let
+      nixGL    = pkgs.nixgl.nixGLIntel;
+      nixGLBin = "${nixGL}/bin/nixGLIntel";
+      mkLauncher = name: pkgs.writeShellScript name ''
+        exec ${nixGLBin} ${pkgs.hyprland}/bin/${name} "$@"
+      '';
+      wrapped = pkgs.symlinkJoin {
+        name = "hyprland-nixgl-${pkgs.hyprland.version}";
+        paths = [ pkgs.hyprland ];
+        postBuild = ''
+          rm -f $out/bin/Hyprland $out/bin/hyprland
+          install -m755 ${mkLauncher "Hyprland"} $out/bin/Hyprland
+          install -m755 ${mkLauncher "hyprland"} $out/bin/hyprland
+        '';
+      };
+    in [ nixGL wrapped ];
+
+  resolvedPackages =
+    lib.filter (p: p != null) (map resolvePackage basePackageNames)
+    ++ lib.optionals needsHyprland hyprlandPackages;
 in
 {
-  imports = [ ]
-    ++ lib.optional isLinux  (import ./modules/linux.nix  { requestedPackages = basePackageNames; })
-    ++ lib.optional isDarwin (import ./modules/darwin.nix { requestedPackages = basePackageNames; });
-
   home.username = username;
   home.homeDirectory = homeDirectory;
   home.stateVersion = "25.05";

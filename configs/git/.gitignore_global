@@ -1,3 +1,16 @@
 # ck semantic search index
 .ck/
 .ckindex/
+
+# AI agent config / state
+CLAUDE.md
+.claude/
+AGENTS.md
+.cursor/
+.cursorrules
+.aider*
+.github/copilot-instructions.md
+.windsurfrules
+GEMINI.md
+.gemini/
+.opencode/
