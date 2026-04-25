@@ -8,6 +8,9 @@ export PATH="$HOME/go/bin:$HOME/.local/bin:$HOME/.local/bin/git-scripts:$HOME/.c
 export BUN_INSTALL="$HOME/.bun"
 export EDITOR="nvim"
 
+# Make opencode pick up the active theme via the current-theme symlink.
+export OPENCODE_TUI_CONFIG="$HOME/.config/current-theme/tui.json"
+
 # ── History ───────────────────────────────────────────────────────────────────
 export HISTFILE=~/.zsh_history
 export HISTSIZE=50000

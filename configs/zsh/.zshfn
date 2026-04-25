@@ -32,7 +32,7 @@ theme() {
   ln -sfn "$themes_dir/$1" "$HOME/.config/current-theme"
   tmux source-file "$HOME/.tmux.conf" 2>/dev/null
   pkill -USR1 nvim 2>/dev/null
-  echo "Switched to $1"
+  echo "Switched to $1 (restart opencode to apply)"
 }
 
 # ── Private Extensions ────────────────────────────────────────────────────────

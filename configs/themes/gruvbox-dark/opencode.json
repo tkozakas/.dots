@@ -1,4 +1,0 @@
-{
-  "theme": "gruvbox",
-  "nvim_cmd": "vim.cmd.colorscheme('gruvbox')"
-}
