@@ -89,6 +89,7 @@
   "pulseaudio": {
     "format": "{icon}",
     "on-click": "pavucontrol",
+    "on-click-middle": "~/.config/hypr/scripts/sink-switcher.sh",
     "on-click-right": "pamixer -t",
     "tooltip-format": "Playing at {volume}%",
     "scroll-step": 5,

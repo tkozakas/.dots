@@ -8,6 +8,7 @@
       "unstable.vim",
       "unstable.zsh",
       "unstable.zoxide",
+      "unstable.direnv",
       "unstable.alacritty",
       "unstable.zip",
       "unstable.unzip",
@@ -69,7 +70,8 @@
       "unstable.jetbrains-toolbox"
     ],
     "xdgLinks": {
-      "hypr": "hypr"
+      "hypr": "hypr",
+      "wireplumber": "wireplumber"
     },
     "homeLinks": {},
     "hooks": []
