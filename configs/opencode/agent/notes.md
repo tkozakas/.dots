@@ -36,7 +36,7 @@ Manage Obsidian vault notes and generate Excalidraw diagrams.
 - Manage tags and frontmatter
 - Organize and move notes between directories
 - **Only write/create notes when explicitly asked by the user** — never proactively create notes
-- **All notes must be written inside the `notes/` directory** in the vault (e.g. `notes/my-note.md`, `notes/research/topic.md`)
+- **All notes must be written inside the `notes/` or `notes-work/` directory (ask user which one to document to)** in the vault (e.g. `notes/my-note.md`, `notes/research/topic.md`)
 - Never write notes to the vault root or any directory outside `notes/`
 
 ## Excalidraw Diagrams
@@ -45,3 +45,4 @@ Manage Obsidian vault notes and generate Excalidraw diagrams.
 - Use Mermaid syntax for UML: convert with `create_from_mermaid`
 - Use `add_template_architecture` for system design diagrams
 - Export diagrams to the Obsidian vault when asked
+- Important to not create texts outside of the diagram radius
