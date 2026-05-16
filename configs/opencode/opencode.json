@@ -83,6 +83,7 @@
     },
     "excalidraw": {
       "type": "local",
+      "enabled": false,
       "command": ["npx", "-y", "@scofieldfree/excalidraw-mcp"]
     },
     "github": {
