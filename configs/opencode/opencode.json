@@ -92,6 +92,10 @@
       "environment": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GITHUB_PERSONAL_ACCESS_TOKEN}"
       }
+    },
+    "TalkToFigma": {
+      "type": "local",
+      "command": ["bunx", "cursor-talk-to-figma-mcp@latest"]
     }
   }
 }
