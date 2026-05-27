@@ -32,8 +32,15 @@ return {
 				capabilities = capabilities,
 			})
 
+		-- Prefer rbenv shim so the project's .ruby-version selects the Ruby
+		-- toolchain (and thus the matching ruby-lsp install). Fall back to PATH.
+		local ruby_lsp_cmd = vim.fn.expand("~/.rbenv/shims/ruby-lsp")
+		if vim.fn.executable(ruby_lsp_cmd) == 0 then
+			ruby_lsp_cmd = vim.fn.exepath("ruby-lsp")
+		end
+
 		vim.lsp.config("ruby_lsp", {
-				cmd = { vim.fn.expand("~/.rbenv/shims/ruby-lsp") },
+				cmd = { ruby_lsp_cmd },
 				filetypes = { "ruby", "eruby" },
 				root_markers = { "Gemfile", ".git" },
 				init_options = {
