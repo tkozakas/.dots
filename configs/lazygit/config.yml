@@ -167,6 +167,9 @@ gui:
 git:
   # See https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
   pagers: []
+  # Pull behaviour: 'merge' (default) | 'rebase' | 'ff-only'
+  pull:
+    mode: rebase
   # Config relating to committing
   commit:
     # If true, pass '--signoff' flag when committing

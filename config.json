@@ -37,6 +37,7 @@
       ".zshfn": "zsh/.zshfn",
       ".editorconfig": "nvim/editorconfig",
       ".gitignore_global": "git/.gitignore_global",
+      ".gitconfig": "git/.gitconfig",
       ".local/bin/git-scripts": "git",
       ".config/current-theme": "themes/onedark"
     },

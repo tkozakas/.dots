@@ -1,0 +1,14 @@
+[include]
+	path = ~/.gitconfig.local
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[core]
+	autocrlf = input
+	excludesFile = ~/.gitignore_global
+[color "status"]
+	untracked = cyan
+[pull]
+	rebase = true
+[push]
+	default = current
+	autoSetupRemote = true
