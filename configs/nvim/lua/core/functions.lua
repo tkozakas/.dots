@@ -33,8 +33,21 @@ function M.git_root()
 end
 
 function M.open_or_create_pr()
-	local cwd = vim.bo.filetype == "oil" and require("oil").get_current_dir() or vim.fn.expand("%:p:h")
-	if not cwd or cwd == "" then return end
+	local cwd
+	if vim.bo.filetype == "oil" then
+		cwd = require("oil").get_current_dir()
+	else
+		local bufname = vim.api.nvim_buf_get_name(0)
+		-- Skip non-file buffers (gitsigns://, oil://, fugitive://, term://, etc.)
+		if bufname == "" or bufname:match("^%w+://") then
+			cwd = vim.fn.getcwd()
+		else
+			cwd = vim.fn.fnamemodify(bufname, ":p:h")
+		end
+	end
+	if not cwd or cwd == "" or vim.fn.isdirectory(cwd) == 0 then
+		cwd = vim.fn.getcwd()
+	end
 
 	local branch = vim.trim(vim.fn.system("git -C " .. vim.fn.shellescape(cwd) .. " rev-parse --abbrev-ref HEAD"))
 	if branch == "master" or branch == "main" then

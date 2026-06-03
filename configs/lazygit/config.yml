@@ -100,9 +100,9 @@ gui:
   # If true, show a random tip in the command log when Lazygit starts
   showRandomTip: false
   # If true, show the command log
-  showCommandLog: false
+  showCommandLog: true
   # If true, show the bottom line that contains keybinding info and useful buttons. If false, this line will be hidden except to display a loader for an in-progress action.
-  showBottomLine: false
+  showBottomLine: true
   # If true, show jump-to-window keybindings in window titles.
   showPanelJumps: true
   # Deprecated: use nerdFontsVersion instead

@@ -34,13 +34,24 @@ return {
 
 		-- Prefer rbenv shim so the project's .ruby-version selects the Ruby
 		-- toolchain (and thus the matching ruby-lsp install). Fall back to PATH.
-		local ruby_lsp_cmd = vim.fn.expand("~/.rbenv/shims/ruby-lsp")
-		if vim.fn.executable(ruby_lsp_cmd) == 0 then
-			ruby_lsp_cmd = vim.fn.exepath("ruby-lsp")
+		local ruby_lsp_bin = vim.fn.expand("~/.rbenv/shims/ruby-lsp")
+		if vim.fn.executable(ruby_lsp_bin) == 0 then
+			ruby_lsp_bin = vim.fn.exepath("ruby-lsp")
+		end
+
+		-- vim.lsp.config + vim.lsp.enable (new API) does NOT auto-set
+		-- cmd_cwd from root_dir. Without this, the rbenv shim inherits
+		-- nvim's cwd and picks the wrong Ruby → Bundler RubyVersionMismatch
+		-- → ruby-lsp can't load the project's bundle → no go-to-def / refs.
+		-- Spawn explicitly with cwd = root_dir.
+		local function ruby_lsp_cmd(dispatchers, config)
+			return vim.lsp.rpc.start({ ruby_lsp_bin }, dispatchers, {
+				cwd = config.root_dir,
+			})
 		end
 
 		vim.lsp.config("ruby_lsp", {
-				cmd = { ruby_lsp_cmd },
+				cmd = ruby_lsp_cmd,
 				filetypes = { "ruby", "eruby" },
 				root_markers = { "Gemfile", ".git" },
 				init_options = {
