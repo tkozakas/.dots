@@ -14,6 +14,7 @@ after-startup-command = [
     'exec-and-forget open -a 1Password',
     'exec-and-forget open -a Alacritty',
     'exec-and-forget open -a Raycast',
+    'exec-and-forget open -a "Sequel Ace"',
     'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=3.0'
 ]
 
@@ -140,6 +141,10 @@ run = ['layout tiling', 'move-node-to-workspace C']
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
 run = ['layout tiling', 'move-node-to-workspace 4']
+
+[[on-window-detected]]
+if.app-id = 'com.sequel-ace.sequel-ace'
+run = ['layout tiling', 'move-node-to-workspace 8']
 
 # Everything else floats
 [[on-window-detected]]
