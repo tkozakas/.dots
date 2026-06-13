@@ -101,6 +101,27 @@ in
   xdg.configFile = mkLinksFor "xdgLinks";
   home.file = mkLinksFor "homeLinks";
 
+  # Remove any pre-existing real files/dirs that would conflict with the
+  # symlinks we manage. home-manager refuses to overwrite paths it doesn't
+  # own (even with `force = true` when the target is a real directory),
+  # so we clear them out before link generation.
+  home.activation.cleanupLinkTargets =
+    let
+      xdgTargets = map (n: "${config.xdg.configHome}/${n}")
+        (lib.attrNames (mergeAttrs "xdgLinks"));
+      homeTargets = map (n: "${homeDirectory}/${n}")
+        (lib.attrNames (mergeAttrs "homeLinks"));
+      allTargets = xdgTargets ++ homeTargets;
+    in
+    lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+      ${lib.concatMapStringsSep "\n" (t: ''
+        if [ -e "${t}" ] && [ ! -L "${t}" ]; then
+          $VERBOSE_ECHO "Removing pre-existing ${t} to allow symlink"
+          $DRY_RUN_CMD rm -rf "${t}"
+        fi
+      '') allTargets}
+    '';
+
   home.activation.userHooks = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     export PATH="${config.home.profileDirectory}/bin:$PATH"
     ${lib.concatMapStringsSep "\n" (cmd: "$DRY_RUN_CMD ${cmd}") (mergeList "hooks")}
