@@ -6,7 +6,7 @@
     "build": {
       "description": "Build and implement features end-to-end",
       "path": "agent/build.md",
-      "model": "github-copilot/claude-opus-4.7",
+      "model": "github-copilot/claude-opus-4.8",
       "permission": {
         "task": {
           "coder": "allow",
@@ -19,7 +19,7 @@
     "plan": {
       "description": "Plan changes without executing them",
       "path": "agent/plan.md",
-      "model": "github-copilot/claude-opus-4.7",
+      "model": "github-copilot/claude-opus-4.8",
       "permission": {
         "task": {
           "researcher": "allow",
@@ -50,7 +50,7 @@
     "notes": {
       "description": "Obsidian vault management and Excalidraw diagrams",
       "path": "agent/notes.md",
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "anthropic/claude-haiku-4-5",
       "steps": 30
     }
   },
