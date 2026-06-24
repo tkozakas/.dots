@@ -87,6 +87,9 @@
       ".aerospace.toml": "aerospace/.aerospace.toml",
       "Library/Application Support/Code/User/settings.json": "vscode/settings.json"
     },
-    "hooks": []
+    "hooks": [
+      "[ -x /opt/homebrew/bin/brew ] || [ -x /usr/local/bin/brew ] || /bin/bash -c \"$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
+      "[ -d /Applications/DbGate.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask --no-quarantine dbgate; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask --no-quarantine dbgate; }"
+    ]
   }
 }
