@@ -26,6 +26,9 @@ local function minimal_chrome()
   set(0, 'StatusLineNC', { ctermfg = 8, ctermbg = 'NONE', cterm = {} })
   -- Fully mute any residual EndOfBuffer glyph
   set(0, 'EndOfBuffer',  { ctermfg = 0, ctermbg = 'NONE', cterm = {} })
+  -- Kill the reversed (solid white) ColorColumn block at column 80; render it
+  -- as a subtle gray cell instead of an inverted bar past the line end.
+  set(0, 'ColorColumn',  { ctermfg = 'NONE', ctermbg = 8, cterm = {} })
 end
 
 vim.api.nvim_create_autocmd('ColorScheme', {
