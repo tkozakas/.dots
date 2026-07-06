@@ -4,7 +4,7 @@
 	insteadOf = https://github.com/
 [core]
 	autocrlf = input
-	excludesFile = ~/.gitignore_global
+	excludesFile = /Users/tomas.kozakas/.gitignore_global
 [color "status"]
 	untracked = cyan
 [pull]

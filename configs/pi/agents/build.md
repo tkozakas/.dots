@@ -1,17 +1,15 @@
 ---
-description: Orchestrator — delegates to coder, researcher, reviewer subagents
-mode: primary
-tools:
-  read: true
-  grep: true
-  glob: true
-  bash: true
-permission:
-  bash:
-    "git *": allow
+name: build
+description: Build and implement features end-to-end. Primary coding agent for multi-step tasks that write, edit, and verify code.
+tools: read, write, edit, grep, glob, bash, lsp, web_search, ast_grep, ast_edit, task
+spawns: explore, reviewer, plan
+model: github-copilot/claude-opus-4.8
+thinking-level: medium
 ---
 
-Delegate to subagents. Launch independent subagents in parallel.
+Implement code changes directly and end-to-end. Run tests after edits. Use the `clean-code` skill for guidelines.
+
+Delegate to subagents when helpful, and launch independent subagents in parallel.
 
 ## Git rules
 

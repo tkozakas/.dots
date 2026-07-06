@@ -1,0 +1,13 @@
+# oh-my-pi (omp) global settings — personal profile
+# Docs: https://github.com/can1357/oh-my-pi/blob/main/docs/settings.md
+
+modelRoles:
+  default: github-copilot/claude-opus-4.8
+  plan: github-copilot/claude-opus-4.8
+
+tools:
+  approvalMode: yolo
+
+lsp:
+  enabled: true
+  diagnosticsOnWrite: true

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/can1357/oh-my-pi/main/packages/coding-agent/src/config/mcp-schema.json",
+  "mcpServers": {
+    "gh_grep": {
+      "type": "http",
+      "url": "https://mcp.grep.app"
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "deepwiki": {
+      "type": "http",
+      "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "github": {
+      "command": "github-mcp-server",
+      "args": ["stdio"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "GITHUB_PERSONAL_ACCESS_TOKEN"
+      }
+    },
+    "obsidian": {
+      "command": "npx",
+      "args": ["-y", "@mauricio.wolff/mcp-obsidian@latest", "${OBSIDIAN_VAULT}"]
+    }
+  }
+}

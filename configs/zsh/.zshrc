@@ -22,7 +22,8 @@ if [[ ! -d "$ZINIT_HOME" ]]; then
 fi
 source "$ZINIT_HOME/zinit.zsh"
 
-MNML_USER_CHAR=''
+# Distinct prompt marker so my shell input stands out from pi/agent output.
+MNML_USER_CHAR='λ'
 zinit light subnixr/minimal
 
 # Turbo-loaded plugins (load after prompt renders)

@@ -19,21 +19,6 @@ alias k='kubectl'
 alias squash='git-squash-pr.sh'
 alias pr='git-open-or-create-pr.sh'
 
-# ── Theme Switcher ─────────────────────────────────────────────────────────────
-theme() {
-  local themes_dir="$HOME/.config/themes"
-  if [[ -z "$1" ]]; then
-    echo "Available: $(ls -1 "$themes_dir" | grep -v themes.json | tr '\n' ' ')"
-    echo "Current:   $(basename "$(readlink "$HOME/.config/current-theme" 2>/dev/null)")"
-    return
-  fi
-  [[ ! -d "$themes_dir/$1" ]] && { echo "Theme '$1' not found"; return 1; }
-  ln -sfn "$themes_dir/$1" "$HOME/.config/current-theme"
-  tmux source-file "$HOME/.tmux.conf" 2>/dev/null
-  pkill -USR1 nvim 2>/dev/null
-  echo "Switched to $1"
-}
-
 # ── Private Extensions ────────────────────────────────────────────────────────
 [[ -f ~/.dots-work/zshfn ]] && source ~/.dots-work/zshfn
 
