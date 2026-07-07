@@ -13,6 +13,31 @@ return {
         completion = { completeopt = 'menu,menuone,noinsert' },
         mapping = cmp.mapping.preset.insert({
           ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+          -- IntelliJ-style Tab: accept the highlighted completion; else
+          -- accept copilot ghost text; else jump snippet placeholder;
+          -- else a real Tab (indent). Insert+select modes only, so
+          -- normal-mode <C-i>/jumplist is untouched.
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            local copilot = require('copilot.suggestion')
+            if cmp.visible() then
+              cmp.confirm({ select = true })
+            elseif copilot.is_visible() then
+              copilot.accept()
+            elseif vim.snippet.active({ direction = 1 }) then
+              vim.snippet.jump(1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif vim.snippet.active({ direction = -1 }) then
+              vim.snippet.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
         }),
         sources = {
           { name = 'nvim_lsp' },
