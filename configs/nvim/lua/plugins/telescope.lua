@@ -34,6 +34,19 @@ return {
         },
       },
       defaults = {
+        -- ripgrep flags for live grep: smart-case, search hidden files,
+        -- respect .gitignore, skip .git itself
+        vimgrep_arguments = {
+          'rg',
+          '--color=never',
+          '--no-heading',
+          '--with-filename',
+          '--line-number',
+          '--column',
+          '--smart-case',
+          '--hidden',
+          '--glob=!.git/*',
+        },
         path_display = { 'filename_first' },
         cache_picker = {
           num_pickers = 10,

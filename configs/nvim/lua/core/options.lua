@@ -64,3 +64,9 @@ vim.diagnostic.config({
 		prefix = "●",
 	},
 })
+
+-- Grep: ripgrep with smart-case + hidden files, respecting .gitignore
+-- (nvim's auto-detected default is `rg --vimgrep -uu`, which searches
+-- ignored files too — slow and noisy in repos with node_modules etc.)
+vim.opt.grepprg = "rg --vimgrep --smart-case --hidden --glob=!.git/*"
+vim.opt.grepformat = "%f:%l:%c:%m"
