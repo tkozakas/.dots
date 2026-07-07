@@ -35,7 +35,8 @@ vim.opt.smoothscroll = true
 vim.opt.signcolumn = "yes"
 vim.opt.splitbelow = true
 vim.opt.splitright = true
-vim.opt.termguicolors = true -- enable 24-bit colors
+-- NOTE: termguicolors is owned by plugins/colorscheme.lua (set to false:
+-- the config renders through the terminal's 16-color ANSI palette)
 vim.opt.wrap = false
 
 vim.opt.colorcolumn = "80"
@@ -57,8 +58,12 @@ vim.opt.tabstop = 2 -- how many spaces tab inserts
 -- UI
 vim.opt.winborder = "rounded"
 
+-- Sessions (auto-session needs these saved for faithful restores)
+vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
 -- Diagnostics
 vim.diagnostic.config({
+	severity_sort = true,
 	virtual_text = {
 		spacing = 4,
 		prefix = "●",

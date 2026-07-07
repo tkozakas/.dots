@@ -178,12 +178,14 @@ return {
 		local tools = vim.list_extend(vim.deepcopy(servers), { "stylua", "isort", "black" })
 		require("mason-tool-installer").setup({ ensure_installed = tools })
 
+			-- mason-lspconfig v2: `handlers` was removed; installed servers are
+			-- enabled via vim.lsp.enable() by automatic_enable. Exclude stylua:
+			-- it's installed as a formatter (conform), but lspconfig ships a
+			-- stylua LSP config and this stylua build has no --lsp mode.
 			require("mason-lspconfig").setup({
 				ensure_installed = servers,
-				handlers = {
-					function(server_name)
-						vim.lsp.enable(server_name)
-					end,
+				automatic_enable = {
+					exclude = { "stylua" },
 				},
 			})
 

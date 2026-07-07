@@ -17,12 +17,14 @@ local function scroll_down()
   local max_top = last_line - math.floor(win_height / 2)
   if topline < max_top then
     local scroll = math.min(3, max_top - topline)
-    vim.fn.feedkeys(string.rep(ctrl_e, scroll), 'nx')
+    -- normal! is mode-safe: raw feedkeys of <C-e> in insert mode would
+    -- INSERT text (char-below-cursor) instead of scrolling
+    vim.cmd.normal({ args = { string.rep(ctrl_e, scroll) }, bang = true })
   end
 end
 
 local function scroll_up()
-  vim.fn.feedkeys(string.rep(ctrl_y, 3), 'nx')
+  vim.cmd.normal({ args = { string.rep(ctrl_y, 3) }, bang = true })
 end
 
 vim.keymap.set({ 'n', 'v', 'i' }, '<ScrollWheelDown>', scroll_down)

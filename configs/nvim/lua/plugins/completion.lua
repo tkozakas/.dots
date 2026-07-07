@@ -33,7 +33,14 @@ return {
     'zbirenbaum/copilot.lua',
     event = 'InsertEnter',
     config = function()
+      -- copilot.lua needs node >= 22; the system node is v20, so prefer
+      -- mise's LTS install and fall back to PATH node.
+      local node = vim.fn.expand('~/.local/share/mise/installs/node/lts/bin/node')
+      if vim.fn.executable(node) == 0 then
+        node = 'node'
+      end
       require('copilot').setup({
+        copilot_node_command = node,
         panel = { enabled = false },
         suggestion = {
           enabled = true,
