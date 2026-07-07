@@ -17,8 +17,49 @@ return {
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = desc })
 					end
 
-				map("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-				map("<leader>lr", vim.lsp.buf.references, "[L]SP [R]eferences")
+				-- IntelliJ-style gd: on a usage jump to the definition; when already
+				-- ON the definition, show a usages picker instead. Multiple
+				-- definitions also open a picker (telescope jumps if single).
+				local function ivy(opts)
+					return require("telescope.themes").get_ivy(
+						vim.tbl_extend("force", { layout_config = { height = 0.50 } }, opts or {})
+					)
+				end
+
+				map("gd", function()
+					local client = vim.lsp.get_clients({ bufnr = event.buf })[1]
+					local params = vim.lsp.util.make_position_params(0, client and client.offset_encoding or "utf-16")
+					vim.lsp.buf_request(event.buf, "textDocument/definition", params, function(err, result)
+						if err or result == nil or vim.tbl_isempty(result) then
+							vim.notify("No definition found", vim.log.levels.INFO)
+							return
+						end
+						if not vim.islist(result) then
+							result = { result }
+						end
+						-- Are we already sitting on (the line of) a definition?
+						local cur_uri = vim.uri_from_bufnr(event.buf)
+						local cur_line = vim.api.nvim_win_get_cursor(0)[1] - 1
+						local at_definition = false
+						for _, loc in ipairs(result) do
+							local uri = loc.uri or loc.targetUri
+							local range = loc.range or loc.targetSelectionRange
+							if uri == cur_uri and range and range.start.line == cur_line then
+								at_definition = true
+								break
+							end
+						end
+						local builtin = require("telescope.builtin")
+						if at_definition then
+							builtin.lsp_references(ivy({ include_declaration = false, show_line = true }))
+						else
+							builtin.lsp_definitions(ivy())
+						end
+					end)
+				end, "[G]oto [D]efinition / usages")
+				map("<leader>lr", function()
+					require("telescope.builtin").lsp_references(ivy({ show_line = true }))
+				end, "[L]SP [R]eferences")
 				map("<leader>rn", vim.lsp.buf.rename, "[R]e[N]ame symbol")
 				map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
 				-- K → vim.lsp.buf.hover is built-in since Neovim 0.10
