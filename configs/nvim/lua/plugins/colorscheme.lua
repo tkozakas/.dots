@@ -29,6 +29,18 @@ local function minimal_chrome()
   -- Kill the reversed (solid white) ColorColumn block at column 80; render it
   -- as a subtle gray cell instead of an inverted bar past the line end.
   set(0, 'ColorColumn',  { ctermfg = 'NONE', ctermbg = 8, cterm = {} })
+
+  -- The builtin default scheme leaves most syntax groups colorless in
+  -- 16-color mode (keywords render bold-only). Give them classic vim
+  -- ANSI colors so go/ruby/etc. read as properly highlighted.
+  set(0, 'Statement', { ctermfg = 11, cterm = { bold = true } }) -- func/def/end/if
+  set(0, 'Keyword',   { link = 'Statement' })
+  set(0, 'Type',      { ctermfg = 6 })  -- cyan: struct/interface/module types
+  set(0, 'Constant',  { ctermfg = 13 }) -- bright magenta: consts/symbols
+  set(0, 'Number',    { link = 'Constant' })
+  set(0, 'Boolean',   { link = 'Constant' })
+  set(0, 'Comment',   { ctermfg = 8 })  -- muted gray comments
+  set(0, 'PreProc',   { ctermfg = 12 }) -- import/require/attributes
 end
 
 vim.api.nvim_create_autocmd('ColorScheme', {
