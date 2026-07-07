@@ -6,12 +6,6 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-buffer',
-      {
-        'zbirenbaum/copilot-cmp',
-        config = function()
-          require('copilot_cmp').setup()
-        end,
-      },
     },
     config = function()
       local cmp = require('cmp')
@@ -21,7 +15,6 @@ return {
           ['<C-y>'] = cmp.mapping.confirm({ select = true }),
         }),
         sources = {
-          { name = 'copilot' },
           { name = 'nvim_lsp' },
           { name = 'path' },
           { name = 'buffer' },
@@ -41,6 +34,9 @@ return {
       end
       require('copilot').setup({
         copilot_node_command = node,
+        -- One copilot paradigm only: inline ghost text (suggestion) with
+        -- <C-l> accept. The cmp menu is LSP/path/buffer only — running the
+        -- copilot-cmp source at the same time duplicated every suggestion.
         panel = { enabled = false },
         suggestion = {
           enabled = true,
