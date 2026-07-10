@@ -26,9 +26,10 @@ local function minimal_chrome()
   set(0, 'StatusLineNC', { ctermfg = 8, ctermbg = 'NONE', cterm = {} })
   -- Fully mute any residual EndOfBuffer glyph
   set(0, 'EndOfBuffer',  { ctermfg = 0, ctermbg = 'NONE', cterm = {} })
-  -- Kill the reversed (solid white) ColorColumn block at column 80; render it
-  -- as a subtle gray cell instead of an inverted bar past the line end.
-  set(0, 'ColorColumn',  { ctermfg = 'NONE', ctermbg = 8, cterm = {} })
+  -- Column-80 ruler: virt-column draws a thin ▏ glyph instead of the solid
+  -- reversed ColorColumn cell; keep the cell background off and tint the glyph.
+  set(0, 'ColorColumn',  { ctermfg = 'NONE', ctermbg = 'NONE', cterm = {} })
+  set(0, 'VirtColumn',   { ctermfg = 8, ctermbg = 'NONE', cterm = {} })
 
   -- The builtin default scheme leaves most syntax groups colorless in
   -- 16-color mode (keywords render bold-only). Give them classic vim
@@ -49,4 +50,9 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 })
 minimal_chrome()
 
-return {}
+-- Render 'colorcolumn' (set in core/options.lua) as a thin virtual glyph,
+-- matching the ▏ tab guides instead of a full-cell background block.
+return {
+  'lukas-reineke/virt-column.nvim',
+  opts = { char = '▏' },
+}
