@@ -169,7 +169,7 @@ git:
   pagers: []
   # Pull behaviour: 'merge' (default) | 'rebase' | 'ff-only'
   pull:
-    mode: rebase
+    mode: ff-only
   # Config relating to committing
   commit:
     # If true, pass '--signoff' flag when committing
