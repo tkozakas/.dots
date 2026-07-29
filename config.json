@@ -87,7 +87,8 @@
     "hooks": [
       "[ -x /opt/homebrew/bin/brew ] || [ -x /usr/local/bin/brew ] || /bin/bash -c \"$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
       "[ -d /Applications/DbGate.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask --no-quarantine dbgate; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask --no-quarantine dbgate; }",
-      "command -v omp >/dev/null 2>&1 || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install can1357/tap/omp; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install can1357/tap/omp; }"
+      "command -v omp >/dev/null 2>&1 || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install can1357/tap/omp; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install can1357/tap/omp; }",
+      "[ -d /Applications/Raycast.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask raycast; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask raycast; }"
     ]
   }
 }
