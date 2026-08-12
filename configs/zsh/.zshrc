@@ -52,3 +52,7 @@ source <(fzf --zsh 2>/dev/null)
 [[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
 [[ -f ~/.dots-work/zshrc ]] && source ~/.dots-work/zshrc
 export PATH="$HOME/.local/bin:$PATH"
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/tomas.kozakas/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
