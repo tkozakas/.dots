@@ -1,35 +1,24 @@
 {
   "common": {
     "packages": [
-      "unstable.neovim",
-      "unstable.tmux",
-      "unstable.lazygit",
-      "unstable.git",
-      "unstable.vim",
-      "unstable.zsh",
-      "unstable.zoxide",
-      "unstable.direnv",
-      "unstable.alacritty",
+      "unstable.sesh",
       "unstable.zip",
       "unstable.unzip",
-      "unstable.gh",
-      "unstable.lsd",
-      "unstable.fastfetch",
-      "unstable.fzf",
       "unstable.bitwarden-cli",
-      "unstable.vscode",
       "unstable.nerd-fonts.jetbrains-mono"
     ],
     "xdgLinks": {
       "nvim": "nvim",
       "alacritty": "alacritty",
       "lazygit": "lazygit",
-      "k9s": "k9s"
+      "k9s": "k9s",
+      "sesh": "sesh"
     },
     "homeLinks": {
       ".omp/agent": "pi",
       ".tmux": "tmux",
       ".tmux.conf": "tmux/.tmux.conf",
+      ".tmux.conf.local": "tmux/.tmux.conf.local",
       ".zshrc": "zsh/.zshrc",
       ".zshenv": "zsh/.zshenv",
       ".zshfn": "zsh/.zshfn",
@@ -77,9 +66,7 @@
     "hooks": []
   },
   "darwin": {
-    "packages": [
-      "unstable.aerospace"
-    ],
+    "packages": [],
     "xdgLinks": {},
     "homeLinks": {
       ".aerospace.toml": "aerospace/.aerospace.toml",
@@ -90,6 +77,7 @@
       "[ -d /Applications/DbGate.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask --no-quarantine dbgate; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask --no-quarantine dbgate; }",
       "command -v omp >/dev/null 2>&1 || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install can1357/tap/omp; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install can1357/tap/omp; }",
       "[ -d /Applications/Raycast.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask raycast; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask raycast; }"
+      ,"[ -d /Applications/AeroSpace.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask nikitabobko/tap/aerospace; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask nikitabobko/tap/aerospace; }"
     ]
   }
 }

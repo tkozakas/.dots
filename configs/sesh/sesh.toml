@@ -1,0 +1,10 @@
+# sesh — session definitions (https://github.com/joshmedeski/sesh)
+# Uncomment to give a project predefined startup, e.g. an editor tab:
+#
+# [default_session]
+# startup_command = "nvim"
+#
+# [[session]]
+# name = "core"
+# path = "~/vinted/core"
+# startup_command = "nvim"
