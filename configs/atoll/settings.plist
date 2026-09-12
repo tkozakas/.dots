@@ -2,8 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ClipboardHistory</key>
+	<data>
+	W10=
+	</data>
 	<key>KeyboardShortcuts_clipboardHistoryPanel</key>
-	<string>{"carbonKeyCode":8,"carbonModifiers":768}</string>
+	<string>{"carbonKeyCode":9,"carbonModifiers":4608}</string>
 	<key>KeyboardShortcuts_colorPickerPanel</key>
 	<string>{"carbonKeyCode":35,"carbonModifiers":768}</string>
 	<key>KeyboardShortcuts_screenAssistantPanel</key>
@@ -16,10 +20,28 @@
 	<string>{"carbonKeyCode":4,"carbonModifiers":768}</string>
 	<key>KeyboardShortcuts_toggleTerminalTab</key>
 	<string>{"carbonKeyCode":50,"carbonModifiers":4096}</string>
+	<key>NSStatusItem VisibleCC Item-0</key>
+	<false/>
+	<key>SUAutomaticallyUpdate</key>
+	<false/>
+	<key>SUEnableAutomaticChecks</key>
+	<false/>
 	<key>SUHasLaunchedBefore</key>
 	<true/>
+	<key>SUSendProfileInfo</key>
+	<false/>
 	<key>capsLockIndicatorTintMode</key>
 	<string>white</string>
+	<key>clipboardDisplayMode</key>
+	<string>"popover"</string>
+	<key>clipboardHistorySize</key>
+	<integer>10</integer>
+	<key>clipboardPanelPositionX</key>
+	<real>596</real>
+	<key>clipboardPanelPositionY</key>
+	<real>274</real>
+	<key>closedNotchWidth</key>
+	<real>150</real>
 	<key>customIdleAnimations</key>
 	<array>
 		<string>{"id":"E5858718-DB3C-4359-8DCE-CD9EA419B1C4","isBuiltIn":true,"name":"Dog waiting","source":{"lottieFile":{"_0":"file:\/\/\/Applications\/Atoll.app\/Contents\/Resources\/Dog%20waiting.json"}},"speed":1}</string>
@@ -27,6 +49,8 @@
 		<string>{"id":"9C696028-3427-4D19-A229-CB0358BC4749","isBuiltIn":true,"name":"Orange Cat Peeping","source":{"lottieFile":{"_0":"file:\/\/\/Applications\/Atoll.app\/Contents\/Resources\/Orange%20Cat%20Peeping.json"}},"speed":1}</string>
 		<string>{"id":"5ECD5107-FD74-48B5-8E2C-13DC99282E80","isBuiltIn":true,"name":"Reindeer","source":{"lottieFile":{"_0":"file:\/\/\/Applications\/Atoll.app\/Contents\/Resources\/Reindeer.json"}},"speed":1}</string>
 	</array>
+	<key>customizePhysicalNotchWidth</key>
+	<false/>
 	<key>didMigrateCapsLockTintMode</key>
 	<true/>
 	<key>didMigrateMusicAuxControls</key>
@@ -37,16 +61,54 @@
 	<true/>
 	<key>enableBetterDisplayIntegration</key>
 	<false/>
+	<key>enableCircularHUD</key>
+	<false/>
+	<key>enableClipboardManager</key>
+	<true/>
+	<key>enableColorPickerFeature</key>
+	<false/>
+	<key>enableCustomOSD</key>
+	<false/>
+	<key>enableHaptics</key>
+	<true/>
 	<key>enableLunarIntegration</key>
 	<false/>
+	<key>enableLyrics</key>
+	<false/>
+	<key>enableMinimalisticUI</key>
+	<false/>
+	<key>enableScreenAssistant</key>
+	<false/>
+	<key>enableStatsFeature</key>
+	<true/>
+	<key>enableSystemHUD</key>
+	<true/>
+	<key>enableTerminalFeature</key>
+	<false/>
+	<key>enableTimerFeature</key>
+	<false/>
+	<key>enableVerticalHUD</key>
+	<false/>
+	<key>externalDisplayStyle</key>
+	<string>Standard Notch</string>
 	<key>firstLaunch</key>
 	<false/>
 	<key>focusMonitoringMode</key>
 	<string>withoutDevTools</string>
+	<key>hideDynamicIslandFromScreenCapture</key>
+	<true/>
+	<key>lockScreenGlassCustomizationMode</key>
+	<string>Custom Liquid</string>
+	<key>lockScreenGlassStyle</key>
+	<string>Liquid Glass</string>
+	<key>lockScreenMusicLiquidGlassVariant</key>
+	<integer>11</integer>
+	<key>lockScreenWeatherWidgetStyle</key>
+	<string>Inline</string>
 	<key>mediaController</key>
 	<string>Now Playing</string>
 	<key>menubarIcon</key>
-	<true/>
+	<false/>
 	<key>musicAuxRightControl</key>
 	<string>mediaOutput</string>
 	<key>musicControlSlots</key>
@@ -57,7 +119,19 @@
 		<string>"trackForward"</string>
 		<string>"mediaOutput"</string>
 	</array>
+	<key>openNotchWidth</key>
+	<real>690</real>
+	<key>selectedDownloadIndicatorStyle</key>
+	<string>Circle</string>
 	<key>selectedIdleAnimation</key>
 	<string>{"id":"E5858718-DB3C-4359-8DCE-CD9EA419B1C4","isBuiltIn":true,"name":"Dog waiting","source":{"lottieFile":{"_0":"file:\/\/\/Applications\/Atoll.app\/Contents\/Resources\/Dog%20waiting.json"}},"speed":1}</string>
+	<key>showBatteryIndicator</key>
+	<false/>
+	<key>showMirror</key>
+	<false/>
+	<key>showOnAllDisplays</key>
+	<true/>
+	<key>useModernCloseAnimation</key>
+	<true/>
 </dict>
 </plist>
