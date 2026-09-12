@@ -5,6 +5,6 @@
 # startup_command = "nvim"
 #
 # [[session]]
-# name = "core"
-# path = "~/vinted/core"
+# name = "project"
+# path = "~/work/project"
 # startup_command = "nvim"

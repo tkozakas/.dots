@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sel="$({ sesh list -t --icons; find ~/vinted -mindepth 1 -maxdepth 1 -type d 2>/dev/null; } | fzf-tmux -p 80%,70% \
+sel="$({ sesh list -t --icons; find -L ~/work -mindepth 1 -maxdepth 1 -type d 2>/dev/null; } | fzf-tmux -p 80%,70% \
   --no-sort --ansi \
   --border=rounded --border-label ' ⚡ sessions ' --border-label-pos 3 \
   --prompt '  ' \

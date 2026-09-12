@@ -28,8 +28,7 @@
       ".local/bin/git-scripts": "git"
     },
     "hooks": [
-      "git config --global core.excludesFile ~/.gitignore_global",
-      "command -v mise >/dev/null 2>&1 && mise settings set trusted_config_paths ~/vinted || true"
+      "git config --global core.excludesFile ~/.gitignore_global"
     ]
   },
   "linux": {
