@@ -105,6 +105,8 @@ alt-shift-c = 'move-node-to-workspace C'
 alt-shift-t = 'move-node-to-workspace T'
 
 alt-tab = 'workspace-back-and-forth'
+alt-s = 'exec-and-forget $HOME/.dots/configs/aerospace/scripts/summon-window.sh'
+alt-e = 'exec-and-forget osascript -e "tell application \"Finder\" to make new Finder window to home" -e "tell application \"Finder\" to activate"'
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 alt-shift-semicolon = 'mode service'
 
