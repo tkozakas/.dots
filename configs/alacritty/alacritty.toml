@@ -2,9 +2,9 @@
 live_config_reload = true
 
 [env]
-TERM = "xterm-256color"
+TERM = "alacritty"
 
-# Default terminal colors (classic dark)
+# Classic dark (Tango palette)
 [colors.primary]
 background = "#1c1c1c"
 foreground = "#c0c0c0"

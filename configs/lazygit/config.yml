@@ -48,46 +48,35 @@ gui:
   # Config relating to colors and styles.
   # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes
   theme:
-    # One Dark theme colors
-    # Border color of focused window
+    # Classic dark, matches alacritty Tango palette
     activeBorderColor:
-      - "#61afef"
+      - "#729fcf"
       - bold
-    # Border color of non-focused windows
     inactiveBorderColor:
-      - "#3e4452"
-    # Border color of focused window when searching in that window
+      - "#3a3a3a"
     searchingActiveBorderColor:
-      - "#56b6c2"
+      - "#fce94f"
       - bold
-    # Color of keybindings help text in the bottom line
     optionsTextColor:
-      - "#56b6c2"
-    # Background color of selected line.
-    # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#highlighting-the-selected-line
+      - "#06989a"
     selectedLineBgColor:
-      - "#3e4452"
-    # Background color of selected line when view doesn't have focus.
+      - "#3a3a3a"
     inactiveViewSelectedLineBgColor:
-      - "#2c313a"
-    # Foreground color of copied commit
+      - "#262626"
     cherryPickedCommitFgColor:
-      - "#c678dd"
-    # Background color of copied commit
+      - "#ad7fa8"
     cherryPickedCommitBgColor:
-      - "#61afef"
-    # Foreground color of marked base commit (for rebase)
+      - "#3a3a3a"
     markedBaseCommitFgColor:
-      - "#c678dd"
-    # Background color of marked base commit (for rebase)
+      - "#ad7fa8"
     markedBaseCommitBgColor:
-      - "#d19a66"
-    # Color for file with unstaged changes
+      - "#c4a000"
     unstagedChangesColor:
-      - "#e06c75"
-    # Default text color
+      - "#ef2929"
     defaultFgColor:
-      - "#abb2bf"
+      - "#c0c0c0"
+  authorColors:
+    "*": "#729fcf"
   # Config relating to the commit length indicator
   commitLength:
     # If true, show an indicator of commit message length
@@ -123,7 +112,7 @@ gui:
   showBranchCommitHash: false
   # Whether to show the divergence from the base branch in the branches view.
   # One of: 'none' | 'onlyArrow'  | 'arrowAndNumber'
-  showDivergenceFromBaseBranch: arrowAndNumber
+  showDivergenceFromBaseBranch: none
   # Height of the command log view
   commandLogSize: 8
   # Whether to split the main window when viewing file changes.
