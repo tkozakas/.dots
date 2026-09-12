@@ -1,4 +1,7 @@
-pcall(vim.keymap.del, "n", "<leader>/")
+local slash = vim.fn.maparg("<leader>/", "n", false, true)
+if slash.desc and slash.desc:find("Grep") then
+  vim.keymap.del("n", "<leader>/")
+end
 
 vim.keymap.set("n", "<leader><space>", function()
   Snacks.picker.smart()
