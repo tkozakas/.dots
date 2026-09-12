@@ -11,7 +11,7 @@ HM     := $(SOURCE) $(NIX) run ".$(HASH)home-manager" -- switch --flake ".$(HASH
 dump:
 	@defaults export com.vorssaint.utils configs/vorssaint/settings.plist && plutil -convert xml1 configs/vorssaint/settings.plist
 	@defaults export com.raycast.macos configs/raycast/settings.plist && plutil -convert xml1 configs/raycast/settings.plist
-	@[ -f "$$HOME/Library/Preferences/theboredteam.boring.notch.plist" ] && defaults export theboredteam.boring.notch configs/boring-notch/settings.plist && plutil -convert xml1 configs/boring-notch/settings.plist || true
+	@defaults read com.Ebullioscopic.Atoll >/dev/null 2>&1 && defaults export com.Ebullioscopic.Atoll configs/atoll/settings.plist && plutil -convert xml1 configs/atoll/settings.plist || true
 	@echo "app settings exported to configs/ (readable xml)"
 fmt:
 	@bash -c '$(SOURCE) $(NIX) fmt'
