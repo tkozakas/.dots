@@ -1,7 +1,5 @@
 #!/bin/bash
-# Toggle a side pane running the pi (oh-my-pi) coding agent.
-
-PANE_WIDTH=80
+# Toggle a pane running the pi (oh-my-pi) coding agent.
 
 PI_BIN="${PI_BIN:-$HOME/.nix-profile/bin/pi}"
 if [[ ! -x "$PI_BIN" ]]; then
@@ -18,6 +16,5 @@ pi_pane=$(tmux list-panes -F '#{pane_id} #{pane_start_command}' | grep -E "/(pi|
 if [[ -n "$pi_pane" ]]; then
   tmux kill-pane -t "$pi_pane"
 else
-  pane_path=$(tmux display-message -p '#{pane_current_path}')
-  tmux split-window -h -l "$PANE_WIDTH" -c "$pane_path" "$PI_BIN"
+  ~/.tmux/scripts/smart-split.sh "$PI_BIN"
 fi

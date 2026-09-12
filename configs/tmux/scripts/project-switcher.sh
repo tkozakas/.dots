@@ -3,13 +3,31 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
+  open_windows=$(tmux list-windows -F '#{window_name}')
   selected=$({
     echo "[New Tab]"
     echo "[Close Current Window]"
-    [[ -d "$HOME/.dots" ]] && echo "$HOME/.dots"
-    [[ -d "$HOME/work" ]] && find -L "$HOME/work" -mindepth 1 -maxdepth 1 -type d
-    [[ -d "$HOME/Documents" ]] && find -L "$HOME/Documents" -mindepth 1 -maxdepth 1 -type d
-  } | fzf --select-1 --exit-0)
+    {
+      [[ -d "$HOME/.dots" ]] && echo "$HOME/.dots"
+      [[ -d "$HOME/work" ]] && find -L "$HOME/work" -mindepth 1 -maxdepth 1 -type d
+      [[ -d "$HOME/Documents" ]] && find -L "$HOME/Documents" -mindepth 1 -maxdepth 1 -type d
+    } | while read -r dir; do
+      name=$(basename "$dir" | sed 's/^\.//')
+      if grep -qx "$name" <<<"$open_windows"; then
+        echo "● $dir"
+      else
+        echo "  $dir"
+      fi
+    done
+  } | fzf-tmux -p 70%,60% \
+    --select-1 --exit-0 --no-sort --ansi \
+    --border=rounded --border-label ' ⌂ projects ' --border-label-pos 3 \
+    --prompt '  ' \
+    --header '↵ open tab · ● already open · esc close' \
+    --bind 'tab:down,btab:up' \
+    --preview-window 'right:50%,border-left' \
+    --preview 'd=$(echo {} | sed "s/^[● ] *//"); if [ -d "$d" ]; then cd "$d" && { git status -sb 2>/dev/null | head -5; echo; ls -A1 | head -30; } else echo; fi')
+  selected=$(echo "$selected" | sed 's/^[● ] *//')
 fi
 
 if [[ -z $selected ]]; then
@@ -17,9 +35,7 @@ if [[ -z $selected ]]; then
 fi
 
 if [[ "$selected" == "[New Tab]" ]]; then
-  timestamp=$(date +%s)
-  window_name="home-$timestamp"
-  tmux new-window -n "$window_name" -c "$HOME"
+  tmux new-window -n "home-$(date +%s)" -c "$HOME"
   exit 0
 fi
 
@@ -30,14 +46,9 @@ fi
 
 selected_name=$(basename "$selected" | sed 's/^\.//')
 
-if tmux list-windows -F '#{window_name}' | grep -q "^${selected_name}$"; then
-  CURRENT_WINDOW_NAME=$(tmux display-message -p '#{window_name}')
-
-  if [ "$selected_name" = "$CURRENT_WINDOW_NAME" ]; then
-    exit 0
-  else
-    tmux select-window -t "$selected_name"
-  fi
+if tmux list-windows -F '#{window_name}' | grep -qx "$selected_name"; then
+  [[ "$selected_name" == "$(tmux display-message -p '#{window_name}')" ]] && exit 0
+  tmux select-window -t "$selected_name"
 else
   tmux new-window -n "$selected_name" -c "$selected"
 fi
