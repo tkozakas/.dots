@@ -1,18 +1,3 @@
-vim.api.nvim_create_autocmd({ "InsertLeave", "BufLeave", "FocusLost" }, {
-  group = vim.api.nvim_create_augroup("auto-save", { clear = true }),
-  callback = function(args)
-    local buf = args.buf
-    if not vim.api.nvim_buf_is_valid(buf) then
-      return
-    end
-    if vim.bo[buf].modified and vim.bo[buf].buftype == "" and vim.bo[buf].filetype ~= "harpoon" then
-      vim.api.nvim_buf_call(buf, function()
-        vim.cmd("silent! write")
-      end)
-    end
-  end,
-})
-
 local function flat_chrome()
   local set = vim.api.nvim_set_hl
   set(0, "WinSeparator", { ctermfg = 8, ctermbg = "NONE", cterm = {} })

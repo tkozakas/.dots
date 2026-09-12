@@ -1,6 +1,8 @@
 vim.opt.exrc = true
 vim.opt.swapfile = false
 
+vim.g.autoformat = false
+
 -- Render through the terminal's 16-color ANSI palette so nvim inherits the
 -- same Tango colors as tmux/omp/lazygit (LazyVim defaults this to true)
 vim.opt.termguicolors = false
