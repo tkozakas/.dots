@@ -18,5 +18,5 @@ vim.keymap.set('n', '<leader>cr', function()
 end, { buffer = 0, desc = '[C]lass: show [R]uby class name' })
 
 vim.keymap.set('n', '<leader>w', function()
-  require('core.functions').word_grep('--glob !**_spec.rb')
+  require('config.functions').word_grep('!**_spec.rb')
 end, { buffer = 0, desc = '[W]ord search (exclude specs)' })
