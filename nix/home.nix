@@ -77,6 +77,10 @@ let
   resolvedPackages =
     lib.filter (p: p != null) (map resolvePackage basePackageNames)
     ++ lib.optionals needsHyprland hyprlandPackages;
+
+  casks = mergeList "casks";
+  brews = mergeList "brews";
+  brewName = entry: lib.last (lib.splitString "/" (lib.head (lib.splitString " " entry)));
 in
 {
   home.username = username;
@@ -126,4 +130,23 @@ in
     export PATH="${config.home.profileDirectory}/bin:$PATH"
     ${lib.concatMapStringsSep "\n" (cmd: "$DRY_RUN_CMD ${cmd}") (mergeList "hooks")}
   '';
+
+  home.activation.brewApps = lib.mkIf (isDarwin && (casks != [ ] || brews != [ ])) (
+    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      BREW=""
+      [ -x /opt/homebrew/bin/brew ] && BREW=/opt/homebrew/bin/brew
+      [ -z "$BREW" ] && [ -x /usr/local/bin/brew ] && BREW=/usr/local/bin/brew
+      if [ -z "$BREW" ]; then
+        /bin/bash -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || true
+        [ -x /opt/homebrew/bin/brew ] && BREW=/opt/homebrew/bin/brew
+        [ -z "$BREW" ] && [ -x /usr/local/bin/brew ] && BREW=/usr/local/bin/brew
+      fi
+      if [ -n "$BREW" ]; then
+        ${lib.concatMapStringsSep "\n" (c: ''"$BREW" list --cask ${brewName c} >/dev/null 2>&1 || $DRY_RUN_CMD "$BREW" install --cask ${c}'') casks}
+        ${lib.concatMapStringsSep "\n" (b: ''"$BREW" list ${brewName b} >/dev/null 2>&1 || $DRY_RUN_CMD "$BREW" install ${b}'') brews}
+      else
+        $VERBOSE_ECHO "homebrew unavailable; skipped casks/brews"
+      fi
+    ''
+  );
 }
