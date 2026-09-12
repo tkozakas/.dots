@@ -1,4 +1,6 @@
-# oh-my-pi (omp) global settings — personal profile
+# oh-my-pi (omp) global settings — personal-machine profile.
+# NOTE: on work machines ~/.dots-work/configs/pi shadows this entire directory
+# (both repos link .omp/agent -> pi; the overlay wins). Edit the overlay there.
 # Docs: https://github.com/can1357/oh-my-pi/blob/main/docs/settings.md
 
 disabledProviders:
@@ -21,3 +23,21 @@ tools:
 lsp:
   enabled: true
   diagnosticsOnWrite: true
+
+theme:
+  dark: titanium
+
+statusLine:
+  preset: minimal
+  separator: none
+  transparent: true
+  sessionAccent: false
+  showHookStatus: false
+
+display:
+  shimmer: disabled
+
+hideThinkingBlock: true
+
+startup:
+  quiet: true
