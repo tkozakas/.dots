@@ -1,4 +1,4 @@
-.PHONY: install update rollback clean fmt check news diff trust doctor
+.PHONY: install update rollback clean fmt check news diff trust doctor dump
 
 CONFIG := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 HASH   := \#
@@ -8,6 +8,10 @@ NIX    := nix --option warn-dirty false
 FILTER := 2>&1 | grep -vE "unknown setting|deprecated alias|evaluation warning: .system. has been renamed|Using .builtins.derivation. to create a derivation named .options.json."; exit $${PIPESTATUS[0]}
 HM     := $(SOURCE) $(NIX) run ".$(HASH)home-manager" -- switch --flake ".$(HASH)$(CONFIG)" -b backup --impure
 
+dump:
+	@defaults export com.vorssaint.utils configs/vorssaint/settings.plist
+	@defaults export com.raycast.macos configs/raycast/settings.plist
+	@echo "app settings exported to configs/"
 fmt:
 	@bash -c '$(SOURCE) $(NIX) fmt'
 

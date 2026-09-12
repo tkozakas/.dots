@@ -78,6 +78,8 @@
       "[ -d /Applications/Raycast.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask raycast; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask raycast; }"
       ,"[ -d /Applications/AeroSpace.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask nikitabobko/tap/aerospace; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask nikitabobko/tap/aerospace; }"
       ,"[ -d /Applications/Vorssaint.app ] || { [ -x /opt/homebrew/bin/brew ] && /opt/homebrew/bin/brew install --cask vorssaint; } || { [ -x /usr/local/bin/brew ] && /usr/local/bin/brew install --cask vorssaint; }"
+      ,"defaults read com.vorssaint.utils >/dev/null 2>&1 || defaults import com.vorssaint.utils $HOME/.dots/configs/vorssaint/settings.plist"
+      ,"defaults read com.raycast.macos >/dev/null 2>&1 || defaults import com.raycast.macos $HOME/.dots/configs/raycast/settings.plist"
     ]
   }
 }
