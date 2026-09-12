@@ -9,9 +9,10 @@ FILTER := 2>&1 | grep -vE "unknown setting|deprecated alias|evaluation warning: 
 HM     := $(SOURCE) $(NIX) run ".$(HASH)home-manager" -- switch --flake ".$(HASH)$(CONFIG)" -b backup --impure
 
 dump:
-	@defaults export com.vorssaint.utils configs/vorssaint/settings.plist
-	@defaults export com.raycast.macos configs/raycast/settings.plist
-	@echo "app settings exported to configs/"
+	@defaults export com.vorssaint.utils configs/vorssaint/settings.plist && plutil -convert xml1 configs/vorssaint/settings.plist
+	@defaults export com.raycast.macos configs/raycast/settings.plist && plutil -convert xml1 configs/raycast/settings.plist
+	@[ -f "$$HOME/Library/Preferences/theboredteam.boring.notch.plist" ] && defaults export theboredteam.boring.notch configs/boring-notch/settings.plist && plutil -convert xml1 configs/boring-notch/settings.plist || true
+	@echo "app settings exported to configs/ (readable xml)"
 fmt:
 	@bash -c '$(SOURCE) $(NIX) fmt'
 

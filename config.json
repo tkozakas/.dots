@@ -70,7 +70,8 @@
       "dbgate --no-quarantine",
       "raycast",
       "nikitabobko/tap/aerospace",
-      "vorssaint"
+      "vorssaint",
+      "TheBoredTeam/boring-notch/boring-notch"
     ],
     "brews": [
       "can1357/tap/omp"
@@ -82,7 +83,8 @@
     },
     "hooks": [
       "defaults read com.vorssaint.utils >/dev/null 2>&1 || defaults import com.vorssaint.utils $HOME/.dots/configs/vorssaint/settings.plist",
-      "defaults read com.raycast.macos >/dev/null 2>&1 || defaults import com.raycast.macos $HOME/.dots/configs/raycast/settings.plist"
+      "defaults read com.raycast.macos >/dev/null 2>&1 || defaults import com.raycast.macos $HOME/.dots/configs/raycast/settings.plist",
+      "defaults read theboredteam.boring.notch >/dev/null 2>&1 || { [ -f $HOME/.dots/configs/boring-notch/settings.plist ] && defaults import theboredteam.boring.notch $HOME/.dots/configs/boring-notch/settings.plist; } || true"
     ]
   }
 }
