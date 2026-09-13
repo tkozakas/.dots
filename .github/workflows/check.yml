@@ -24,6 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Manifest ownership check
+        run: python3 scripts/check-manifest.py
+
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 

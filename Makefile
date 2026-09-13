@@ -17,6 +17,7 @@ fmt:
 	@bash -c '$(SOURCE) $(NIX) fmt'
 
 check:
+	@python3 scripts/check-manifest.py
 	@bash -c '$(SOURCE) $(NIX) build ".$(HASH)homeConfigurations.linux.activationPackage" --no-link --impure $(FILTER)'
 
 news:
