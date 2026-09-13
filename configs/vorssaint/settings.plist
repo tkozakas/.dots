@@ -9,7 +9,7 @@
 	<key>clipboardAutoClearDelaySeconds</key>
 	<integer>20</integer>
 	<key>clipboardHistoryEnabled</key>
-	<true/>
+	<false/>
 	<key>clipboardHistoryLimit</key>
 	<integer>50</integer>
 	<key>clipboardHistoryShortcut</key>
@@ -23,7 +23,7 @@
 	<key>featureAvailable.appUpdates</key>
 	<false/>
 	<key>featureAvailable.autoQuit</key>
-	<false/>
+	<true/>
 	<key>featureAvailable.bluetoothSleep</key>
 	<true/>
 	<key>featureAvailable.brightness</key>
@@ -35,7 +35,7 @@
 	<key>featureAvailable.cleaningMode</key>
 	<false/>
 	<key>featureAvailable.clipboardHistory</key>
-	<true/>
+	<false/>
 	<key>featureAvailable.colorPicker</key>
 	<false/>
 	<key>featureAvailable.commandBar</key>
@@ -93,7 +93,7 @@
 	<key>featureAvailable.mouseNavigation</key>
 	<false/>
 	<key>featureAvailable.musicBlock</key>
-	<false/>
+	<true/>
 	<key>featureAvailable.pastePlain</key>
 	<false/>
 	<key>featureAvailable.quickLauncher</key>
@@ -129,7 +129,7 @@
 	<key>featureAvailable.uninstaller</key>
 	<true/>
 	<key>featureAvailable.urlCleaner</key>
-	<true/>
+	<false/>
 	<key>featureAvailable.windowLayout</key>
 	<false/>
 	<key>featureAvailable.windowMaximizer</key>

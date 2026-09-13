@@ -54,5 +54,5 @@ source <(fzf --zsh 2>/dev/null)
 export PATH="$HOME/.local/bin:$PATH"
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="$HOME/.rd/bin:$PATH"
+export PATH="/Users/tomas.kozakas/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
