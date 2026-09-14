@@ -1,12 +1,11 @@
-local function ruby_lsp_bin()
-  local bin = vim.fn.expand("~/.local/share/mise/shims/ruby-lsp")
-  if vim.fn.executable(bin) == 0 then
-    bin = vim.fn.expand("~/.rbenv/shims/ruby-lsp")
+-- Spawn through mise so the whole toolchain (ruby, bundle, ruby-lsp) comes
+-- from the project's mise config; bare shims let rbenv hijack inner execs.
+local function ruby_lsp_cmd(dispatchers, config)
+  local cmd = { "mise", "x", "--", "ruby-lsp" }
+  if vim.fn.executable("mise") == 0 then
+    cmd = { vim.fn.expand("~/.rbenv/shims/ruby-lsp") }
   end
-  if vim.fn.executable(bin) == 0 then
-    bin = vim.fn.exepath("ruby-lsp")
-  end
-  return bin
+  return vim.lsp.rpc.start(cmd, dispatchers, { cwd = config.root_dir })
 end
 
 -- JetBrains Cmd+B: on a usage jump to definition; on the definition itself
@@ -65,10 +64,7 @@ return {
       },
       ruby_lsp = {
         mason = false,
-        -- shims resolve Ruby from cwd; spawn in root_dir or Bundler picks the wrong Ruby
-        cmd = function(dispatchers, config)
-          return vim.lsp.rpc.start({ ruby_lsp_bin() }, dispatchers, { cwd = config.root_dir })
-        end,
+        cmd = ruby_lsp_cmd,
         filetypes = { "ruby", "eruby" },
         root_markers = { "Gemfile", ".git" },
         init_options = {
