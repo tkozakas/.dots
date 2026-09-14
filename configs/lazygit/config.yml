@@ -408,3 +408,6 @@ keybinding:
     bulkMenu: b
   commitMessage:
     commitMenu: <c-o>
+
+os:
+  editPreset: nvim-remote
