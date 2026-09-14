@@ -41,6 +41,12 @@ local function flat_chrome()
   set(0, "BlinkCmpDocBorder", { link = "FloatBorder" })
   set(0, "CopilotSuggestion", { ctermfg = 8, cterm = { italic = true } })
   set(0, "CopilotAnnotation", { ctermfg = 8 })
+  set(0, "GitSignsAdd", { ctermfg = 2 })
+  set(0, "GitSignsChange", { ctermfg = 12 })
+  set(0, "GitSignsDelete", { ctermfg = 9 })
+  set(0, "GitSignsChangedelete", { link = "GitSignsChange" })
+  set(0, "GitSignsTopdelete", { link = "GitSignsDelete" })
+  set(0, "GitSignsUntracked", { ctermfg = 8 })
 end
 
 vim.api.nvim_create_autocmd("ColorScheme", {

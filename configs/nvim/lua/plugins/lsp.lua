@@ -71,10 +71,19 @@ return {
         -- pull diagnostics return the full set and retract correctly
         handlers = {
           ["textDocument/publishDiagnostics"] = function() end,
+          -- rubocop cops occasionally crash on mid-edit code states
+          -- (e.g. Style/IfUnlessModifier on 1.88.2); log instead of popup
+          ["window/showMessage"] = function(err, params, ctx)
+            if params and type(params.message) == "string" and params.message:lower():find("internal error") then
+              vim.lsp.log.warn("ruby_lsp suppressed:", params.message)
+              return
+            end
+            return vim.lsp.handlers["window/showMessage"](err, params, ctx)
+          end,
         },
         init_options = {
-          formatter = "rubocop",
-          linters = { "rubocop" },
+          formatter = "rubocop_internal",
+          linters = { "rubocop_internal" },
           addonSettings = {
             ["Ruby LSP Rails"] = {
               enablePendingMigrationsPrompt = false,
