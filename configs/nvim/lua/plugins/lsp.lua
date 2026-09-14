@@ -67,6 +67,11 @@ return {
         cmd = ruby_lsp_cmd,
         filetypes = { "ruby", "eruby" },
         root_markers = { "Gemfile", ".git" },
+        -- ruby-lsp pushes syntax diagnostics that go stale between saves;
+        -- pull diagnostics return the full set and retract correctly
+        handlers = {
+          ["textDocument/publishDiagnostics"] = function() end,
+        },
         init_options = {
           formatter = "rubocop",
           linters = { "rubocop" },
