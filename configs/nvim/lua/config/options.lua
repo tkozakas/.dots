@@ -27,3 +27,9 @@ vim.diagnostic.config({
     prefix = "●",
   },
 })
+
+-- Deterministic server socket per tmux pane so tooling (lazygit edit)
+-- can remote-open files into the nvim of a specific pane
+if vim.env.TMUX_PANE then
+  pcall(vim.fn.serverstart, "/tmp/nvim-tmux-" .. vim.env.TMUX_PANE:sub(2))
+end
