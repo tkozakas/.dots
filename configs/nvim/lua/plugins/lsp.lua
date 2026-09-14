@@ -8,31 +8,18 @@ local function ruby_lsp_cmd(dispatchers, config)
   return vim.lsp.rpc.start(cmd, dispatchers, { cwd = config.root_dir })
 end
 
--- JetBrains Cmd+B: on a usage jump to definition; on the definition itself
--- show usages instead.
+-- JetBrains Cmd+B: jump to definition from a usage; on the definition itself
+-- (where servers return no locations) show usages instead.
 local function smart_definition()
   local buf = vim.api.nvim_get_current_buf()
-  local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
-  local uri = vim.uri_from_bufnr(buf)
   local client = vim.lsp.get_clients({ bufnr = buf, method = "textDocument/definition" })[1]
   if not client then
-    return
+    return Snacks.picker.lsp_definitions()
   end
   local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
   client:request("textDocument/definition", params, function(_, result)
-    local locs = result or {}
-    if locs.uri or locs.targetUri then
-      locs = { locs }
-    end
-    local at_definition = false
-    for _, loc in ipairs(locs) do
-      local range = loc.range or loc.targetSelectionRange
-      if (loc.uri or loc.targetUri) == uri and range and range.start.line == lnum then
-        at_definition = true
-        break
-      end
-    end
-    if at_definition then
+    local empty = result == nil or (vim.islist(result) and #result == 0)
+    if empty then
       Snacks.picker.lsp_references()
     else
       Snacks.picker.lsp_definitions()

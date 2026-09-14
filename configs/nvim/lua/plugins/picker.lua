@@ -1,4 +1,4 @@
-local cycle_order = { smart = "files", files = "grep", grep = "smart" }
+local cycle_order = { smart = "recent", recent = "files", files = "grep", grep = "smart" }
 
 local function cycle_mode(picker)
   local query = picker.input:get()
@@ -11,15 +11,18 @@ local function cycle_mode(picker)
   end
 end
 
-local cycle_keys = {
-  win = {
-    input = {
-      keys = {
-        ["<c-g>"] = { "cycle_mode", mode = { "i", "n" } },
+local function cycle_source(prompt_mark, extra)
+  return vim.tbl_deep_extend("force", {
+    prompt = "[" .. prompt_mark .. "] ",
+    win = {
+      input = {
+        keys = {
+          ["<c-g>"] = { "cycle_mode", mode = { "i", "n" } },
+        },
       },
     },
-  },
-}
+  }, extra or {})
+end
 
 return {
   "folke/snacks.nvim",
@@ -34,19 +37,21 @@ return {
         cycle_mode = cycle_mode,
       },
       sources = {
-        smart = vim.tbl_deep_extend("force", { filter = { cwd = true } }, cycle_keys),
-        files = cycle_keys,
-        grep = vim.tbl_deep_extend("force", { regex = false }, cycle_keys),
+        smart = cycle_source("s", { filter = { cwd = true } }),
+        recent = cycle_source("r", { filter = { cwd = true } }),
+        files = cycle_source("f"),
+        grep = cycle_source("g", { regex = false }),
         grep_word = { regex = false },
         grep_buffers = { regex = false },
         lsp_references = {
           include_declaration = false,
+          unique_lines = true,
           layout = { preset = "vertical" },
         },
-        lsp_definitions = { layout = { preset = "vertical" } },
-        lsp_declarations = { layout = { preset = "vertical" } },
-        lsp_implementations = { layout = { preset = "vertical" } },
-        lsp_type_definitions = { layout = { preset = "vertical" } },
+        lsp_definitions = { unique_lines = true, layout = { preset = "vertical" } },
+        lsp_declarations = { unique_lines = true, layout = { preset = "vertical" } },
+        lsp_implementations = { unique_lines = true, layout = { preset = "vertical" } },
+        lsp_type_definitions = { unique_lines = true, layout = { preset = "vertical" } },
       },
     },
   },

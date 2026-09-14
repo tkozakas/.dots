@@ -7,9 +7,12 @@ line="${2:-}"
 
 open_remote() {
   local server="$1"
-  nvim --server "$server" --remote "$file" || return 1
-  [ -n "$line" ] && nvim --server "$server" --remote-send "${line}G"
-  nvim --server "$server" --remote-send ":DiffIfDirty<CR>"
+  local esc="${file//\'/\'\'}"
+  local edit="edit"
+  [ -n "$line" ] && edit="edit +$line"
+  nvim --server "$server" --remote-expr \
+    "execute('stopinsert') . execute('$edit ' . fnameescape('$esc')) . execute('DiffIfDirty $line')" \
+    >/dev/null || return 1
 }
 
 if [ -n "$NVIM" ]; then
