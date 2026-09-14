@@ -70,6 +70,11 @@ return {
         init_options = {
           formatter = "rubocop",
           linters = { "rubocop" },
+          addonSettings = {
+            ["Ruby LSP Rails"] = {
+              enablePendingMigrationsPrompt = false,
+            },
+          },
           indexing = {
             excludedPatterns = { "**/test/**/*.rb", "**/spec/fixtures/**/*.rb" },
             excludedGems = {
