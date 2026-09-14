@@ -48,3 +48,25 @@ vim.api.nvim_create_autocmd("ColorScheme", {
   callback = flat_chrome,
 })
 flat_chrome()
+
+vim.api.nvim_create_autocmd("LspProgress", {
+  group = vim.api.nvim_create_augroup("lsp-progress-notify", { clear = true }),
+  callback = function(ev)
+    local value = ev.data.params.value
+    if type(value) ~= "table" then
+      return
+    end
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    local text = vim.trim((value.title or "") .. " " .. (value.message or ""))
+    if value.percentage then
+      text = text .. " " .. value.percentage .. "%"
+    end
+    vim.notify(text, vim.log.levels.INFO, {
+      id = "lsp_progress_" .. ev.data.client_id,
+      title = client and client.name or "lsp",
+      opts = function(notif)
+        notif.icon = value.kind == "end" and "✓" or "…"
+      end,
+    })
+  end,
+})
