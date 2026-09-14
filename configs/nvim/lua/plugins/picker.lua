@@ -25,36 +25,42 @@ local function mode_source(mark, extra)
 end
 
 return {
-  "folke/snacks.nvim",
-  keys = {
-    { "<leader>/", false },
-    { "<leader>ff", false },
-    { "<leader>sg", false },
+  {
+    "folke/which-key.nvim",
+    opts = { plugins = { registers = false } },
   },
-  opts = {
-    picker = {
-      actions = {
-        switch_smart = switch_to("smart"),
-        switch_recent = switch_to("recent"),
-        switch_files = switch_to("files"),
-        switch_grep = switch_to("grep"),
-      },
-      sources = {
-        smart = mode_source("s", { filter = { cwd = true } }),
-        recent = mode_source("r", { filter = { cwd = true } }),
-        files = mode_source("f"),
-        grep = mode_source("g", { regex = false }),
-        grep_word = { regex = false },
-        grep_buffers = { regex = false },
-        lsp_references = {
-          include_declaration = false,
-          unique_lines = true,
-          layout = { preset = "vertical" },
+  {
+    "folke/snacks.nvim",
+    keys = {
+      { "<leader>/", false },
+      { "<leader>ff", false },
+      { "<leader>sg", false },
+    },
+    opts = {
+      picker = {
+        actions = {
+          switch_smart = switch_to("smart"),
+          switch_recent = switch_to("recent"),
+          switch_files = switch_to("files"),
+          switch_grep = switch_to("grep"),
         },
-        lsp_definitions = { unique_lines = true, layout = { preset = "vertical" } },
-        lsp_declarations = { unique_lines = true, layout = { preset = "vertical" } },
-        lsp_implementations = { unique_lines = true, layout = { preset = "vertical" } },
-        lsp_type_definitions = { unique_lines = true, layout = { preset = "vertical" } },
+        sources = {
+          smart = mode_source("s", { filter = { cwd = true } }),
+          recent = mode_source("r", { filter = { cwd = true } }),
+          files = mode_source("f"),
+          grep = mode_source("g", { regex = false }),
+          grep_word = { regex = false },
+          grep_buffers = { regex = false },
+          lsp_references = {
+            include_declaration = false,
+            unique_lines = true,
+            layout = { preset = "vertical" },
+          },
+          lsp_definitions = { unique_lines = true, layout = { preset = "vertical" } },
+          lsp_declarations = { unique_lines = true, layout = { preset = "vertical" } },
+          lsp_implementations = { unique_lines = true, layout = { preset = "vertical" } },
+          lsp_type_definitions = { unique_lines = true, layout = { preset = "vertical" } },
+        },
       },
     },
   },

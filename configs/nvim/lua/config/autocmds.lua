@@ -114,3 +114,37 @@ vim.api.nvim_create_user_command("DiffIfDirty", function(opts)
   end
   vim.defer_fn(attempt, 200)
 end, { nargs = "?", desc = "Open gitsigns diff when the file has changes" })
+
+-- Snacks pickers: LSP responses arriving after close hit the torn-down
+-- matcher (picker.matcher.task:resume() on nil). Park a no-op stub after
+-- snacks' own scheduled teardown so late callbacks fizzle harmlessly.
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  once = true,
+  callback = function()
+    local ok, Picker = pcall(require, "snacks.picker.core.picker")
+    if not ok then
+      return
+    end
+    local stub = {
+      task = { resume = function() end },
+      abort = function() end,
+      close = function() end,
+      running = function()
+        return false
+      end,
+    }
+    local orig_close = Picker.close
+    Picker.close = function(self, ...)
+      local result = orig_close(self, ...)
+      vim.schedule(function()
+        vim.schedule(function()
+          if rawget(self, "matcher") == nil then
+            self.matcher = stub
+          end
+        end)
+      end)
+      return result
+    end
+  end,
+})
