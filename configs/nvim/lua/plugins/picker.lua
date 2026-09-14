@@ -1,26 +1,26 @@
-local cycle_order = { smart = "recent", recent = "files", files = "grep", grep = "smart" }
-
-local function cycle_mode(picker)
-  local query = picker.input:get()
-  local next_source = cycle_order[picker.opts.source] or "smart"
-  picker:close()
-  if next_source == "grep" then
-    Snacks.picker.grep({ search = query })
-  else
-    Snacks.picker[next_source]({ pattern = query })
+local function switch_to(source)
+  return function(picker)
+    local query = picker.input:get()
+    picker:close()
+    if source == "grep" then
+      Snacks.picker.grep({ search = query })
+    else
+      Snacks.picker[source]({ pattern = query })
+    end
   end
 end
 
-local function cycle_source(prompt_mark, extra)
+local switch_keys = {
+  ["<c-s>"] = { "switch_smart", mode = { "i", "n" } },
+  ["<c-r>"] = { "switch_recent", mode = { "i", "n" } },
+  ["<c-f>"] = { "switch_files", mode = { "i", "n" } },
+  ["<c-g>"] = { "switch_grep", mode = { "i", "n" } },
+}
+
+local function mode_source(mark, extra)
   return vim.tbl_deep_extend("force", {
-    prompt = "[" .. prompt_mark .. "] ",
-    win = {
-      input = {
-        keys = {
-          ["<c-g>"] = { "cycle_mode", mode = { "i", "n" } },
-        },
-      },
-    },
+    prompt = "[" .. mark .. "] ",
+    win = { input = { keys = switch_keys } },
   }, extra or {})
 end
 
@@ -34,13 +34,16 @@ return {
   opts = {
     picker = {
       actions = {
-        cycle_mode = cycle_mode,
+        switch_smart = switch_to("smart"),
+        switch_recent = switch_to("recent"),
+        switch_files = switch_to("files"),
+        switch_grep = switch_to("grep"),
       },
       sources = {
-        smart = cycle_source("s", { filter = { cwd = true } }),
-        recent = cycle_source("r", { filter = { cwd = true } }),
-        files = cycle_source("f"),
-        grep = cycle_source("g", { regex = false }),
+        smart = mode_source("s", { filter = { cwd = true } }),
+        recent = mode_source("r", { filter = { cwd = true } }),
+        files = mode_source("f"),
+        grep = mode_source("g", { regex = false }),
         grep_word = { regex = false },
         grep_buffers = { regex = false },
         lsp_references = {
