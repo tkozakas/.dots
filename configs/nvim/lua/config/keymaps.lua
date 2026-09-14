@@ -13,6 +13,12 @@ vim.keymap.set("x", "d", '"_d', { desc = "Delete selection (no yank)" })
 
 vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+vim.keymap.set("v", "<M-Down>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "<M-Up>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+vim.keymap.set("n", "<M-Down>", "<cmd>m .+1<CR>==", { desc = "Move line down" })
+vim.keymap.set("n", "<M-Up>", "<cmd>m .-2<CR>==", { desc = "Move line up" })
+vim.keymap.set("i", "<M-Down>", "<esc><cmd>m .+1<CR>==gi", { desc = "Move line down" })
+vim.keymap.set("i", "<M-Up>", "<esc><cmd>m .-2<CR>==gi", { desc = "Move line up" })
 
 local ctrl_e = vim.api.nvim_replace_termcodes("<C-e>", true, false, true)
 local ctrl_y = vim.api.nvim_replace_termcodes("<C-y>", true, false, true)
