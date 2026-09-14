@@ -76,3 +76,18 @@ vim.api.nvim_create_autocmd("LspProgress", {
     })
   end,
 })
+
+vim.api.nvim_create_user_command("DiffIfDirty", function()
+  local tries = 0
+  local function attempt()
+    tries = tries + 1
+    local ok, gitsigns = pcall(require, "gitsigns")
+    local hunks = ok and gitsigns.get_hunks() or nil
+    if hunks and #hunks > 0 then
+      vim.cmd("Gitsigns diffthis")
+    elseif tries < 10 then
+      vim.defer_fn(attempt, 200)
+    end
+  end
+  vim.defer_fn(attempt, 200)
+end, { desc = "Open gitsigns diff when the file has changes" })

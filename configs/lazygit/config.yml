@@ -412,6 +412,6 @@ keybinding:
 os:
   editInTerminal: false
   edit: >-
-    sh -c 'if [ -n "$NVIM" ]; then nvim --server "$NVIM" --remote-send q && nvim --server "$NVIM" --remote "$1"; elif [ -n "$TMUX" ]; then tmux respawn-pane -k -t "$TMUX_PANE" "nvim $(printf %q "$1")"; else nvim "$1"; fi' -- {{filename}}
+    sh -c 'if [ -n "$NVIM" ]; then nvim --server "$NVIM" --remote-send q && nvim --server "$NVIM" --remote "$1" && nvim --server "$NVIM" --remote-send ":DiffIfDirty<CR>"; elif [ -n "$TMUX" ]; then tmux respawn-pane -k -t "$TMUX_PANE" "nvim +DiffIfDirty $(printf %q "$1")"; else nvim +DiffIfDirty "$1"; fi' -- {{filename}}
   editAtLine: >-
-    sh -c 'if [ -n "$NVIM" ]; then nvim --server "$NVIM" --remote-send q && nvim --server "$NVIM" --remote "$1"; elif [ -n "$TMUX" ]; then tmux respawn-pane -k -t "$TMUX_PANE" "nvim +$2 $(printf %q "$1")"; else nvim +$2 "$1"; fi' -- {{filename}} {{line}}
+    sh -c 'if [ -n "$NVIM" ]; then nvim --server "$NVIM" --remote-send q && nvim --server "$NVIM" --remote "$1" && nvim --server "$NVIM" --remote-send "$2G:DiffIfDirty<CR>"; elif [ -n "$TMUX" ]; then tmux respawn-pane -k -t "$TMUX_PANE" "nvim +$2 +DiffIfDirty $(printf %q "$1")"; else nvim +$2 +DiffIfDirty "$1"; fi' -- {{filename}} {{line}}
