@@ -58,6 +58,7 @@ end, { desc = "List (fuzzy)" })
 
 vim.keymap.set("n", "<leader>gh", functions.open_in_gh, { desc = "Open on GitHub" })
 vim.keymap.set("n", "<leader>gp", functions.open_or_create_pr, { desc = "Open/create PR" })
+vim.keymap.set("n", "<leader>go", functions.code_owners, { desc = "Owner (CODEOWNERS)" })
 
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.open_float, { desc = "Diagnostic details" })
 vim.keymap.set("n", "<leader>dl", vim.diagnostic.setloclist, { desc = "Diagnostics to loclist" })
