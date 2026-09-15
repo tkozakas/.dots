@@ -55,9 +55,9 @@ function M.code_owners()
     end
   end
   if match then
-    vim.notify(match.owners .. "  (" .. match.pattern .. ")", vim.log.levels.INFO, { title = "CODEOWNERS" })
+    vim.notify(match.owners .. "\nrule: " .. match.pattern, vim.log.levels.INFO, { title = "CODEOWNERS" })
   else
-    vim.notify("No owner matches " .. rel, vim.log.levels.WARN, { title = "CODEOWNERS" })
+    vim.notify("No owner matches\n" .. rel, vim.log.levels.WARN, { title = "CODEOWNERS" })
   end
 end
 

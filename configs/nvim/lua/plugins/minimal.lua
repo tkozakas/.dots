@@ -10,6 +10,10 @@ return {
       explorer = { enabled = false },
       scroll = { enabled = false },
       animate = { enabled = false },
+      notifier = {
+        width = { min = 40, max = 0.6 },
+        height = { min = 1, max = 0.8 },
+      },
     },
   },
 }
