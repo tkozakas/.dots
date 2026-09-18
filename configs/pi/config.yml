@@ -25,19 +25,42 @@ lsp:
   diagnosticsOnWrite: true
 
 theme:
-  dark: titanium
+  dark: terminal
+
+symbolPreset: unicode
 
 statusLine:
-  preset: minimal
+  preset: custom
   separator: none
   transparent: true
-  sessionAccent: false
+  compactThinkingLevel: true
   showHookStatus: false
+  sessionAccent: false
+  leftSegments:
+    - path
+    - git
+  rightSegments:
+    - model
+    - mode
+    - context_pct
+  segmentOptions:
+    path:
+      abbreviate: true
+      maxLength: 30
+    git:
+      showBranch: true
+      showStaged: false
+      showUnstaged: false
+      showUntracked: false
+    model:
+      showThinkingLevel: false
 
 display:
   shimmer: disabled
+  showTokenUsage: false
 
 hideThinkingBlock: true
+personality: none
 
 startup:
   quiet: true
