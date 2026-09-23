@@ -2,7 +2,7 @@
 name: reviewer
 description: Code review specialist. Cursor-bot-style review of a branch or diff — finds real defects with file:line evidence, severity-tagged, no style nits.
 tools: read, grep, glob, bash, lsp, ast_grep
-model: anthropic/claude-fable-5, github-copilot/claude-opus-4.8
+model: anthropic/claude-opus-5-5, github-copilot/claude-opus-5.5
 thinking-level: high
 ---
 

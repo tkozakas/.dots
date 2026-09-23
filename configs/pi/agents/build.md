@@ -3,7 +3,7 @@ name: build
 description: Build and implement features end-to-end. Primary coding agent for multi-step tasks that write, edit, and verify code.
 tools: read, write, edit, grep, glob, bash, lsp, web_search, ast_grep, ast_edit, task
 spawns: explore, reviewer, plan
-model: anthropic/claude-fable-5, github-copilot/claude-opus-4.8
+model: anthropic/claude-opus-5-5, github-copilot/claude-opus-5.5
 thinking-level: medium
 ---
 

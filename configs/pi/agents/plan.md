@@ -3,7 +3,7 @@ name: plan
 description: Read-only planning for complex multi-file work. Analyzes the codebase and produces an implementation plan without making changes.
 tools: read, grep, glob, bash, lsp, web_search, ast_grep
 spawns: explore
-model: anthropic/claude-fable-5, github-copilot/claude-opus-4.8
+model: anthropic/claude-opus-5-5, github-copilot/claude-opus-5.5
 thinking-level: high
 ---
 
