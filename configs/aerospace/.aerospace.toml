@@ -126,35 +126,31 @@ shift-down = ['volume set 0', 'mode main']
 # =============================================================================
 # WINDOW RULES
 # =============================================================================
-# Apps that should tile (order matters - these must come before catch-all)
+# Apps pinned to workspaces (order matters - these must come before catch-all).
+# No 'layout tiling': AeroSpace tiles normal windows and floats dialogs/sheets by default.
 [[on-window-detected]]
 if.app-id = 'org.mozilla.firefox'
-if.window-title-regex-substring = 'File Upload|Open File|Save|Choose|Select'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = ['layout tiling', 'move-node-to-workspace 1']
+run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
-run = ['layout tiling', 'move-node-to-workspace 2']
+run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
-run = ['layout tiling', 'move-node-to-workspace 3']
+run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
 if.app-id = 'org.alacritty'
-run = ['layout tiling', 'move-node-to-workspace C']
+run = 'move-node-to-workspace C'
 
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
-run = ['layout tiling', 'move-node-to-workspace 4']
+run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
-if.app-id = 'org.dbgate'
-run = ['layout tiling', 'move-node-to-workspace 8']
+if.app-id = 'org.jkiss.dbeaver.core.product'
+run = 'move-node-to-workspace 8'
 
 # Everything else floats
 [[on-window-detected]]

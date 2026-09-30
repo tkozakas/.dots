@@ -67,7 +67,6 @@
   "darwin": {
     "packages": [],
     "casks": [
-      "dbgate --no-quarantine",
       "raycast",
       "nikitabobko/tap/aerospace",
       "vorssaint",
@@ -84,7 +83,8 @@
     "hooks": [
       "defaults read com.vorssaint.utils >/dev/null 2>&1 || defaults import com.vorssaint.utils $HOME/.dots/configs/vorssaint/settings.plist",
       "defaults read com.raycast.macos >/dev/null 2>&1 || defaults import com.raycast.macos $HOME/.dots/configs/raycast/settings.plist",
-      "defaults read com.Ebullioscopic.Atoll >/dev/null 2>&1 || { [ -f $HOME/.dots/configs/atoll/settings.plist ] && defaults import com.Ebullioscopic.Atoll $HOME/.dots/configs/atoll/settings.plist; } || true"
+      "defaults read com.Ebullioscopic.Atoll >/dev/null 2>&1 || { [ -f $HOME/.dots/configs/atoll/settings.plist ] && defaults import com.Ebullioscopic.Atoll $HOME/.dots/configs/atoll/settings.plist; } || true",
+      "defaults write com.apple.spaces spans-displays -bool true"
     ]
   }
 }
