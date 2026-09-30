@@ -1,16 +1,20 @@
 -- Spawn through mise so the whole toolchain (ruby, bundle, ruby-lsp) comes
 -- from the project's mise config; bare shims let rbenv hijack inner execs.
+-- Scoped to `ruby` so one unrelated broken tool in mise.toml (e.g. pnpm)
+-- can't abort the exec and silently kill the LSP.
 local function ruby_lsp_cmd(dispatchers, config)
-  local cmd = { "mise", "x", "--", "ruby-lsp" }
+  local cmd = { "mise", "x", "ruby", "--", "ruby-lsp" }
   if vim.fn.executable("mise") == 0 then
     cmd = { vim.fn.expand("~/.rbenv/shims/ruby-lsp") }
   end
-  return vim.lsp.rpc.start(cmd, dispatchers, { cwd = config.root_dir })
+  local addons = "-I" .. vim.fn.stdpath("config") .. "/ruby-lsp"
+  local rubyopt = vim.env.RUBYOPT and (vim.env.RUBYOPT .. " " .. addons) or addons
+  return vim.lsp.rpc.start(cmd, dispatchers, { cwd = config.root_dir, env = { RUBYOPT = rubyopt } })
 end
 
 -- JetBrains Cmd+B: jump to definition from a usage; on the definition itself
 -- (where servers return no locations) show usages instead.
-local function smart_definition()
+local function lsp_definition()
   local buf = vim.api.nvim_get_current_buf()
   local client = vim.lsp.get_clients({ bufnr = buf, method = "textDocument/definition" })[1]
   if not client then
@@ -25,6 +29,14 @@ local function smart_definition()
       Snacks.picker.lsp_definitions()
     end
   end, buf)
+end
+
+local function smart_definition()
+  local openapi = require("config.openapi_jump")
+  if openapi.is_spec(0) then
+    return openapi.jump(lsp_definition)
+  end
+  lsp_definition()
 end
 
 return {

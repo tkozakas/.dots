@@ -1,9 +1,11 @@
+local live_sources = { smart = true, grep = true }
+
 local function switch_to(source)
   return function(picker)
     local query = picker.input:get()
     picker:close()
-    if source == "grep" then
-      Snacks.picker.grep({ search = query })
+    if live_sources[source] then
+      Snacks.picker[source]({ search = query })
     else
       Snacks.picker[source]({ pattern = query })
     end
@@ -45,7 +47,36 @@ return {
           switch_grep = switch_to("grep"),
         },
         sources = {
-          smart = mode_source("s", { filter = { cwd = true } }),
+          -- one live picker: recent files at rest; fuzzy files (paths, packages,
+          -- file:line:col, GitHub URLs) + rg (content) while typing
+          smart = mode_source("s", {
+            live = true,
+            multi = {
+              {
+                finder = function(opts, ctx)
+                  if ctx.filter.search ~= "" then
+                    return {}
+                  end
+                  return require("snacks.picker.source.recent").files(opts, ctx)
+                end,
+                format = "file",
+              },
+              {
+                source = "files",
+                finder = function(opts, ctx)
+                  return require("config.smart_search").files(opts, ctx)
+                end,
+              },
+              {
+                source = "grep",
+                regex = false,
+                finder = function(opts, ctx)
+                  return require("config.smart_search").grep(opts, ctx)
+                end,
+              },
+            },
+            filter = { cwd = true },
+          }),
           recent = mode_source("r", { filter = { cwd = true } }),
           files = mode_source("f"),
           grep = mode_source("g", { regex = false }),

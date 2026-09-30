@@ -1,3 +1,34 @@
+local function ruby_spec(file)
+  if file:match("_spec%.rb$") then
+    return nil
+  end
+  local root, rest = file:match("^(.*/)app/(.+)%.rb$")
+  if root then
+    return { root .. "spec/" .. rest .. "_spec.rb" }
+  end
+  root, rest = file:match("^(.*/)lib/(.+)%.rb$")
+  if root then
+    return { root .. "spec/lib/" .. rest .. "_spec.rb" }
+  end
+end
+
+local function ruby_source(file)
+  local root, rest = file:match("^(.*/)spec/(.+)_spec%.rb$")
+  if not root then
+    return nil
+  end
+  local candidates = { root .. "app/" .. rest .. ".rb" }
+  if rest:match("^lib/") then
+    table.insert(candidates, 1, root .. rest .. ".rb")
+  end
+  for _, candidate in ipairs(candidates) do
+    if vim.uv.fs_stat(candidate) then
+      return { candidate }
+    end
+  end
+  return { candidates[1] }
+end
+
 return {
   {
     "ThePrimeagen/harpoon",
@@ -57,18 +88,8 @@ return {
       mappings = {
         "golang",
         "python",
-        {
-          pattern = "/app/(.*)/(.*).rb",
-          target = {
-            { context = "test", target = "/spec/%1/%2_spec.rb" },
-          },
-        },
-        {
-          pattern = "(.+)/spec/(.*)/(.*)_spec.rb",
-          target = {
-            { target = "%1/app/%2/%3.rb" },
-          },
-        },
+        { pattern = ruby_spec, target = "%1", context = "test" },
+        { pattern = ruby_source, target = "%1" },
       },
     },
     config = function(_, opts)

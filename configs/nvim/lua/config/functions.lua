@@ -8,6 +8,19 @@ function M.word_grep(glob)
   Snacks.picker.grep_word({ glob = glob ~= "" and { glob } or nil })
 end
 
+function M.pack_grep()
+  local file = vim.api.nvim_buf_get_name(0)
+  local pack = vim.fs.root(file ~= "" and file or vim.uv.cwd(), "package.yml")
+  if not pack then
+    return vim.notify("No package.yml above this file", vim.log.levels.WARN, { title = "Pack grep" })
+  end
+  Snacks.picker.grep({
+    dirs = { pack },
+    regex = false,
+    title = "Grep pack: " .. vim.fn.fnamemodify(pack, ":t"),
+  })
+end
+
 function M.code_owners()
   local file = vim.api.nvim_buf_get_name(0)
   if file == "" then

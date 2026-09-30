@@ -148,3 +148,18 @@ vim.api.nvim_create_autocmd("User", {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("openapi-gd", { clear = true }),
+  pattern = "yaml",
+  callback = function(ev)
+    local openapi = require("config.openapi_jump")
+    if openapi.is_spec(ev.buf) then
+      vim.keymap.set("n", "gd", function()
+        openapi.jump(function()
+          vim.cmd("normal! gd")
+        end)
+      end, { buffer = ev.buf, desc = "Goto controller (OpenAPI)" })
+    end
+  end,
+})
