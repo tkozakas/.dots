@@ -1,23 +1,31 @@
 # .dots
 
-Personal dotfiles managed declaratively via nix home-manager. Works on macOS and Arch Linux.
+Home-manager flake shared by Arch Linux and macOS.
 
-Semi-stolen, semi-handcrafted, aggressively vibe coded.
-
-Configs live in [`configs/`](configs/); `config.json` maps them to symlinks/packages per OS.
-
-## Install
-
-```bash
-git clone git@github.com:tkozakas/.dots.git ~/.dots && ~/.dots/bootstrap.sh
+```
+bootstrap.sh   Makefile   flake.nix   Brewfile
+home/          common.nix  linux.nix  darwin.nix
+configs/       raw dotfiles, symlinked into $HOME
+scripts/       helpers
 ```
 
-## Usage
+An optional private overlay at `~/.dots-work` (`work.nix`, `Brewfile`) is loaded automatically when present.
 
-```bash
-make install   # apply config
-make update    # bump flake.lock and apply
-make rollback  # revert to previous home-manager generation
-make clean     # wipe profile history and run nix gc
+## Ownership
+
+- Nix (home-manager): every CLI tool (`home/common.nix`), Linux GUI/hyprland stack (`home/linux.nix`).
+- Brewfile (macOS): casks, taps, brew services, gem build libs.
+- mise: language runtimes and per-repo tools. Never declare go/node/ruby/python/java/rust in nix.
+- Undeclared is not uninstalled: install never removes anything; only `make prune` does.
+
+## Bootstrap
+
+```
+git clone https://github.com/tkozakas/.dots ~/.dots && ~/.dots/bootstrap.sh
 ```
 
+## Daily
+
+`make install`, `make check`, `make doctor` (lists drift), `make prune` (removes undeclared brew packages), `make update`, `make diff`, `make rollback`.
+
+Apps installed outside Homebrew make `brew bundle` fail on their cask; adopt them once with `brew install --cask --adopt <cask>` (needs sudo).

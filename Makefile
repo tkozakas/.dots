@@ -1,4 +1,4 @@
-.PHONY: install update rollback clean fmt check news diff trust doctor dump
+.PHONY: install update rollback clean fmt check diff trust doctor prune dump
 
 CONFIG := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 HASH   := \#
@@ -6,22 +6,20 @@ NIX_SH := /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 SOURCE := export USER=$${USER:-$$(id -un)}; . $(NIX_SH);
 NIX    := nix --option warn-dirty false
 FILTER := 2>&1 | grep -vE "unknown setting|deprecated alias|evaluation warning: .system. has been renamed|Using .builtins.derivation. to create a derivation named .options.json."; exit $${PIPESTATUS[0]}
+BREWFILES := $(wildcard $(HOME)/.dots/Brewfile $(HOME)/.dots-work/Brewfile)
 HM     := $(SOURCE) $(NIX) run ".$(HASH)home-manager" -- switch --flake ".$(HASH)$(CONFIG)" -b backup --impure
 
 dump:
-	@defaults export com.vorssaint.utils configs/vorssaint/settings.plist && plutil -convert xml1 configs/vorssaint/settings.plist
 	@defaults export com.raycast.macos configs/raycast/settings.plist && plutil -convert xml1 configs/raycast/settings.plist
-	@defaults read com.Ebullioscopic.Atoll >/dev/null 2>&1 && defaults export com.Ebullioscopic.Atoll configs/atoll/settings.plist && plutil -convert xml1 configs/atoll/settings.plist || true
 	@echo "app settings exported to configs/ (readable xml)"
 fmt:
 	@bash -c '$(SOURCE) $(NIX) fmt'
 
 check:
-	@python3 scripts/check-manifest.py
-	@bash -c '$(SOURCE) $(NIX) build ".$(HASH)homeConfigurations.linux.activationPackage" --no-link --impure $(FILTER)'
-
-news:
-	@bash -c '$(SOURCE) $(NIX) run ".$(HASH)home-manager" -- news --flake ".$(HASH)linux" --impure $(FILTER)'
+	@bash -c '$(SOURCE) $(NIX) build ".$(HASH)homeConfigurations.$(CONFIG).activationPackage" --no-link --impure $(FILTER)'
+ifeq ($(shell uname),Darwin)
+	@rc=0; for f in $(BREWFILES); do brew bundle check --file="$$f" || rc=1; done; exit $$rc
+endif
 
 install: trust
 	@bash -c '$(HM) $(FILTER)'
@@ -65,6 +63,13 @@ doctor:
 		echo; \
 		echo "generations:"; \
 		$(NIX) run ".$(HASH)home-manager" -- generations 2>/dev/null | head -3'
+ifeq ($(shell uname),Darwin)
+	@echo; echo "undeclared brew packages (make prune removes):"
+	@cat $(BREWFILES) 2>/dev/null | brew bundle cleanup --file=- || true
+
+prune:
+	@read -p "remove undeclared brew packages? [y/N] " a; if [ "$$a" = y ]; then cat $(BREWFILES) | brew bundle cleanup --force --file=-; fi
+endif
 
 clean:
 	@$(SOURCE) $(NIX) profile wipe-history 2>/dev/null || true

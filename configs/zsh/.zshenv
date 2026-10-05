@@ -3,7 +3,7 @@
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 typeset -U path
-export PATH="$HOME/go/bin:$HOME/.local/bin:$HOME/.local/bin/git-scripts:$HOME/.cargo/bin:$HOME/.bun/bin:$HOME/.rd/bin:$HOME/.dots:$PATH:$HOME/.nix-profile/bin"
+export PATH="$HOME/go/bin:$HOME/.local/bin:$HOME/.local/bin/git-scripts:$HOME/.nix-profile/bin:$HOME/.cargo/bin:$HOME/.bun/bin:$HOME/.rd/bin:$HOME/.dots:$PATH"
 
 export BUN_INSTALL="$HOME/.bun"
 export EDITOR="nvim"
