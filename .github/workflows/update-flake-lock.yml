@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 jobs:
   update:
@@ -23,3 +24,8 @@ jobs:
         uses: DeterminateSystems/update-flake-lock@main
         with:
           pr-title: "Update flake.lock"
+
+      - name: Run check on the update branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run check.yml --ref update_flake_lock_action
