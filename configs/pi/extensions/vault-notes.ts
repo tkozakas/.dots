@@ -3,7 +3,7 @@ import { homedir, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import type { ExtensionAPI, ExtensionContext } from "@oh-my-pi/pi-coding-agent";
 
-const VAULT = join(homedir(), "Documents/notes-work");
+const VAULT = join(homedir(), "notes-work");
 const MODEL = "anthropic/claude-sonnet-5-5";
 const LOG = join(homedir(), ".omp/agent/logs/vault-notes.log");
 const MIN_GAP_MS = 2 * 60 * 1000;
