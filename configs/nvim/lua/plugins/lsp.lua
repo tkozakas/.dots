@@ -54,7 +54,7 @@ return {
       groovyls = {
         mason = false,
         cmd = {
-          "/opt/homebrew/opt/openjdk/bin/java",
+          "java",
           "-jar",
           vim.fn.stdpath("config") .. "/lsp-servers/groovy-language-server-all.jar",
         },
