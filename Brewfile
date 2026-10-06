@@ -1,0 +1,7 @@
+tap "can1357/tap"
+tap "nikitabobko/tap"
+brew "can1357/tap/omp"
+cask "aerospace"
+cask "raycast"
+cask "alacritty"
+cask "obsidian"

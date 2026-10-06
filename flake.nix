@@ -19,10 +19,12 @@
       username = builtins.getEnv "USER";
       homeDirectory = builtins.getEnv "HOME";
       dotsRoot = homeDirectory + "/.dots";
+      workNix = homeDirectory + "/.dots-work/work.nix";
 
       mkHome = system:
         let
           isLinux = nixpkgs.lib.hasSuffix "-linux" system;
+          osModule = if isLinux then ./home/linux.nix else ./home/darwin.nix;
           unstableOverlay = _final: _prev: {
             unstable = import nixpkgs-unstable {
               inherit system;
@@ -37,7 +39,8 @@
             overlays = [ unstableOverlay ]
               ++ nixpkgs.lib.optional isLinux nixgl.overlays.default;
           };
-          modules = [ ./nix/home.nix ];
+          modules = [ ./home/common.nix osModule ]
+            ++ nixpkgs.lib.optional (builtins.pathExists workNix) workNix;
           extraSpecialArgs = {
             inherit username homeDirectory dotsRoot system;
           };

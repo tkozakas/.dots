@@ -12,5 +12,10 @@ if ! command -v nix >/dev/null 2>&1; then
   fi
 fi
 
+if [ "$(uname)" = Darwin ] && ! command -v brew >/dev/null 2>&1 && [ ! -x /opt/homebrew/bin/brew ]; then
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
 cd "$(dirname "$0")"
 exec make install

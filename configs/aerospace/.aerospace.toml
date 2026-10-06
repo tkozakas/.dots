@@ -152,6 +152,10 @@ run = 'move-node-to-workspace 4'
 if.app-id = 'org.jkiss.dbeaver.core.product'
 run = 'move-node-to-workspace 8'
 
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.goland'
+run = 'move-node-to-workspace 9'
+
 # Everything else floats
 [[on-window-detected]]
 if.window-title-regex-substring = '.*'
