@@ -6,6 +6,13 @@ let
     force = true;
   };
 
+  # download-cdn.jetbrains.com 404s for toolbox; drop once nixpkgs switches hosts
+  jetbrainsToolbox = pkgs.unstable.jetbrains-toolbox.override {
+    fetchzip = args: pkgs.unstable.fetchzip (args // {
+      url = builtins.replaceStrings [ "download-cdn." ] [ "download." ] args.url;
+    });
+  };
+
   hyprlandPackages =
     let
       nixGL = pkgs.nixgl.nixGLIntel;
@@ -48,7 +55,7 @@ in
     nautilus
     discord
     spotify
-    jetbrains-toolbox
+    jetbrainsToolbox
     alacritty
   ]) ++ hyprlandPackages;
 
