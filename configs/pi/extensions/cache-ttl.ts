@@ -3,12 +3,14 @@ import type { ExtensionAPI, ExtensionContext } from "@oh-my-pi/pi-coding-agent";
 const TTL_MS = 55 * 60 * 1000;
 const TICK_MS = 5000;
 const ASK_MIN_TOKENS = 50_000;
+const ASK_GRACE_MS = 2 * 60 * 1000;
 const AUTO_COMPACT = false;
 
 interface WatchState {
 	lastRequestAt: number;
 	asked: boolean;
 	asking: boolean;
+	compacted: boolean;
 }
 
 function fmt(ms: number): string {
@@ -17,7 +19,7 @@ function fmt(ms: number): string {
 }
 
 export default function cacheTtl(pi: ExtensionAPI) {
-	const state: WatchState = { lastRequestAt: 0, asked: false, asking: false };
+	const state: WatchState = { lastRequestAt: 0, asked: false, asking: false, compacted: false };
 	let ctx0: ExtensionContext | undefined;
 	let timer: NodeJS.Timeout | undefined;
 
@@ -25,6 +27,7 @@ export default function cacheTtl(pi: ExtensionAPI) {
 		ctx0 = ctx;
 		state.lastRequestAt = Date.now();
 		state.asked = false;
+		state.compacted = false;
 	}
 
 	function tokens(): number {
@@ -33,7 +36,7 @@ export default function cacheTtl(pi: ExtensionAPI) {
 	}
 
 	async function offerCompact() {
-		if (!ctx0 || state.asking || !ctx0.isIdle()) return;
+		if (!ctx0 || state.asking || state.compacted || !ctx0.isIdle()) return;
 		const tok = tokens();
 		if (tok < ASK_MIN_TOKENS) return;
 		state.asked = true;
@@ -49,7 +52,7 @@ export default function cacheTtl(pi: ExtensionAPI) {
 				"Prompt cache expired",
 				`Context is ~${Math.round(tok / 1000)}k tokens and will be re-ingested at full cost. Compact now?`,
 			);
-			if (yes) await ctx0.compact();
+			if (yes && !state.compacted) await ctx0.compact();
 		} finally {
 			state.asking = false;
 		}
@@ -72,7 +75,7 @@ export default function cacheTtl(pi: ExtensionAPI) {
 			show(`cache ${left < 60_000 ? "◐" : "●"} ${fmt(left)}`);
 		} else {
 			show(`cache ○ ${fmt(-left)}`);
-			if (!state.asked) void offerCompact();
+			if (!state.asked && left < -ASK_GRACE_MS) void offerCompact();
 		}
 	}
 
@@ -87,7 +90,11 @@ export default function cacheTtl(pi: ExtensionAPI) {
 		tick();
 	});
 
-	pi.on("session_compact", async (_event, ctx) => touch(ctx));
+	pi.on("session_compact", async (_event, ctx) => {
+		ctx0 = ctx;
+		state.lastRequestAt = Date.now();
+		state.compacted = true;
+	});
 
 	pi.on("session_shutdown", async () => {
 		clearInterval(timer);
