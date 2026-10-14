@@ -3,31 +3,30 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
-  open_windows=$(tmux list-windows -F '#{window_name}')
+  open_windows=$'\n'$(tmux list-windows -F '#{window_name}')$'\n'
   selected=$({
-    echo "[New Tab]"
-    echo "[Close Current Window]"
+    printf '[New Tab]\t[New Tab]\n'
+    printf '[Close Current Window]\t[Close Current Window]\n'
     {
       [[ -d "$HOME/.dots" ]] && echo "$HOME/.dots"
-      [[ -d "$HOME/work" ]] && find -L "$HOME/work" -mindepth 1 -maxdepth 1 -type d
-      [[ -d "$HOME/Documents" ]] && find -L "$HOME/Documents" -mindepth 1 -maxdepth 1 -type d
+      [[ -d "$HOME/work" ]] && find -L "$HOME/work" -mindepth 1 -maxdepth 1 -type d | sort
+      [[ -d "$HOME/Documents" ]] && find -L "$HOME/Documents" -mindepth 1 -maxdepth 1 -type d | sort
     } | while read -r dir; do
-      name=$(basename "$dir" | sed 's/^\.//')
-      if grep -qx "$name" <<<"$open_windows"; then
-        echo "● $dir"
-      else
-        echo "  $dir"
-      fi
-    done
+      name=${dir##*/}
+      mark=" "
+      [[ $open_windows == *$'\n'"${name#.}"$'\n'* ]] && mark="●"
+      printf '%s\t\t%s\t%s\n' "$dir" "$dir" "$mark"
+    done | ~/.tmux/scripts/nest-worktrees.sh | awk '
+      BEGIN { FS = "\t" }
+      { name = $2; if ($1 != "") sub(/.*\//, "", name); print $2 "\t" $3 " " $1 name }'
   } | fzf-tmux -p 70%,60% \
-    --select-1 --exit-0 --no-sort --ansi \
+    --select-1 --exit-0 --no-sort --ansi --delimiter '\t' --with-nth 2 --accept-nth 1 \
     --border=rounded --border-label ' ⌂ projects ' --border-label-pos 3 \
     --prompt '  ' \
     --header '↵ open tab · ● already open · esc close' \
     --bind 'tab:down,btab:up' \
     --preview-window 'right:50%,border-left' \
-    --preview 'd=$(echo {} | sed "s/^[● ] *//"); if [ -d "$d" ]; then cd "$d" && { git status -sb 2>/dev/null | head -5; echo; ls -A1 | head -30; } else echo; fi')
-  selected=$(echo "$selected" | sed 's/^[● ] *//')
+    --preview 'd={1}; if [ -d "$d" ]; then cd "$d" && { git status -sb 2>/dev/null | head -5; echo; ls -A1 | head -30; } else echo; fi')
 fi
 
 if [[ -z $selected ]]; then
