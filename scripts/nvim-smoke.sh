@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # nvim smoke test: config loads without errors and an LSP client initializes.
-# Usage: nvim-smoke.sh [FILE] [TIMEOUT_MS]
+# Usage: nvim-smoke.sh FILE [TIMEOUT_MS]
 set -euo pipefail
 
-FILE="${1:-$HOME/vinted/core/app/models/user.rb}"
+FILE="${1:?usage: nvim-smoke.sh FILE [TIMEOUT_MS]}"
 TIMEOUT="${2:-60000}"
 
 echo "1/2 startup..."

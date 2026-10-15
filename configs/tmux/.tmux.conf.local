@@ -493,13 +493,13 @@ bind n run-shell "~/.tmux/scripts/project-switcher.sh"
 bind o run-shell "~/.tmux/scripts/pi-launcher.sh"
 bind g split-window -l 100% -c "#{pane_current_path}" "lazygit"
 bind k new-window "k9s"
-bind m run-shell "~/.dots-work/scripts/function-picker.sh"
 
 bind C-f run-shell "~/.tmux/scripts/session-picker.sh"
 
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi y send -X copy-pipe-and-cancel
 
+source-file -q ~/.dots-work/tmux.conf
 
 # -- tpm -----------------------------------------------------------------------
 

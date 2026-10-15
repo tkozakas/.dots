@@ -1,6 +1,6 @@
-# Ruby / RSpec — vinted-eve lint rules
+# Ruby / RSpec — RuboCop rules
 
-Recurring `vinted-eve` (RuboCop runner) comments on PRs. Fix these before
+Recurring RuboCop / rubocop-rspec offenses flagged on PRs. Fix these before
 opening a PR to avoid review noise. Self-contained; no external links.
 
 ## RSpec/MessageSpies — `receive` vs `have_received`
@@ -11,10 +11,10 @@ stubbed with `allow`.
 
 ```ruby
 # BAD — sets expectation with spy form
-expect(MyOrders::Facade).not_to have_received(:fetch_by_id)
+expect(Orders::Facade).not_to have_received(:fetch_by_id)
 
 # GOOD — set expectation up front
-expect(MyOrders::Facade).not_to receive(:fetch_by_id)
+expect(Orders::Facade).not_to receive(:fetch_by_id)
 # ... call code ...
 ```
 
@@ -41,12 +41,12 @@ not the literal name.
 
 ```ruby
 # BAD
-RSpec.describe ComplaintParams do
-  controller(ActionController::Base) { include ComplaintParams }
+RSpec.describe OrderParams do
+  controller(ActionController::Base) { include OrderParams }
 end
 
 # GOOD
-RSpec.describe ComplaintParams do
+RSpec.describe OrderParams do
   controller(ActionController::Base) { include described_class }
 end
 ```
@@ -77,22 +77,6 @@ the cop. Flatten with shared examples or compound context names
 A single `it` block can't exceed 25 lines. Extract setup into `let` / `before`,
 or split into multiple examples.
 
-## Lint/AvoidComplaintFactories (more-backend rule)
-
-`@vinted/more-backend` packages: don't use `:complaint`, `:complaint_order_item`,
-etc. factories directly. Go through `Complaints::Repository` or a facade. If
-unavoidable, ping `#more`.
-
-## Lint/AvoidComplaintRecords
-
-Same idea for production code: no direct `Complaint` ActiveRecord access. Use
-`Complaints::Repository` or a facade.
-
-## Lint/DeprecatedFactory
-
-Many legacy factories (`item`, `user`, etc.) are deprecated. Stub the **public
-API** of the owning package instead.
-
 ## Layout / Metrics (non-RSpec but common alongside)
 
 - `Layout/LineLength`: max 120 chars.
@@ -107,5 +91,3 @@ API** of the owning package instead.
 - [ ] No stubs on the subject itself.
 - [ ] Nesting ≤ 4 levels.
 - [ ] Each `it` ≤ 25 lines.
-- [ ] No direct `:complaint*` factories or `Complaint` AR access (more-backend).
-- [ ] No deprecated factories — stub the package's public API.

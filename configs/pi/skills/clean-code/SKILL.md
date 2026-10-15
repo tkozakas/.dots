@@ -1,6 +1,6 @@
 ---
 name: clean-code
-description: Clean-code guidelines for writing and editing code. Use when implementing or refactoring, especially Go (Uber style) or Ruby/RSpec (vinted-eve lint rules).
+description: Clean-code guidelines for writing and editing code. Use when implementing or refactoring, especially Go (Uber style) or Ruby/RSpec (RuboCop rules).
 globs:
   - "**/*.go"
   - "**/*.rb"
@@ -20,4 +20,4 @@ globs:
 Read the relevant file before writing code in that language:
 
 - **Go** → `references/go-uber.md` (Uber style, never-nester, table-driven tests)
-- **Ruby / RSpec** → `references/ruby-rspec.md` (vinted-eve lint rules — fix before PR)
+- **Ruby / RSpec** → `references/ruby-rspec.md` (RuboCop rules — fix before PR)
