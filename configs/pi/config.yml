@@ -1,0 +1,64 @@
+# oh-my-pi (omp) global settings — personal-machine profile.
+# Docs: https://github.com/can1357/oh-my-pi/blob/main/docs/settings.md
+
+disabledProviders:
+  - agents-md
+  - claude
+  - codex
+  - gemini
+  - opencode
+  - github
+  - agents
+
+modelRoles:
+  default: github-copilot/claude-opus-5.5
+  plan: github-copilot/claude-opus-5.5
+  smol: anthropic/claude-haiku-4-5
+
+tools:
+  approvalMode: yolo
+
+lsp:
+  enabled: true
+  diagnosticsOnWrite: true
+
+theme:
+  dark: terminal
+
+symbolPreset: unicode
+
+statusLine:
+  preset: custom
+  separator: none
+  transparent: true
+  compactThinkingLevel: true
+  showHookStatus: false
+  sessionAccent: false
+  leftSegments:
+    - path
+    - git
+  rightSegments:
+    - model
+    - mode
+    - context_pct
+  segmentOptions:
+    path:
+      abbreviate: true
+      maxLength: 30
+    git:
+      showBranch: true
+      showStaged: false
+      showUnstaged: false
+      showUntracked: false
+    model:
+      showThinkingLevel: false
+
+display:
+  shimmer: disabled
+  showTokenUsage: false
+
+hideThinkingBlock: true
+personality: none
+
+startup:
+  quiet: true

@@ -1,0 +1,22 @@
+{
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "explorer.confirmDelete": false,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "graphviz-interactive-preview.renderLockAdditionalTimeout": 100000,
+    "redhat.telemetry.enabled": true,
+    "vim.mouseSelectionGoesIntoVisualMode": false,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        { "before": ["j"], "after": ["g", "j"] },
+        { "before": ["k"], "after": ["g", "k"] },
+        { "before": ["<down>"], "after": ["g", "j"] },
+        { "before": ["<up>"], "after": ["g", "k"] }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        { "before": ["j"], "after": ["g", "j"] },
+        { "before": ["k"], "after": ["g", "k"] },
+        { "before": ["<down>"], "after": ["g", "j"] },
+        { "before": ["<up>"], "after": ["g", "k"] },
+        { "before": ["d"], "after": ["\"", "_", "d"] }
+    ]
+}

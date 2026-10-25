@@ -1,0 +1,52 @@
+name: check
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            config: linux
+            home: /home/runner
+          - os: macos-latest
+            config: darwin
+            home: /Users/runner
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Cache Nix store
+        uses: nix-community/cache-nix-action@v6
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+
+      - name: Flake check
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          USER: runner
+          HOME: ${{ matrix.home }}
+        run: nix flake check --impure --option warn-dirty false
+
+      - name: Build home configuration
+        env:
+          USER: runner
+          HOME: ${{ matrix.home }}
+        run: |
+          nix build .#homeConfigurations.${{ matrix.config }}.activationPackage \
+            --impure \
+            --no-link \
+            --option warn-dirty false

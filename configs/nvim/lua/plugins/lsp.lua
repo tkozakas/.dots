@@ -1,0 +1,121 @@
+-- Spawn through mise so the whole toolchain (ruby, bundle, ruby-lsp) comes
+-- from the project's mise config; bare shims let rbenv hijack inner execs.
+-- Scoped to `ruby` so one unrelated broken tool in mise.toml (e.g. pnpm)
+-- can't abort the exec and silently kill the LSP.
+local function ruby_lsp_cmd(dispatchers, config)
+  local cmd = { "mise", "x", "ruby", "--", "ruby-lsp" }
+  if vim.fn.executable("mise") == 0 then
+    cmd = { vim.fn.expand("~/.rbenv/shims/ruby-lsp") }
+  end
+  local addons = "-I" .. vim.fn.stdpath("config") .. "/ruby-lsp"
+  local rubyopt = vim.env.RUBYOPT and (vim.env.RUBYOPT .. " " .. addons) or addons
+  return vim.lsp.rpc.start(cmd, dispatchers, { cwd = config.root_dir, env = { RUBYOPT = rubyopt } })
+end
+
+-- JetBrains Cmd+B: jump to definition from a usage; on the definition itself
+-- (where servers return no locations) show usages instead.
+local function lsp_definition()
+  local buf = vim.api.nvim_get_current_buf()
+  local client = vim.lsp.get_clients({ bufnr = buf, method = "textDocument/definition" })[1]
+  if not client then
+    return Snacks.picker.lsp_definitions()
+  end
+  local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+  client:request("textDocument/definition", params, function(_, result)
+    local empty = result == nil or (vim.islist(result) and #result == 0)
+    if empty then
+      Snacks.picker.lsp_references()
+    else
+      Snacks.picker.lsp_definitions()
+    end
+  end, buf)
+end
+
+local function smart_definition()
+  local openapi = require("config.openapi_jump")
+  if openapi.is_spec(0) then
+    return openapi.jump(lsp_definition)
+  end
+  lsp_definition()
+end
+
+return {
+  "neovim/nvim-lspconfig",
+  opts = function(_, opts)
+    opts.servers = vim.tbl_deep_extend("force", opts.servers or {}, {
+      ["*"] = {
+        keys = {
+          { "gd", smart_definition, desc = "Definition / Usages (smart)" },
+        },
+      },
+      gopls = {},
+      pyright = {},
+      yamlls = {},
+      groovyls = {
+        mason = false,
+        cmd = {
+          "java",
+          "-jar",
+          vim.fn.stdpath("config") .. "/lsp-servers/groovy-language-server-all.jar",
+        },
+        filetypes = { "groovy" },
+        root_markers = { "Jenkinsfile", "build.gradle", "settings.gradle", ".git" },
+      },
+      ruby_lsp = {
+        mason = false,
+        cmd = ruby_lsp_cmd,
+        filetypes = { "ruby", "eruby" },
+        root_markers = { "Gemfile", ".git" },
+        -- ruby-lsp pushes syntax diagnostics that go stale between saves;
+        -- pull diagnostics return the full set and retract correctly
+        handlers = {
+          ["textDocument/publishDiagnostics"] = function() end,
+          -- rubocop cops occasionally crash on mid-edit code states
+          -- (e.g. Style/IfUnlessModifier on 1.88.2); log instead of popup
+          ["window/showMessage"] = function(err, params, ctx)
+            if params and type(params.message) == "string" and params.message:lower():find("internal error") then
+              vim.lsp.log.warn("ruby_lsp suppressed:", params.message)
+              return
+            end
+            return vim.lsp.handlers["window/showMessage"](err, params, ctx)
+          end,
+        },
+        init_options = {
+          formatter = "rubocop_internal",
+          linters = { "rubocop_internal" },
+          addonSettings = {
+            ["Ruby LSP Rails"] = {
+              enablePendingMigrationsPrompt = false,
+            },
+          },
+          indexing = {
+            excludedPatterns = { "**/test/**/*.rb", "**/spec/fixtures/**/*.rb" },
+            excludedGems = {
+              "actioncable",
+              "actionmailbox",
+              "actiontext",
+              "activestorage",
+              "aws-sdk-*",
+              "brakeman",
+              "byebug",
+              "factory_bot",
+              "faker",
+              "pry",
+              "rubocop",
+              "rubocop-performance",
+              "rubocop-rails",
+              "rspec",
+              "rspec-core",
+              "rspec-expectations",
+              "rspec-mocks",
+              "rspec-rails",
+              "simplecov",
+              "webmock",
+            },
+          },
+        },
+      },
+    })
+    return opts
+  end,
+}
