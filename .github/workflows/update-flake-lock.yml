@@ -25,7 +25,19 @@ jobs:
         with:
           pr-title: "Update flake.lock"
 
-      - name: Run check on the update branch
+      - name: Approve pending checks on the update branch
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run check.yml --ref update_flake_lock_action
+          BRANCH: update_flake_lock_action
+        run: |
+          for _ in $(seq 1 10); do
+            runs=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?branch=$BRANCH&status=action_required" --jq '.workflow_runs[].id')
+            if [ -n "$runs" ]; then
+              for id in $runs; do
+                gh api -X POST "repos/$GITHUB_REPOSITORY/actions/runs/$id/approve"
+              done
+              exit 0
+            fi
+            sleep 10
+          done
+          gh workflow run check.yml --ref "$BRANCH"
