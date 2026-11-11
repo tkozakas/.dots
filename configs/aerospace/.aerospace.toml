@@ -8,7 +8,7 @@ start-at-login = true
 automatically-unhide-macos-hidden-apps = false
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 after-startup-command = [
-    'exec-and-forget defaults write com.apple.dock expose-animation-duration -float 0.1 && killall Dock',
+    'exec-and-forget defaults write com.apple.dock expose-animation-duration -float 0.1 && defaults write com.apple.dock expose-group-apps -bool true && killall Dock',
     'exec-and-forget defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false',
     'exec-and-forget defaults write -g NSWindowResizeTime -float 0.001',
     'exec-and-forget open -a Firefox',
