@@ -51,3 +51,5 @@ eval "$(mise activate zsh)"
 source <(fzf --zsh 2>/dev/null)
 [[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
 [[ -f ~/.dots-work/zshrc ]] && source ~/.dots-work/zshrc
+export PATH="$HOME/.elan/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
