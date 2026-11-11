@@ -21,11 +21,13 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
 
       - name: Update flake.lock
+        id: update
         uses: DeterminateSystems/update-flake-lock@main
         with:
           pr-title: "Update flake.lock"
 
       - name: Approve pending checks on the update branch
+        if: steps.update.outputs.pull-request-number != ''
         env:
           GH_TOKEN: ${{ github.token }}
           BRANCH: update_flake_lock_action
