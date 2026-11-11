@@ -2,15 +2,9 @@ import type { ExtensionAPI, ExtensionContext } from "@oh-my-pi/pi-coding-agent";
 
 const TTL_MS = 55 * 60 * 1000;
 const TICK_MS = 5000;
-const ASK_MIN_TOKENS = 50_000;
-const ASK_GRACE_MS = 2 * 60 * 1000;
-const AUTO_COMPACT = false;
 
 interface WatchState {
 	lastRequestAt: number;
-	asked: boolean;
-	asking: boolean;
-	compacted: boolean;
 }
 
 function fmt(ms: number): string {
@@ -19,43 +13,18 @@ function fmt(ms: number): string {
 }
 
 export default function cacheTtl(pi: ExtensionAPI) {
-	const state: WatchState = { lastRequestAt: 0, asked: false, asking: false, compacted: false };
+	const state: WatchState = { lastRequestAt: 0 };
 	let ctx0: ExtensionContext | undefined;
 	let timer: NodeJS.Timeout | undefined;
 
 	function touch(ctx: ExtensionContext) {
 		ctx0 = ctx;
 		state.lastRequestAt = Date.now();
-		state.asked = false;
-		state.compacted = false;
 	}
 
 	function tokens(): number {
 		const usage = ctx0?.getContextUsage();
 		return usage?.tokens ?? 0;
-	}
-
-	async function offerCompact() {
-		if (!ctx0 || state.asking || state.compacted || !ctx0.isIdle()) return;
-		const tok = tokens();
-		if (tok < ASK_MIN_TOKENS) return;
-		state.asked = true;
-		if (AUTO_COMPACT) {
-			ctx0.ui.notify(`Prompt cache expired at ~${Math.round(tok / 1000)}k tokens — compacting`, "info");
-			await ctx0.compact();
-			return;
-		}
-		if (!ctx0.hasUI) return;
-		state.asking = true;
-		try {
-			const yes = await ctx0.ui.confirm(
-				"Prompt cache expired",
-				`Context is ~${Math.round(tok / 1000)}k tokens and will be re-ingested at full cost. Compact now?`,
-			);
-			if (yes && !state.compacted) await ctx0.compact();
-		} finally {
-			state.asking = false;
-		}
 	}
 
 	function show(text: string) {
@@ -66,17 +35,11 @@ export default function cacheTtl(pi: ExtensionAPI) {
 		if (!ctx0 || state.lastRequestAt === 0) return;
 		if (!ctx0.isIdle()) {
 			state.lastRequestAt = Date.now();
-			state.asked = false;
 			show("cache ●");
 			return;
 		}
 		const left = state.lastRequestAt + TTL_MS - Date.now();
-		if (left > 0) {
-			show(`cache ${left < 60_000 ? "◐" : "●"} ${fmt(left)}`);
-		} else {
-			show(`cache ○ ${fmt(-left)}`);
-			if (!state.asked && left < -ASK_GRACE_MS) void offerCompact();
-		}
+		show(left > 0 ? `cache ${left < 60_000 ? "◐" : "●"} ${fmt(left)}` : `cache ○ ${fmt(-left)}`);
 	}
 
 	pi.on("session_start", async (_event, ctx) => {
@@ -90,11 +53,7 @@ export default function cacheTtl(pi: ExtensionAPI) {
 		tick();
 	});
 
-	pi.on("session_compact", async (_event, ctx) => {
-		ctx0 = ctx;
-		state.lastRequestAt = Date.now();
-		state.compacted = true;
-	});
+	pi.on("session_compact", async (_event, ctx) => touch(ctx));
 
 	pi.on("session_shutdown", async () => {
 		clearInterval(timer);
@@ -114,7 +73,7 @@ export default function cacheTtl(pi: ExtensionAPI) {
 			ctx.ui.notify(
 				left > 0
 					? `Cache warm: ${fmt(left)} left (~${tok}k tokens cached)`
-					: `Cache expired ${fmt(-left)} ago (~${tok}k tokens to re-ingest) — /compact to shrink`,
+					: `Cache expired ${fmt(-left)} ago (~${tok}k tokens to re-ingest)`,
 				left > 0 ? "info" : "warn",
 			);
 		},

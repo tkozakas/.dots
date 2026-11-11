@@ -62,3 +62,8 @@ personality: none
 
 startup:
   quiet: true
+
+compaction:
+  idleEnabled: true
+  idleTimeoutSeconds: 3300
+  idleThresholdTokens: 50000
