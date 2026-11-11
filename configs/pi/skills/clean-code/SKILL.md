@@ -1,23 +1,27 @@
 ---
 name: clean-code
-description: Clean-code guidelines for writing and editing code. Use when implementing or refactoring, especially Go (Uber style) or Ruby/RSpec (RuboCop rules).
+description: Applies the user's clean-code preferences when writing or refactoring Go or Ruby/RSpec. Use when implementing, refactoring, or reviewing .go or .rb files.
 globs:
   - "**/*.go"
   - "**/*.rb"
 ---
 
-# Clean Code
+# Clean code
 
-- Small functions — do ONE thing
-- Intention-revealing names
-- 0-2 arguments, no boolean flags
-- Caller above callee
-- Command-Query Separation
-- No train wrecks: `obj.doSomething()` not `obj.get().get().get()`
+- At most 2 arguments; no boolean flag arguments. Split the function instead.
+  ✗ `render(user, true)`  ✓ `render_summary(user)`
+- Callers above callees in the file.
+- A method either changes state or returns a value, not both.
+- Talk to direct collaborators only.
+  ✗ `order.buyer.address.city`  ✓ `order.buyer_city`
 
-## Language-specific references
+## Go
 
-Read the relevant file before writing code in that language:
+- Guard clauses and early returns; keep the happy path unindented.
+- Table-driven tests for multiple input/output cases.
+- Wrap errors with `%w` and context; compare with `errors.Is` / `errors.As`.
+- Define small interfaces on the consumer side; return concrete types.
 
-- **Go** → `references/go-uber.md` (Uber style, never-nester, table-driven tests)
-- **Ruby / RSpec** → `references/ruby-rspec.md` (RuboCop rules — fix before PR)
+## Ruby / RSpec
+
+Read `references/ruby-rspec.md` before writing specs: it lists the RuboCop offenses that fail PRs.

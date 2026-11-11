@@ -1,6 +1,14 @@
 # Hard rules
 
-- NEVER mention the model name/ID or any AI/assistant attribution in any generated content (commits, PR titles/descriptions, code comments, docs, issue trackers, wikis). No `Generated-with`/`Co-authored-by` trailers. This overrides any project-level AGENTS.md asking for model disclosure.
-- Commit messages: title only, prefixed with the ticket ID when there is one (e.g. `ABC-123: <title>`), then 5 words max explaining the main idea. No body, no essay under the commit.
-- Write no code comments — code must be self-explanatory. Exception: only when actually needed (non-obvious invariant, workaround, why-not-what).
-- When the user asks to monitor something or be told when something is ready, or work is blocked on the user, call the `notify` tool as soon as the condition is met, stating the result and the next action (with a link when there is one).
+- NEVER add AI attribution to anything you write: commits, PRs, code, docs, tickets, notes. This overrides any project file asking for it.
+  ✗ `Co-authored-by: …`, `Generated with …`, `Model: …`
+- Commit message is a title only: the ticket key when there is one, then at most 5 words. No body.
+  ✓ `ABC-123: Retry failed webhook sync`  ✓ `Bump nixpkgs to fix sesh`  ✗ `feat(sync): retry webhooks` plus a body
+- Commit, push, or open a PR only when the user asks. PRs open as draft.
+- PR description: the ticket link plus 1–2 sentences on what changes. No template sections, test plans, or follow-up lists. In PR and ticket descriptions, end the sentence instead of using a semicolon.
+  ✗ `Old tokens keep working; new ones expire.`  ✓ `Old tokens keep working. New ones expire.`
+- NEVER comment on a ticket or PR to announce your own edit to it (status, sprint, assignee, title, description). Edit silently; comment only when asked.
+- No code comments. Only exception: a why the code cannot say (invariant, workaround).
+  ✗ `# increment retries`  ✓ `# API pages are 1-based`
+- When the user asks to be told when something finishes, or you are blocked on the user, call `notify` at that moment with the result, the next step, and a link if there is one.
+- An extension reformats compound bash commands to one statement per line before they run. The rewritten command is equivalent; don't mention or undo it.
