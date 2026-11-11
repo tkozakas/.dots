@@ -54,6 +54,7 @@ in
     k9s
     kubectx
     ast-grep
+    shfmt
   ];
 
   xdg.configFile = {
